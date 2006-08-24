@@ -1,0 +1,51 @@
+<project name="RaPid" basedir=".">
+	
+	<property file="${basedir}/build.properties"/>
+	
+	<property name="src.dir" value="${basedir}/src"/>
+	<property name="src.dir.java" value="${src.dir}/java"/>
+	<property name="src.dir.resources" value="${src.dir}/resources"/>
+	<property name="src.dir.test" value="${src.dir}/test"/>
+	
+	<property name="build.dir" value="${basedir}/build"/>
+	<property name="build.dir.classes" value="${build.dir}/classes"/>
+	<property name="build.dir.test" value="${build.dir}/tests"/>
+	
+	<property name="web.dir" value="${basedir}/web"/>
+	<property name="lib.dir" value="${web.dir}/WEB-INF/lib"/>
+	
+	<path id="classpath.compile.java">
+		<fileset dir="${lib.dir}" includes="*.jar"/>
+	</path>
+	
+	<path id="classpath.compile.test">
+		<path refid="classpath.compile.java"/>
+	</path>
+		
+	<target name="compile.java">
+		<mkdir dir="${build.dir.classes}"/>
+		<javac srcdir="${src.dir.java}" destdir="${build.dir.classes}"
+				debug="${compile.debug}"
+				optimize="${compile.optimize}"
+				deprecation="${compile.deprecation}"
+				nowarn="${compile.nowarn}"
+				verbose="${compile.verbose}"
+				failonerror="${compile.failonerror}">
+			<classpath refid="classpath.compile.java"/>
+		</javac>
+	</target>
+	
+	<target name="compile.test">
+		<mkdir dir="${build.dir.test}"/>
+		<javac srcdir="${src.dir.test}" destdir="${build.dir.test}"
+				debug="${compile.debug}"
+				optimize="${compile.optimize}"
+				deprecation="${compile.deprecation}"
+				nowarn="${compile.nowarn}"
+				verbose="${compile.verbose}"
+				failonerror="${compile.failonerror}">
+			<classpath refid="classpath.compile.test"/>
+		</javac>
+	</target>
+		
+</project>
