@@ -18,8 +18,7 @@ public class RapidScriptActionBean extends ScriptActionBean {
 	
 	@Override
 	public ScriptLoader getScriptLoader() {
-		// TODO Auto-generated method stub
-		return null;
+		return( this.scriptLoader );
 	}
 
 	public RapidActionBeanContext getContext() {

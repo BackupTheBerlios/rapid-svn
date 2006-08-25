@@ -13,7 +13,10 @@
 	
 	<property name="web.dir" value="${basedir}/web"/>
 	<property name="lib.dir" value="${web.dir}/WEB-INF/lib"/>
+	<property name="sql.dir" value="${basedir}/sql"/>
 	
+	<property name="xdoclet.dir" value="${basedir}/xdoclet"/>
+		
 	<path id="classpath.compile.java">
 		<fileset dir="${lib.dir}" includes="*.jar"/>
 	</path>
@@ -21,7 +24,57 @@
 	<path id="classpath.compile.test">
 		<path refid="classpath.compile.java"/>
 	</path>
+	
+	<path id="classpath.xdoclet">
+		<fileset dir="${xdoclet.home}/lib" includes="*.jar"/>
+	</path>
+	
+	<path id="classpath.database">
+		<pathelement location="${jdbc.jar}"/>
+	</path>
+	
+	<taskdef name="hibernatedoclet"
+			classname="xdoclet.modules.hibernate.HibernateDocletTask"
+			classpathref="classpath.xdoclet"/>
+	<taskdef name="schemaexport"
+			classname="org.hibernate.tool.hbm2ddl.SchemaExportTask"
+			classpathref="classpath.compile.java"/>
 		
+	<target name="hibernate.mappings">
+		<hibernatedoclet destdir="${src.dir.resources}" mergedir="${xdoclet.dir}" verbose="${xdoclet.verbose}" force="${xdoclet.force}">
+			<fileset dir="${src.dir.java}" includes="**/*.java"/>
+			<hibernate version="3.0"/>
+		</hibernatedoclet>
+	</target>
+		
+	<target name="hibernate.properties">
+		<echoproperties destfile="${src.dir.resources}/hibernate.properties" prefix="hibernate."/>
+	</target>
+	
+	<target name="hibernate.config" depends="hibernate.mappings,hibernate.properties">
+		<hibernatedoclet destdir="${src.dir.resources}" mergedir="${xdoclet.dir}" verbose="${xdoclet.verbose}" force="${xdoclet.force}">
+			<fileset dir="${src.dir.java}" includes="**/*.java"/>
+			<hibernatecfg version="3.0"
+					dialect="${hibernate.dialect}"
+					dataSource="${hibernate.connection.datasource}"
+					useOuterJoin="true"
+					showSql="${hibernate.show_sql}"
+					cglibUseReflectionOptimizer="${hibernate.cglib.use_reflection_optimizer}"/>
+		</hibernatedoclet>
+	</target>
+	
+	<target name="hibernate.schemaexport" depends="hibernate.config">
+		<mkdir dir="${sql.dir}"/>
+		<schemaexport properties="${src.dir.resources}/hibernate.properties"
+				quiet="no"
+				text="yes"
+				drop="no"
+				delimiter=";"
+				output="${sql.dir}/schema.sql">
+			<fileset dir="${src.dir.resources}" includes="**/*.hbm.xml"/>
+		</schemaexport>
+	</target>
+	
 	<target name="compile.java">
 		<mkdir dir="${build.dir.classes}"/>
 		<javac srcdir="${src.dir.java}" destdir="${build.dir.classes}"
@@ -47,5 +100,31 @@
 			<classpath refid="classpath.compile.test"/>
 		</javac>
 	</target>
+	
+	<target name="database.schema" depends="hibernate.schemaexport">
+		<sql src="${sql.dir}/schema.sql"
+				driver="${hibernate.connection.driver_class}"
+				url="${hibernate.connection.url}"
+				userid="${hibernate.connection.username}"
+				password="${hibernate.connection.password}"
+				delimiter=";"
+				autocommit="false" onerror="continue">
+			<classpath refid="classpath.database"/>
+		</sql>
+	</target>
+	
+	<target name="database.data">
+		<sql src="${sql.dir}/init.sql"
+				driver="${hibernate.connection.driver_class}"
+				url="${hibernate.connection.url}"
+				userid="${hibernate.connection.username}"
+				password="${hibernate.connection.password}"
+				delimiter=";"
+				autocommit="false" onerror="continue">
+			<classpath refid="classpath.database"/>
+		</sql>
+	</target>
+		
+	<target name="database.init" depends="database.schema,database.data"/>
 		
 </project>

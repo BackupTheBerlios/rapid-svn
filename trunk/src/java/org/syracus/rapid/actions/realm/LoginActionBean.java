@@ -4,23 +4,25 @@ import javax.servlet.http.HttpSession;
 
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
+import net.sourceforge.stripes.action.UrlBinding;
 
 import org.syracus.rapid.realm.User;
 
+@UrlBinding("/public/login.action")
 public class LoginActionBean extends RealmActionBean {
 
 	public static final String DEFAULT_TARGET_URL = "/protected/index.jsp";
 	
 	private String account;
 	private String password;
-	private String targetUrl = DEFAULT_TARGET_URL;
+	private String target = DEFAULT_TARGET_URL;
 	
-	public String getTargetUrl() {
-		return targetUrl;
+	public String getTarget() {
+		return target;
 	}
 
-	public void setTargetUrl(String targetUrl) {
-		this.targetUrl = targetUrl;
+	public void setTarget(String target) {
+		this.target = target;
 	}
 
 	public String getAccount() {
@@ -41,10 +43,10 @@ public class LoginActionBean extends RealmActionBean {
 
 	public Resolution login() {
 		User user = getRealmService().authenticateUser( getAccount(), getPassword() );
-		Resolution resolution = null;
+		Resolution resolution = getContext().getSourcePageResolution();
 		if ( null != user ) {
 			getContext().setAuthUser( user );
-			resolution = new RedirectResolution( getTargetUrl() );
+			resolution = new RedirectResolution( getTarget() );
 		}
 		return( resolution );
 	}

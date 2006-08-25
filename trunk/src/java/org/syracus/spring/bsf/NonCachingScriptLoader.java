@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.bsf.BSFException;
@@ -38,12 +37,13 @@ public class NonCachingScriptLoader implements ScriptLoader, InitializingBean {
 		}
 		this.locations.add( 0, location );
 	}
-	
-	public void setLocations( Resource[] locations ) {
-		if ( null == locations ) {
-			this.locations = new ArrayList<Resource>();
+
+	public void setLocations( List<Resource> locations ) {
+		if ( null == this.locations ) {
+			this.locations = locations;
+		} else {
+			this.locations.addAll( locations );
 		}
-		this.locations.addAll( Arrays.asList( locations ) );
 	}
 	
 	public List<Resource> getLocations() {
