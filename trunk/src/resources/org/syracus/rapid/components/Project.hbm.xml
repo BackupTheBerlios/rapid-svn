@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="org.syracus.rapid.components.Project"
+        table="projects"
+    >
+
+        <id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-Project.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <many-to-one
+            name="module"
+            class="org.syracus.rapid.components.Module"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="module"
+        />
+
+        <property
+            name="created"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            column="created"
+        />
+
+        <many-to-one
+            name="creator"
+            class="org.syracus.rapid.realm.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="creator"
+        />
+
+        <property
+            name="description"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="description"
+        />
+
+        <property
+            name="modified"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            column="modified"
+        />
+
+        <many-to-one
+            name="modifier"
+            class="org.syracus.rapid.realm.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="modifier"
+        />
+
+        <property
+            name="name"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="name"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Project.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

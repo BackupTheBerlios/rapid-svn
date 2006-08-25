@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="placeHolderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:hibernate.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="scriptLoader" class="org.syracus.spring.bsf.CachingScriptLoader">
+		<property name="locations">
+			<list>
+				<value>/WEB-INF/scripts</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="scriptRunner" class="org.syracus.spring.bsf.ScriptRunner">
+		<property name="scriptLoader">
+			<ref local="scriptLoader"/>
+		</property>
+	</bean>
+
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>${hibernate.connection.datasource}</value>
+		</property>
+	</bean>
+  
+	<bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation">
+			<value>classpath:hibernate.cfg.xml</value>
+		</property>
+		<property name="hibernateProperties">
+			<bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+				<property name="location">
+					<value>classpath:hibernate.properties</value>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="hibernateTxManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
+	<bean id="userDao" class="org.syracus.rapid.realm.dao.HibernateUserDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
+	<bean id="realmServiceImpl" class="org.syracus.rapid.realm.RealmServiceImpl">
+		<property name="userDao">
+			<ref local="userDao"/>
+		</property>
+	</bean>
+	
+	<bean id="realmService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="hibernateTxManager"/>
+		<property name="target">
+			<ref local="realmServiceImpl"/>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="add*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="moduleDao" class="org.syracus.rapid.components.dao.HibernateModuleDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
+	<bean id="projectDao" class="org.syracus.rapid.components.dao.HibernateProjectDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
+	<bean id="componentDao" class="org.syracus.rapid.components.dao.HibernateComponentDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
+	<bean id="componentServiceImpl" class="org.syracus.rapid.components.ComponentServiceImpl">
+		<property name="moduleDao">
+			<ref local="moduleDao"/>
+		</property>
+		<property name="projectDao">
+			<ref local="projectDao"/>
+		</property>
+		<property name="componentDao">
+			<ref local="componentDao"/>
+		</property>
+	</bean>
+	
+	<bean id="componentService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="hibernateTxManager"/>
+		<property name="target">
+			<ref local="componentServiceImpl"/>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="add*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	
+</beans>

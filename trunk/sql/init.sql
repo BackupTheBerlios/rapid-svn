@@ -1,0 +1,1 @@
+INSERT INTO users ( account, password, name, email ) VALUES ( 'snwiem', 'secret', 'Sebastian Wiemer', 'sebastian.wiemer@nefkom.net' );
