@@ -1,25 +1,24 @@
 package org.syracus.spring.bsf;
 
+import java.util.List;
+
 import org.apache.bsf.BSFManager;
+import org.springframework.beans.factory.InitializingBean;
 
+public class ScriptEngineRegistry implements InitializingBean {
 
-public class ScriptEngineRegistry {
+	private List<ScriptEngine> scriptEngines;
 
-	private ScriptEngine[] engines;
-	
-	
-	public ScriptEngine[] getEngines() {
-		return engines;
+	public List<ScriptEngine> getScriptEngines() {
+		return scriptEngines;
 	}
 
-
-	public void setEngines(ScriptEngine[] engines) {
-		this.engines = engines;
+	public void setScriptEngines(List<ScriptEngine> scriptEngines) {
+		this.scriptEngines = scriptEngines;
 	}
-
 
 	public void afterPropertiesSet() throws Exception {
-		for ( ScriptEngine engine : engines ) {
+		for ( ScriptEngine engine : this.scriptEngines ) {
 			BSFManager.registerScriptingEngine(
 					engine.getLanguage(),
 					engine.getClassname(),
@@ -27,5 +26,5 @@ public class ScriptEngineRegistry {
 			);
 		}
 	}
-	
+
 }

@@ -6,6 +6,15 @@ public class ScriptEngine {
 	private String classname;
 	private String[] extensions;
 	
+	public ScriptEngine() {
+	}
+	
+	public ScriptEngine( String classname, String language, String[] extensions ) {
+		setClassname( classname );
+		setLanguage( language );
+		setExtensions( extensions );
+	}
+	
 	public String getClassname() {
 		return classname;
 	}
@@ -21,8 +30,9 @@ public class ScriptEngine {
 	public String getLanguage() {
 		return language;
 	}
-	public void setLanguage(String lang) {
-		this.language = lang;
+	public void setLanguage(String language) {
+		this.language = language;
 	}
+	
 	
 }

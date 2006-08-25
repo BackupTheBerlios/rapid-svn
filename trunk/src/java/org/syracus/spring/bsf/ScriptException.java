@@ -4,14 +4,15 @@ import org.springframework.core.NestedRuntimeException;
 
 public class ScriptException extends NestedRuntimeException {
 
-	private static final long serialVersionUID = -838675604807206341L;
+	private static final long serialVersionUID = 1L;
 
-	public ScriptException( String message ) {
-		super( message );
+	public ScriptException(String arg0, Throwable arg1) {
+		super(arg0, arg1);
 	}
-	
-	public ScriptException( String message, Throwable cause ) {
-		super( message, cause );
+
+	public ScriptException(String arg0) {
+		super(arg0);
 	}
+
 	
 }

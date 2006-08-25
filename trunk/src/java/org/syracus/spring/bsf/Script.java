@@ -5,16 +5,16 @@ import java.io.File;
 public class Script {
 
 	private File source;
-	private String language;
 	private String code;
-	private long modified;
+	private long timestamp;
+	private String language;
 	
 	
-	public long getModified() {
-		return modified;
+	public String getLanguage() {
+		return language;
 	}
-	public void setModified(long modified) {
-		this.modified = modified;
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 	public String getCode() {
 		return code;
@@ -22,11 +22,11 @@ public class Script {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	public String getLanguage() {
-		return language;
+	public long getTimestamp() {
+		return timestamp;
 	}
-	public void setLanguage(String language) {
-		this.language = language;
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 	public File getSource() {
 		return source;
@@ -34,5 +34,11 @@ public class Script {
 	public void setSource(File source) {
 		this.source = source;
 	}
+	
+	public boolean isModified() {
+		long lastModified = this.source.lastModified();
+		return( lastModified > this.timestamp );
+	}
+	
 	
 }
