@@ -122,4 +122,30 @@
 		</property>
 	</bean>
 	
+	<bean id="todoDao" class="org.syracus.rapid.todos.dao.HibernateTodoDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
+	<bean id="todoServiceImpl" class="org.syracus.rapid.todos.TodoService">
+		<property name="todoDao">
+			<ref local="todoDao"/>
+		</property>
+	</bean>
+	
+	<bean id="todoService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="hibernateTxManager"/>
+		<property name="target">
+			<ref local="todoServiceImpl"/>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="add*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
+			</props>
+		</property>
+	</bean>
 </beans>

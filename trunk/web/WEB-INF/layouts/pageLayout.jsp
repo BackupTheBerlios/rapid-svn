@@ -5,10 +5,14 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="pragma" content="no-cache">
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/prototype.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/rapid.js"></script>
 		<title>${pageTitle}</title>
 	</head>
 	<body>
-		<table width="100%">
+		<table width="100%" border="1">
 			<tr>
 				<td>
 					<stripes:layout-component name="pageHeader"/>
