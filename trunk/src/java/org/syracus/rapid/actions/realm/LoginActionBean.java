@@ -11,7 +11,8 @@ import org.syracus.rapid.realm.User;
 @UrlBinding("/public/login.action")
 public class LoginActionBean extends RealmActionBean {
 
-	public static final String DEFAULT_TARGET_URL = "/protected/index.jsp";
+	public static final String DEFAULT_TARGET_URL = "/protected/workbench.jsp";
+	public static final String DEFAULT_LOGIN_URL = "/public/login.jsp";
 	
 	private String account;
 	private String password;
@@ -56,6 +57,6 @@ public class LoginActionBean extends RealmActionBean {
 		if ( null != session ) {
 			session.invalidate();
 		}
-		return( new RedirectResolution( "/public/login.jsp" ) );
+		return( new RedirectResolution( DEFAULT_LOGIN_URL ) );
 	}
 }

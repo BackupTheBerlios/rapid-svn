@@ -17,6 +17,7 @@
 
 		<!-- mapping files -->
 		<mapping resource="org/syracus/rapid/realm/User.hbm.xml"/>
+		<mapping resource="org/syracus/rapid/todos/Todo.hbm.xml"/>
 		<mapping resource="org/syracus/rapid/components/Component.hbm.xml"/>
 		<mapping resource="org/syracus/rapid/components/Project.hbm.xml"/>
 		<mapping resource="org/syracus/rapid/components/Module.hbm.xml"/>
