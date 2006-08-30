@@ -85,6 +85,14 @@ public class HibernateProjectDao extends HibernateDaoSupport implements
 		) );
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Project> findByParent(Project parent) {
+		return( (List<Project>)getHibernateTemplate().find(
+				"FROM Project p WHERE p.parent = ?",
+				parent
+		) );
+	}
+
 	public void update(Project project) {
 		getHibernateTemplate().update( project );
 	}

@@ -7,8 +7,8 @@
 <hibernate-mapping
 >
     <class
-        name="org.syracus.rapid.components.Project"
-        table="projects"
+        name="org.syracus.rapid.messages.Message"
+        table="messages"
     >
 
         <id
@@ -19,87 +19,59 @@
             <generator class="native">
               <!--  
                   To add non XDoclet generator parameters, create a file named 
-                  hibernate-generator-params-Project.xml 
+                  hibernate-generator-params-Message.xml 
                   containing the additional parameters and place it in your merge dir. 
               --> 
             </generator>
         </id>
 
-        <many-to-one
-            name="parent"
-            class="org.syracus.rapid.components.Project"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="parent"
-        />
-
-        <many-to-one
-            name="module"
-            class="org.syracus.rapid.components.Module"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="module"
-        />
-
         <property
-            name="created"
-            type="java.util.Date"
+            name="body"
+            type="text"
             update="true"
             insert="true"
-            column="created"
+            column="body"
         />
 
         <many-to-one
-            name="creator"
+            name="receiver"
             class="org.syracus.rapid.realm.User"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
-            column="creator"
+            column="receiver"
         />
 
         <property
-            name="description"
-            type="java.lang.String"
-            update="true"
-            insert="true"
-            column="description"
-        />
-
-        <property
-            name="modified"
+            name="send"
             type="java.util.Date"
             update="true"
             insert="true"
-            column="modified"
+            column="send"
         />
 
         <many-to-one
-            name="modifier"
+            name="sender"
             class="org.syracus.rapid.realm.User"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
-            column="modifier"
+            column="sender"
         />
 
         <property
-            name="name"
+            name="subject"
             type="java.lang.String"
             update="true"
             insert="true"
-            column="name"
+            column="subject"
         />
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-Project.xml
+                hibernate-properties-Message.xml
             containing the additional properties and place it in your merge dir.
         -->
 

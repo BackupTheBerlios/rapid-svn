@@ -8,6 +8,20 @@ package org.syracus.rapid.components;
 public class Project extends ABaseComponent {
 
 	private Module module;
+	private Project parent;
+
+	/**
+	 * 
+	 * @return
+	 * @hibernate.many-to-one
+	 */
+	public Project getParent() {
+		return parent;
+	}
+
+	public void setParent(Project parent) {
+		this.parent = parent;
+	}
 
 	/**
 	 * 

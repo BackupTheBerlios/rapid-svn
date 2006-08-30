@@ -24,6 +24,7 @@ public interface IComponentService {
 	public Project getProjectById( Long id );
 	public List<Project> getAllProjects();
 	public List<Project> getProjectsOfModule( Module module );
+	public List<Project> getProjectsOfProject( Project project );
 	public List<Project> getProjectsByName( String name );
 	public List<Project> getProjectsByDescription( String description );
 	public List<Project> getProjectsByCreator( User creator );

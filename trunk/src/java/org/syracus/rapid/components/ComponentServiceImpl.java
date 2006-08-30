@@ -187,4 +187,9 @@ public class ComponentServiceImpl implements IComponentService {
 		getProjectDao().update( project );
 	}
 
+	public List<Project> getProjectsOfProject(Project project) {
+		return( getProjectDao().findByParent( project ) );
+	}
+
+	
 }

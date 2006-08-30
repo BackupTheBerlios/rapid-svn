@@ -148,4 +148,31 @@
 			</props>
 		</property>
 	</bean>
+	
+	<bean id="messageDao" class="org.syracus.rapid.messages.dao.HibernateMessageDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
+	<bean id="messageServiceImpl" class="org.syracus.rapid.messages.MessageService">
+		<property name="messageDao">
+			<ref local="messageDao"/>
+		</property>
+	</bean>
+	
+	<bean id="messageService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="hibernateTxManager"/>
+		<property name="target">
+			<ref local="messageServiceImpl"/>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="send*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
+			</props>
+		</property>
+	</bean>
 </beans>
