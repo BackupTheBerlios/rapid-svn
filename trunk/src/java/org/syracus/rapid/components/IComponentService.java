@@ -16,6 +16,7 @@ public interface IComponentService {
 	public List<Module> getModulesByDescription( String description );
 	public List<Module> getModulesByCreator( User creator );
 	public List<Module> getModulesByModifier( User modifier );
+	public List<Module> getModulesByLeader( User leader );
 	
 	public void addProject( Project project, User user );
 	public void updateProject( Project project, User user );

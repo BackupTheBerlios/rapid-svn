@@ -11,6 +11,7 @@
 		
 			<stripes:layout-component name="leftColumn">
 				<jsp:include page="/protected/workbench/tiles/todoList.jsp" flush="true"/>
+				<jsp:include page="/protected/workbench/tiles/moduleList.jsp" flush="true"/>
 			</stripes:layout-component>
 			
 			<stripes:layout-component name="centerColumn">

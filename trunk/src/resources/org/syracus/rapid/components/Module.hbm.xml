@@ -25,6 +25,16 @@
             </generator>
         </id>
 
+        <many-to-one
+            name="leader"
+            class="org.syracus.rapid.realm.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="leader"
+        />
+
         <property
             name="created"
             type="java.util.Date"

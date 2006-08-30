@@ -1,8 +1,11 @@
 package org.syracus.rapid.actions.realm;
 
+import java.util.List;
+
 import net.sourceforge.stripes.integration.spring.SpringBean;
 
 import org.syracus.rapid.realm.IRealmService;
+import org.syracus.rapid.realm.User;
 import org.syracus.rapid.stripes.RapidActionBean;
 
 public class RealmActionBean extends RapidActionBean {
@@ -16,6 +19,10 @@ public class RealmActionBean extends RapidActionBean {
 	@SpringBean("realmService")
 	public void setRealmService(IRealmService realmService) {
 		this.realmService = realmService;
+	}
+	
+	public List<User> getAllUsers() {
+		return( getRealmService().getAllUsers() );
 	}
 	
 }

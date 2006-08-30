@@ -18,6 +18,7 @@ public interface IModuleDao {
 	public List<Module> findLikeName( String name );
 	public List<Module> findByDescription( String description );
 	public List<Module> findLikeDescription( String description );
+	public List<Module> findByLeader( User leader );
 	public List<Module> findByCreator( User creator );
 	public List<Module> findByModifier( User modifier );
 	

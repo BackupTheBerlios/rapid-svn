@@ -53,6 +53,14 @@ public class HibernateModuleDao extends HibernateDaoSupport implements
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<Module> findByLeader(User leader) {
+		return( (List<Module>)getHibernateTemplate().find(
+				"FROM Module m WHERE m.leader = ?",
+				leader
+		) ); 
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Module> findByName(String name) {
 		return( (List<Module>)getHibernateTemplate().find(
 				"FROM Module m WHERE m.name = ?",

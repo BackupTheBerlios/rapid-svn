@@ -190,6 +190,10 @@ public class ComponentServiceImpl implements IComponentService {
 	public List<Project> getProjectsOfProject(Project project) {
 		return( getProjectDao().findByParent( project ) );
 	}
+	
+	public List<Module> getModulesByLeader( User leader ) {
+		return( getModuleDao().findByLeader( leader ) );
+	}
 
 	
 }

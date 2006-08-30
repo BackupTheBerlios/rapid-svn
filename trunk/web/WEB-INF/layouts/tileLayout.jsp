@@ -3,7 +3,7 @@
 <stripes:layout-definition>
 <table width="100%" border="1">
 	<tr>
-		<td>
+		<td style="background-color:#0000FF;">
 			<stripes:layout-component name="tileHeader"/>
 		</td>
 	</tr>

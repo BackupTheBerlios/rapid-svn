@@ -3,7 +3,7 @@
 <stripes:layout-definition>
 <table width="100%" border="1">
 	<tr>
-		<td width="25%">
+		<td width="25%" valign="top">
 			<stripes:layout-component name="leftColumn"/>
 		</td>
 		<td valign="top">
