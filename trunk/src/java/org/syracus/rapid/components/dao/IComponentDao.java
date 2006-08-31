@@ -25,5 +25,5 @@ public interface IComponentDao {
 	public List<Component> findLikeDescription( String description );
 	public List<Component> findByCreator( User creator );
 	public List<Component> findByModifier( User modifier );
-	
+	public List<Component> findByLeader( User leader );
 }

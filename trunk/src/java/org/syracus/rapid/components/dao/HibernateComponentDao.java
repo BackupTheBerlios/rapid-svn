@@ -101,6 +101,14 @@ public class HibernateComponentDao extends HibernateDaoSupport implements
 				name
 		) );
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Component> findByLeader(User leader) {
+		return( (List<Component>)getHibernateTemplate().find(
+				"FROM Component c WHERE c.leader = ?",
+				leader
+		) ); 
+	}
 
 	public void update(Component component) {
 		getHibernateTemplate().update( component );

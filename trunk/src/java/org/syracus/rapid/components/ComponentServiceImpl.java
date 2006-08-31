@@ -194,6 +194,14 @@ public class ComponentServiceImpl implements IComponentService {
 	public List<Module> getModulesByLeader( User leader ) {
 		return( getModuleDao().findByLeader( leader ) );
 	}
+	
+	public List<Project> getProjectsByLeader( User leader ) {
+		return( getProjectDao().findByLeader( leader ) );
+	}
+	
+	public List<Component> getComponentsByLeader( User leader ) {
+		return( getComponentDao().findByLeader( leader ) );
+	}
 
 	
 }

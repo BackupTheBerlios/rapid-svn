@@ -23,5 +23,5 @@ public interface IProjectDao {
 	public List<Project> findLikeDescription( String description );
 	public List<Project> findByCreator( User creator );
 	public List<Project> findByModifier( User modifier );
-	
+	public List<Project> findByLeader( User leader );
 }

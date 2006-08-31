@@ -30,6 +30,8 @@ public interface IComponentService {
 	public List<Project> getProjectsByDescription( String description );
 	public List<Project> getProjectsByCreator( User creator );
 	public List<Project> getProjectsByModifier( User modifier );
+	public List<Project> getProjectsByLeader( User leader );
+	
 	
 	public void addComponent( Component component, User user );
 	public void updateComponent( Component project, User user );
@@ -44,6 +46,6 @@ public interface IComponentService {
 	public List<Component> getComponentsByDescription( String description );
 	public List<Component> getComponentsByCreator( User creator );
 	public List<Component> getComponentsByModifier( User modifier );
-	
+	public List<Component> getComponentsByLeader( User leader );
 	
 }

@@ -1,5 +1,7 @@
 package org.syracus.rapid.components;
 
+import org.syracus.rapid.realm.User;
+
 /**
  * 
  * @author snwiem
@@ -9,6 +11,20 @@ public class Component extends ABaseComponent {
 
 	private Module module;
 	private Project project;
+	private User leader;
+
+	/**
+	 * 
+	 * @return
+	 * @hibernate.many-to-one
+	 */
+	public User getLeader() {
+		return leader;
+	}
+
+	public void setLeader(User leader) {
+		this.leader = leader;
+	}
 	
 	/**
 	 * 
