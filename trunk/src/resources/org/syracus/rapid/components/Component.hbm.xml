@@ -26,6 +26,16 @@
         </id>
 
         <many-to-one
+            name="leader"
+            class="org.syracus.rapid.realm.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="leader"
+        />
+
+        <many-to-one
             name="module"
             class="org.syracus.rapid.components.Module"
             cascade="none"

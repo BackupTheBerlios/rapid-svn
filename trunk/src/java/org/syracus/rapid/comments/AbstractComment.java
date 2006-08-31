@@ -7,7 +7,6 @@ import org.syracus.rapid.realm.User;
 public class AbstractComment {
 
 	private Long id;
-	private AbstractComment parent;
 
 	private String subject;
 	private String text;
@@ -17,17 +16,7 @@ public class AbstractComment {
 	private User modifier;
 	private Date modified;
 	
-	/**
-	 * 
-	 * @return
-	 * @hibernate.many-to-one
-	 */
-	public AbstractComment getParent() {
-		return parent;
-	}
-	public void setParent(AbstractComment parent) {
-		this.parent = parent;
-	}
+	
 	/**
 	 * 
 	 * @return
@@ -53,7 +42,7 @@ public class AbstractComment {
 	/**
 	 * 
 	 * @return
-	 * hibernate.id generator-class="native"
+	 * @hibernate.id generator-class="native"
 	 */
 	public Long getId() {
 		return id;

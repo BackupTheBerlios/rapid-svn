@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="org.syracus.rapid.comments.IssueComment"
+        table="issue_comments"
+    >
+
+        <id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-IssueComment.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <many-to-one
+            name="parent"
+            class="org.syracus.rapid.comments.IssueComment"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="parent"
+        />
+
+        <many-to-one
+            name="issue"
+            class="org.syracus.rapid.issues.Issue"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="issue"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-IssueComment.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

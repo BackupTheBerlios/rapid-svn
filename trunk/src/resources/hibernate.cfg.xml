@@ -17,11 +17,16 @@
 
 		<!-- mapping files -->
 		<mapping resource="org/syracus/rapid/messages/Message.hbm.xml"/>
+		<mapping resource="org/syracus/rapid/comments/IssueComment.hbm.xml"/>
 		<mapping resource="org/syracus/rapid/todos/Todo.hbm.xml"/>
 		<mapping resource="org/syracus/rapid/components/Component.hbm.xml"/>
+		<mapping resource="org/syracus/rapid/comments/ProjectComment.hbm.xml"/>
 		<mapping resource="org/syracus/rapid/realm/User.hbm.xml"/>
+		<mapping resource="org/syracus/rapid/comments/ModuleComment.hbm.xml"/>
 		<mapping resource="org/syracus/rapid/components/Project.hbm.xml"/>
 		<mapping resource="org/syracus/rapid/components/Module.hbm.xml"/>
+		<mapping resource="org/syracus/rapid/comments/ComponentComment.hbm.xml"/>
+		<mapping resource="org/syracus/rapid/issues/Issue.hbm.xml"/>
 	</session-factory>
 
 </hibernate-configuration>

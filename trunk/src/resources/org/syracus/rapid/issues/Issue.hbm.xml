@@ -7,8 +7,8 @@
 <hibernate-mapping
 >
     <class
-        name="org.syracus.rapid.components.Project"
-        table="projects"
+        name="org.syracus.rapid.issues.Issue"
+        table="issues"
     >
 
         <id
@@ -19,38 +19,20 @@
             <generator class="native">
               <!--  
                   To add non XDoclet generator parameters, create a file named 
-                  hibernate-generator-params-Project.xml 
+                  hibernate-generator-params-Issue.xml 
                   containing the additional parameters and place it in your merge dir. 
               --> 
             </generator>
         </id>
 
-        <property
-            name="home"
-            type="java.lang.String"
-            update="true"
-            insert="true"
-            column="home"
-        />
-
         <many-to-one
-            name="leader"
-            class="org.syracus.rapid.realm.User"
+            name="component"
+            class="org.syracus.rapid.components.Component"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
-            column="leader"
-        />
-
-        <many-to-one
-            name="parent"
-            class="org.syracus.rapid.components.Project"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="parent"
+            column="component"
         />
 
         <many-to-one
@@ -61,6 +43,34 @@
             update="true"
             insert="true"
             column="module"
+        />
+
+        <many-to-one
+            name="project"
+            class="org.syracus.rapid.components.Project"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="project"
+        />
+
+        <property
+            name="assigned"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            column="assigned"
+        />
+
+        <many-to-one
+            name="assignee"
+            class="org.syracus.rapid.realm.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="assignee"
         />
 
         <property
@@ -108,16 +118,58 @@
         />
 
         <property
-            name="name"
+            name="priority"
             type="java.lang.String"
             update="true"
             insert="true"
-            column="name"
+            column="priority"
+        />
+
+        <property
+            name="reported"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            column="reported"
+        />
+
+        <many-to-one
+            name="reporter"
+            class="org.syracus.rapid.realm.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="reporter"
+        />
+
+        <property
+            name="status"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="status"
+        />
+
+        <property
+            name="summary"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="summary"
+        />
+
+        <property
+            name="type"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="type"
         />
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-Project.xml
+                hibernate-properties-Issue.xml
             containing the additional properties and place it in your merge dir.
         -->
 

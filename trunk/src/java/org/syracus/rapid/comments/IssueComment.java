@@ -10,6 +10,20 @@ import org.syracus.rapid.issues.Issue;
 public class IssueComment extends AbstractComment {
 
 	private Issue issue;
+	private IssueComment parent;
+	
+	/**
+	 * 
+	 * @return
+	 * @hibernate.many-to-one
+	 */
+	public IssueComment getParent() {
+		return parent;
+	}
+
+	public void setParent(IssueComment parent) {
+		this.parent = parent;
+	}
 
 	/**
 	 * 

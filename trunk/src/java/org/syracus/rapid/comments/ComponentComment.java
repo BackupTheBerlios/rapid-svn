@@ -10,6 +10,20 @@ import org.syracus.rapid.components.Component;
 public class ComponentComment extends AbstractComment {
 
 	private Component component;
+	private ComponentComment parent;
+	
+	/**
+	 * 
+	 * @return
+	 * @hibernate.many-to-one
+	 */
+	public ComponentComment getParent() {
+		return parent;
+	}
+
+	public void setParent(ComponentComment parent) {
+		this.parent = parent;
+	}
 
 	/**
 	 * 
