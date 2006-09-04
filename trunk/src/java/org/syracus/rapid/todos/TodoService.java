@@ -6,7 +6,6 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.syracus.rapid.components.Component;
 import org.syracus.rapid.realm.User;
 import org.syracus.rapid.todos.dao.ITodoDao;
 
@@ -49,7 +48,7 @@ public class TodoService implements ITodoService {
 
 	@SuppressWarnings("unchecked")
 	public List<Todo> getNewestTodosByOwner(User owner, int max) {
-		DetachedCriteria criteria = DetachedCriteria.forClass( Component.class )
+		DetachedCriteria criteria = DetachedCriteria.forClass( Todo.class )
 			.add( Restrictions.eq( "owner", owner ) )
 			.addOrder( Order.desc( "modified" ) );
 		return( (List<Todo>)getTodoDao().findByCriteria( criteria, 1, max ) );
