@@ -51,7 +51,7 @@ public class TodoService implements ITodoService {
 		DetachedCriteria criteria = DetachedCriteria.forClass( Todo.class )
 			.add( Restrictions.eq( "owner", owner ) )
 			.addOrder( Order.desc( "modified" ) );
-		return( (List<Todo>)getTodoDao().findByCriteria( criteria, 1, max ) );
+		return( (List<Todo>)getTodoDao().findByCriteria( criteria, 0, max ) );
 	}
 
 	public Todo getOwnTodo(User owner, Long id) {

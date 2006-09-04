@@ -2,10 +2,12 @@ package org.syracus.rapid.messages.dao;
 
 import java.util.List;
 
+import org.syracus.rapid.common.IPersistanceDao;
 import org.syracus.rapid.messages.Message;
+import org.syracus.rapid.messages.MessageStatus;
 import org.syracus.rapid.realm.User;
 
-public interface IMessageDao {
+public interface IMessageDao extends IPersistanceDao {
 
 	public void create( Message message );
 	public void update( Message message );
@@ -21,5 +23,7 @@ public interface IMessageDao {
 	public List<Message> findLikeSubject( String subject );
 	public List<Message> findByBody( String body );
 	public List<Message> findLikeBody( String body );
+	
+	public List<Message> findByStatus( MessageStatus status );
 	
 }

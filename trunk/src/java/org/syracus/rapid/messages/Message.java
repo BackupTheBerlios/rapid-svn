@@ -19,6 +19,20 @@ public class Message {
 	private String body;
 	
 	private Date send;
+	private String status;
+
+	/**
+	 * 
+	 * @return
+	 * @hibernate.property
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	/**
 	 * 

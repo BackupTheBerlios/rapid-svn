@@ -3,6 +3,9 @@ package org.syracus.rapid.messages;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.syracus.rapid.messages.dao.IMessageDao;
 import org.syracus.rapid.realm.User;
 
@@ -42,4 +45,23 @@ public class MessageService implements IMessageService {
 		getMessageDao().create( message );
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Message> getNewestMessages(User receiver, int max ) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Message.class )
+			.add( Restrictions.eq( "receiver", receiver ) )
+			.addOrder( Order.desc( "send" ) );
+		return( (List<Message>)getMessageDao().findByCriteria( criteria, 0, max ) );
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Message> getNewestMessagesWithStatus(User receiver, MessageStatus status, int max) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Message.class )
+			.add( Restrictions.eq( "receiver", receiver ) )
+			.add( Restrictions.eq( "status", status.toString() ) )
+			.addOrder( Order.desc( "send" ) );
+		return( (List<Message>)getMessageDao().findByCriteria( criteria, 0, max ) );
+	}
+
+	
+	
 }

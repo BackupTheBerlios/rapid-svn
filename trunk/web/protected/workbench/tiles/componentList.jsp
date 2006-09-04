@@ -5,9 +5,9 @@
 	<stripes:layout-component name="tileHeader">
 		<table width="100%">
 			<tr>
-				<td>Your Modules</td>
+				<td>Your Components</td>
 				<td align="right">
-					<stripes:link href="/protected/components/moduleCreate.jsp" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
+					<stripes:link href="/protected/components/componentCreate.jsp" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
 						new
 					</stripes:link>
 				</td>
@@ -16,16 +16,16 @@
 	</stripes:layout-component>
 	
 	<stripes:layout-component name="tileContent">
-	<!-- ModuleList: BEGIN -->
-	<div id="_ownModuleList">
+	<!-- ComponentList: BEGIN -->
+	<div id="_ownComponentList">
 		<%--
 		<jsp:include page="/protected/workbench/data/ownTodos.jsp" flush="true"/>
 		--%>
 	</div>
 	<script type="text/javascript">
-		new Ajax.PeriodicalUpdater( '_ownModuleList', '/rapid/protected/workbench/data/ownModules.jsp', {frequency:10} );
+		new Ajax.PeriodicalUpdater( '_ownComponentList', '/rapid/protected/workbench/data/ownComponents.jsp', {frequency:10} );
 	</script>
-	<!-- ModuleList: END -->
+	<!-- ComponentList: END -->
 	</stripes:layout-component>
 	
 </stripes:layout-render>

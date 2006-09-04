@@ -10,8 +10,9 @@
 		<stripes:layout-render name="/WEB-INF/layouts/centerColumnLayout.jsp">
 		
 			<stripes:layout-component name="leftColumn">
-				<jsp:include page="/protected/workbench/tiles/todoList.jsp" flush="true"/>
 				<jsp:include page="/protected/workbench/tiles/moduleList.jsp" flush="true"/>
+				<jsp:include page="/protected/workbench/tiles/projectList.jsp" flush="true"/>
+				<jsp:include page="/protected/workbench/tiles/componentList.jsp" flush="true"/>
 			</stripes:layout-component>
 			
 			<stripes:layout-component name="centerColumn">
@@ -20,6 +21,7 @@
 			</stripes:layout-component>
 			
 			<stripes:layout-component name="rightColumn">
+				<jsp:include page="/protected/workbench/tiles/todoList.jsp" flush="true"/>
 			</stripes:layout-component>
 			
 		</stripes:layout-render>

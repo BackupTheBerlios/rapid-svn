@@ -9,6 +9,8 @@ import net.sourceforge.stripes.action.UrlBinding;
 import net.sourceforge.stripes.integration.spring.SpringBean;
 import net.sourceforge.stripes.validation.SimpleError;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.syracus.rapid.profiles.UserProfile;
 import org.syracus.rapid.stripes.RapidActionBean;
 import org.syracus.rapid.todos.ITodoService;
@@ -17,6 +19,8 @@ import org.syracus.rapid.todos.Todo;
 @UrlBinding("/protected/todo.action")
 public class TodoActionBean extends RapidActionBean {
 
+	protected static final transient Log log = LogFactory.getLog( TodoActionBean.class );
+	
 	private ITodoService todoService;
 	
 	private Long todoId;

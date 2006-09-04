@@ -3,10 +3,12 @@ package org.syracus.rapid.messages.dao;
 import java.util.List;
 
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.syracus.rapid.common.AbstractHibernateDao;
 import org.syracus.rapid.messages.Message;
+import org.syracus.rapid.messages.MessageStatus;
 import org.syracus.rapid.realm.User;
 
-public class HibernateMessageDao extends HibernateDaoSupport implements
+public class HibernateMessageDao extends AbstractHibernateDao implements
 		IMessageDao {
 
 	public void create(Message message) {
@@ -80,4 +82,13 @@ public class HibernateMessageDao extends HibernateDaoSupport implements
 		getHibernateTemplate().update( message );
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Message> findByStatus(MessageStatus status) {
+		return( (List<Message>)getHibernateTemplate().find(
+				"FROM Message m WHERE m.status = ?",
+				status
+		) );
+	}
+
+	
 }

@@ -44,7 +44,7 @@ create table component_comments (id bigint not null auto_increment, parent bigin
 create table components (id bigint not null auto_increment, leader bigint, module bigint, project bigint, created datetime, creator bigint, description varchar(255), modified datetime, modifier bigint, name varchar(255), primary key (id));
 create table issue_comments (id bigint not null auto_increment, parent bigint, issue bigint, primary key (id));
 create table issues (id bigint not null auto_increment, component bigint, module bigint, project bigint, assigned datetime, assignee bigint, created datetime, creator bigint, description varchar(255), modified datetime, modifier bigint, priority varchar(255), reported datetime, reporter bigint, status varchar(255), summary varchar(255), type varchar(255), primary key (id));
-create table messages (id bigint not null auto_increment, body text, receiver bigint, send datetime, sender bigint, subject varchar(255), primary key (id));
+create table messages (id bigint not null auto_increment, status varchar(255), body text, receiver bigint, send datetime, sender bigint, subject varchar(255), primary key (id));
 create table module_comments (id bigint not null auto_increment, parent bigint, module bigint, primary key (id));
 create table modules (id bigint not null auto_increment, leader bigint, created datetime, creator bigint, description varchar(255), modified datetime, modifier bigint, name varchar(255), primary key (id));
 create table project_comments (id bigint not null auto_increment, parent bigint, project bigint, primary key (id));

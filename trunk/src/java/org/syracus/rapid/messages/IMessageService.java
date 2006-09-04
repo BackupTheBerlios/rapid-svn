@@ -11,4 +11,7 @@ public interface IMessageService {
 	public List<Message> getReceivedMessages( User receiver );
 	public List<Message> getSendMessages( User sender );
 	
+	public List<Message> getNewestMessages( User receiver, int max );
+	public List<Message> getNewestMessagesWithStatus( User receiver, MessageStatus status, int max );
+	
 }

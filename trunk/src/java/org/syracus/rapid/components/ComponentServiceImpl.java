@@ -212,7 +212,7 @@ public class ComponentServiceImpl implements IComponentService {
 			.add( Restrictions.eq( "leader", leader ) )
 			.addOrder( Order.desc( "modified" ) );
 		
-		return( (List<Module>)getModuleDao().findByCriteria(criteria, 1, max ) );
+		return( (List<Module>)getModuleDao().findByCriteria(criteria, 0, max ) );
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -221,7 +221,7 @@ public class ComponentServiceImpl implements IComponentService {
 			.add( Restrictions.eq( "leader", leader ) )
 			.addOrder( Order.desc( "modified" ) );
 		
-		return( (List<Project>)getProjectDao().findByCriteria(criteria, 1, max ) );
+		return( (List<Project>)getProjectDao().findByCriteria(criteria, 0, max ) );
 	}
 
 	@SuppressWarnings("unchecked")
@@ -230,7 +230,7 @@ public class ComponentServiceImpl implements IComponentService {
 			.add( Restrictions.eq( "leader", leader ) )
 			.addOrder( Order.desc( "modified" ) );
 		
-		return( (List<Component>)getComponentDao().findByCriteria(criteria, 1, max ) );
+		return( (List<Component>)getComponentDao().findByCriteria(criteria, 0, max ) );
 	}
 	
 }

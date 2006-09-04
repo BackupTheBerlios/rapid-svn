@@ -26,6 +26,14 @@
         </id>
 
         <property
+            name="status"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="status"
+        />
+
+        <property
             name="body"
             type="text"
             update="true"

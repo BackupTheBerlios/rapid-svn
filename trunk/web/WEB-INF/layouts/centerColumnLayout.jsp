@@ -9,7 +9,7 @@
 		<td valign="top">
 			<stripes:layout-component name="centerColumn"/>
 		</td>
-		<td width="25%">
+		<td width="25%" valign="top">
 			<stripes:layout-component name="rightColumn"/>
 		</td>
 	</tr>
