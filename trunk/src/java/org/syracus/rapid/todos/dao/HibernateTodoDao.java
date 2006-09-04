@@ -2,11 +2,11 @@ package org.syracus.rapid.todos.dao;
 
 import java.util.List;
 
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.syracus.rapid.common.AbstractHibernateDao;
 import org.syracus.rapid.realm.User;
 import org.syracus.rapid.todos.Todo;
 
-public class HibernateTodoDao extends HibernateDaoSupport implements ITodoDao {
+public class HibernateTodoDao extends AbstractHibernateDao implements ITodoDao {
 
 	public void create(Todo todo) {
 		getHibernateTemplate().save( todo );

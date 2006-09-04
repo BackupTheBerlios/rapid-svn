@@ -1,9 +1,8 @@
-package org.syracus.rapid.profiles.dao;
+package org.syracus.rapid.profiles;
 
 import java.util.List;
 
-import org.syracus.rapid.profiles.IProfileService;
-import org.syracus.rapid.profiles.UserProfile;
+import org.syracus.rapid.profiles.dao.IUserProfileDao;
 
 public class ProfileService implements IProfileService {
 

@@ -12,7 +12,8 @@ public interface ITodoService {
 	
 	public Todo getTodoById( Long id );
 	public List<Todo> getAllTodos();
-	public List<Todo> getOwnTodos( User owner );
+	public List<Todo> getTodosByOwner( User owner );
+	public List<Todo> getNewestTodosByOwner( User owner, int max );
 	public Todo getOwnTodo( User owner, Long id );
 	
 }

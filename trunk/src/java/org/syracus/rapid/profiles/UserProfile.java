@@ -14,6 +14,8 @@ public class UserProfile {
 	public static final String DEF_MAX_PROJECTS = "10";
 	public static final String KEY_MAX_COMPONENTS = "max-components";
 	public static final String DEF_MAX_COMPONENTS = "10";
+	public static final String KEY_MAX_TODOS = "max-todos";
+	public static final String DEF_MAX_TODOS = "10";
 	
 	private Long id;
 	private Properties properties;
@@ -66,6 +68,7 @@ public class UserProfile {
 		properties.setProperty( KEY_MAX_MODULES, DEF_MAX_MODULES );
 		properties.setProperty( KEY_MAX_PROJECTS, DEF_MAX_PROJECTS );
 		properties.setProperty( KEY_MAX_COMPONENTS, DEF_MAX_COMPONENTS );
+		properties.setProperty( KEY_MAX_TODOS, DEF_MAX_TODOS );
 		return( properties );
 	}
 	

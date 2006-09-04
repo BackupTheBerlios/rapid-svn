@@ -3,6 +3,10 @@ package org.syracus.rapid.todos;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.syracus.rapid.components.Component;
 import org.syracus.rapid.realm.User;
 import org.syracus.rapid.todos.dao.ITodoDao;
 
@@ -39,8 +43,16 @@ public class TodoService implements ITodoService {
 		return( getTodoDao().find( id ) );
 	}
 
-	public List<Todo> getOwnTodos(User owner) {
+	public List<Todo> getTodosByOwner(User owner) {
 		return( getTodoDao().findByOwner( owner ) );
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Todo> getNewestTodosByOwner(User owner, int max) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Component.class )
+			.add( Restrictions.eq( "owner", owner ) )
+			.addOrder( Order.desc( "modified" ) );
+		return( (List<Todo>)getTodoDao().findByCriteria( criteria, 1, max ) );
 	}
 
 	public Todo getOwnTodo(User owner, Long id) {

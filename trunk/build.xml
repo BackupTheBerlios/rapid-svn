@@ -70,7 +70,7 @@
 				text="yes"
 				drop="no"
 				delimiter=";"
-				output="${sql.dir}/schema.sql">
+				output="${sql.dir}/hibernate_schema.sql">
 			<fileset dir="${src.dir.resources}" includes="**/*.hbm.xml"/>
 		</schemaexport>
 	</target>
@@ -102,7 +102,16 @@
 	</target>
 	
 	<target name="database.schema" depends="hibernate.schemaexport">
-		<sql src="${sql.dir}/schema.sql"
+		<sql src="${sql.dir}/hibernate_schema.sql"
+				driver="${hibernate.connection.driver_class}"
+				url="${hibernate.connection.url}"
+				userid="${hibernate.connection.username}"
+				password="${hibernate.connection.password}"
+				delimiter=";"
+				autocommit="false" onerror="continue">
+			<classpath refid="classpath.database"/>
+		</sql>
+		<sql src="${sql.dir}/jdbc_schema.sql"
 				driver="${hibernate.connection.driver_class}"
 				url="${hibernate.connection.url}"
 				userid="${hibernate.connection.username}"
@@ -113,7 +122,7 @@
 		</sql>
 	</target>
 	
-	<target name="database.data">
+	<target name="database.init" depends="database.schema">
 		<sql src="${sql.dir}/init.sql"
 				driver="${hibernate.connection.driver_class}"
 				url="${hibernate.connection.url}"
@@ -124,7 +133,5 @@
 			<classpath refid="classpath.database"/>
 		</sql>
 	</target>
-		
-	<target name="database.init" depends="database.schema,database.data"/>
 		
 </project>

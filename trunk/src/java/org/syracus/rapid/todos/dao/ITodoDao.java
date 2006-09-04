@@ -2,10 +2,11 @@ package org.syracus.rapid.todos.dao;
 
 import java.util.List;
 
+import org.syracus.rapid.common.IPersistanceDao;
 import org.syracus.rapid.realm.User;
 import org.syracus.rapid.todos.Todo;
 
-public interface ITodoDao {
+public interface ITodoDao extends IPersistanceDao {
 
 	public void create( Todo todo );
 	public void update( Todo todo );

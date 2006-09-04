@@ -9,6 +9,7 @@ import net.sourceforge.stripes.action.UrlBinding;
 import net.sourceforge.stripes.integration.spring.SpringBean;
 import net.sourceforge.stripes.validation.SimpleError;
 
+import org.syracus.rapid.profiles.UserProfile;
 import org.syracus.rapid.stripes.RapidActionBean;
 import org.syracus.rapid.todos.ITodoService;
 import org.syracus.rapid.todos.Todo;
@@ -131,6 +132,7 @@ public class TodoActionBean extends RapidActionBean {
 	}
 	
 	public List<Todo> getOwnTodos() {
-		return( getTodoService().getOwnTodos( getContext().getAuthUser() ) );
+		int maxTodos = Integer.parseInt( getContext().getUserProfile().getProperty( UserProfile.KEY_MAX_TODOS, UserProfile.DEF_MAX_TODOS ) );
+		return( getTodoService().getNewestTodosByOwner( getContext().getAuthUser(), maxTodos ) );
 	}
 }
