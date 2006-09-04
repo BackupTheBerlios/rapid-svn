@@ -6,6 +6,7 @@ import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 
+import org.syracus.rapid.profiles.UserProfile;
 import org.syracus.rapid.realm.User;
 
 @UrlBinding("/public/login.action")
@@ -47,6 +48,13 @@ public class LoginActionBean extends RealmActionBean {
 		Resolution resolution = getContext().getSourcePageResolution();
 		if ( null != user ) {
 			getContext().setAuthUser( user );
+			// try to load users profile
+			UserProfile profile = getProfileService().getUserProfile( user.getId() );
+			if ( null == profile ) {
+				profile = UserProfile.getDefaultProfile( user.getId() );
+				getProfileService().addUserProfile( profile );
+			}
+			getContext().setUserProfile( profile );
 			resolution = new RedirectResolution( getTarget() );
 		}
 		return( resolution );

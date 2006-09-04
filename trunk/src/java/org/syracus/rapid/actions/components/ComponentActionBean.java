@@ -1,11 +1,14 @@
 package org.syracus.rapid.actions.components;
 
+import java.util.List;
+
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 
 import org.syracus.rapid.components.Component;
+import org.syracus.rapid.profiles.UserProfile;
 
 @UrlBinding("/protected/component.action")
 public class ComponentActionBean extends BaseComponentActionBean {
@@ -61,5 +64,10 @@ public class ComponentActionBean extends BaseComponentActionBean {
 		Component component = getComponentService().getComponentById( getComponentId() );
 		getComponentService().deleteComponent( component, getContext().getAuthUser() );
 		return( new ForwardResolution( "" ) );
+	}
+	
+	public List<Component> getOwnComponents() {
+		int maxComponents = Integer.parseInt( getContext().getUserProfile().getProperty( UserProfile.KEY_MAX_COMPONENTS, UserProfile.DEF_MAX_COMPONENTS ) );
+		return( getComponentService().getNewestComponentsByLeader( getContext().getAuthUser(), maxComponents ) );
 	}
 }

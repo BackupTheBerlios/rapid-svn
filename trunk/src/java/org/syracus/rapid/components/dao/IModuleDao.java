@@ -2,10 +2,11 @@ package org.syracus.rapid.components.dao;
 
 import java.util.List;
 
+import org.syracus.rapid.common.IPersistanceDao;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.realm.User;
 
-public interface IModuleDao {
+public interface IModuleDao extends IPersistanceDao {
 
 	public void create( Module module );
 	public void update( Module module );

@@ -17,6 +17,7 @@ public interface IComponentService {
 	public List<Module> getModulesByCreator( User creator );
 	public List<Module> getModulesByModifier( User modifier );
 	public List<Module> getModulesByLeader( User leader );
+	public List<Module> getNewestModulesByLeader( User leader, int max );
 	
 	public void addProject( Project project, User user );
 	public void updateProject( Project project, User user );
@@ -31,7 +32,7 @@ public interface IComponentService {
 	public List<Project> getProjectsByCreator( User creator );
 	public List<Project> getProjectsByModifier( User modifier );
 	public List<Project> getProjectsByLeader( User leader );
-	
+	public List<Project> getNewestProjectsByLeader( User leader, int max );
 	
 	public void addComponent( Component component, User user );
 	public void updateComponent( Component project, User user );
@@ -47,5 +48,6 @@ public interface IComponentService {
 	public List<Component> getComponentsByCreator( User creator );
 	public List<Component> getComponentsByModifier( User modifier );
 	public List<Component> getComponentsByLeader( User leader );
+	public List<Component> getNewestComponentsByLeader( User leader, int max );
 	
 }

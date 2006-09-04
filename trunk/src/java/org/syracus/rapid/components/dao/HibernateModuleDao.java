@@ -2,11 +2,11 @@ package org.syracus.rapid.components.dao;
 
 import java.util.List;
 
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.syracus.rapid.common.AbstractHibernateDao;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.realm.User;
 
-public class HibernateModuleDao extends HibernateDaoSupport implements
+public class HibernateModuleDao extends AbstractHibernateDao implements
 		IModuleDao {
 
 	public void create(Module module) {
@@ -88,4 +88,5 @@ public class HibernateModuleDao extends HibernateDaoSupport implements
 		getHibernateTemplate().update( module );
 	}
 
+	
 }

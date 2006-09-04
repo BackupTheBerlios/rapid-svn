@@ -1,7 +1,5 @@
 package org.syracus.rapid.actions.components;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import net.sourceforge.stripes.action.ForwardResolution;
@@ -10,6 +8,7 @@ import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 
 import org.syracus.rapid.components.Module;
+import org.syracus.rapid.profiles.UserProfile;
 
 @UrlBinding("/protected/module.action")
 public class ModuleActionBean extends BaseComponentActionBean {
@@ -69,12 +68,7 @@ public class ModuleActionBean extends BaseComponentActionBean {
 	}
 	
 	public List<Module> getOwnModules() {
-		List<Module> modules = getComponentService().getModulesByLeader( getContext().getAuthUser() );
-		Collections.sort( modules, new Comparator<Module>() {
-			public int compare(Module arg0, Module arg1) {
-				return( arg0.getModified().compareTo( arg1.getModified() ) );
-			}
-		} );
-		return( modules );
+		int maxModules = Integer.parseInt( getContext().getUserProfile().getProperty( UserProfile.KEY_MAX_MODULES, UserProfile.DEF_MAX_MODULES ) );
+		return( getComponentService().getNewestModulesByLeader( getContext().getAuthUser(), maxModules ) );
 	}
 }

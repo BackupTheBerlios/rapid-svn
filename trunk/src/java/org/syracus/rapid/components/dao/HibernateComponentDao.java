@@ -2,13 +2,13 @@ package org.syracus.rapid.components.dao;
 
 import java.util.List;
 
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.syracus.rapid.common.AbstractHibernateDao;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
 import org.syracus.rapid.realm.User;
 
-public class HibernateComponentDao extends HibernateDaoSupport implements
+public class HibernateComponentDao extends AbstractHibernateDao implements
 		IComponentDao {
 
 	public void create(Component component) {

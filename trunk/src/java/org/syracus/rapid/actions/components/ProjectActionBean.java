@@ -8,6 +8,7 @@ import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 
 import org.syracus.rapid.components.Project;
+import org.syracus.rapid.profiles.UserProfile;
 
 @UrlBinding("/protected/project.action")
 public class ProjectActionBean extends BaseComponentActionBean {
@@ -66,7 +67,8 @@ public class ProjectActionBean extends BaseComponentActionBean {
 	}
 	
 	public List<Project> getOwnProjects() {
-		return( getComponentService().getProjectsByLeader( getContext().getAuthUser() ) );
+		int maxProjects = Integer.parseInt( getContext().getUserProfile().getProperty( UserProfile.KEY_MAX_PROJECTS, UserProfile.DEF_MAX_PROJECTS ) );
+		return( getComponentService().getNewestProjectsByLeader( getContext().getAuthUser(), maxProjects ) );
 	}
 	
 	

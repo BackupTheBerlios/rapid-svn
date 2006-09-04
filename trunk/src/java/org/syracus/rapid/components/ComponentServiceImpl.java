@@ -3,6 +3,9 @@ package org.syracus.rapid.components;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.syracus.rapid.components.dao.IComponentDao;
 import org.syracus.rapid.components.dao.IModuleDao;
 import org.syracus.rapid.components.dao.IProjectDao;
@@ -203,5 +206,31 @@ public class ComponentServiceImpl implements IComponentService {
 		return( getComponentDao().findByLeader( leader ) );
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Module> getNewestModulesByLeader(User leader, int max) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Module.class )
+			.add( Restrictions.eq( "leader", leader ) )
+			.addOrder( Order.desc( "modified" ) );
+		
+		return( (List<Module>)getModuleDao().findByCriteria(criteria, 1, max ) );
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Project> getNewestProjectsByLeader(User leader, int max) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Project.class )
+			.add( Restrictions.eq( "leader", leader ) )
+			.addOrder( Order.desc( "modified" ) );
+		
+		return( (List<Project>)getProjectDao().findByCriteria(criteria, 1, max ) );
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Component> getNewestComponentsByLeader(User leader, int max) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Component.class )
+			.add( Restrictions.eq( "leader", leader ) )
+			.addOrder( Order.desc( "modified" ) );
+		
+		return( (List<Component>)getComponentDao().findByCriteria(criteria, 1, max ) );
+	}
 	
 }

@@ -2,7 +2,7 @@ package org.syracus.rapid.issues.dao;
 
 import java.util.List;
 
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.syracus.rapid.common.AbstractHibernateDao;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
@@ -12,7 +12,7 @@ import org.syracus.rapid.issues.Status;
 import org.syracus.rapid.issues.Type;
 import org.syracus.rapid.realm.User;
 
-public class HibernateIssueDao extends HibernateDaoSupport implements IIssueDao {
+public class HibernateIssueDao extends AbstractHibernateDao implements IIssueDao {
 
 	public void create(Issue issue) {
 		getHibernateTemplate().save( issue );
@@ -149,4 +149,6 @@ public class HibernateIssueDao extends HibernateDaoSupport implements IIssueDao 
 		getHibernateTemplate().update( issue );
 	}
 
+	
+	
 }

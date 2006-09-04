@@ -2,11 +2,12 @@ package org.syracus.rapid.components.dao;
 
 import java.util.List;
 
+import org.syracus.rapid.common.IPersistanceDao;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
 import org.syracus.rapid.realm.User;
 
-public interface IProjectDao {
+public interface IProjectDao extends IPersistanceDao {
 
 	public void create( Project project );
 	public void update( Project project );
@@ -24,4 +25,5 @@ public interface IProjectDao {
 	public List<Project> findByCreator( User creator );
 	public List<Project> findByModifier( User modifier );
 	public List<Project> findByLeader( User leader );
+
 }

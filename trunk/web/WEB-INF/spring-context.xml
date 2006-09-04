@@ -77,6 +77,18 @@
 		</property>
 	</bean>
 	
+	<bean id="userProfileDao" class="org.syracus.rapid.profiles.dao.JdbcUserProfileDao">
+		<property name="dataSource">
+			<ref local="dataSource"/>
+		</property>
+	</bean>
+	
+	<bean id="profileService" class="org.syracus.rapid.profiles.ProfileService">
+		<property name="userProfileDao">
+			<ref local="userProfileDao"/>
+		</property>
+	</bean>
+	
 	<bean id="moduleDao" class="org.syracus.rapid.components.dao.HibernateModuleDao">
 		<property name="sessionFactory">
 			<ref local="hibernateSessionFactory"/>

@@ -4,11 +4,13 @@ import javax.servlet.http.HttpSession;
 
 import net.sourceforge.stripes.action.ActionBeanContext;
 
+import org.syracus.rapid.profiles.UserProfile;
 import org.syracus.rapid.realm.User;
 
 public class RapidActionBeanContext extends ActionBeanContext {
 
 	public static final String AUTH_USER = "org.syracus.rapid.realm.AUTH_USER";
+	public static final String AUTH_USER_PROFILE = "org.syracus.rapid.profiles.AUTH_USER_PROFILE";
 	
 	/**
 	 * Returns the currently active user for this session.
@@ -29,5 +31,15 @@ public class RapidActionBeanContext extends ActionBeanContext {
 	public void setAuthUser( User user ) {
 		HttpSession session = getRequest().getSession();
 		session.setAttribute( AUTH_USER, user );
+	}
+	
+	public UserProfile getUserProfile() {
+		HttpSession session = getRequest().getSession();
+		return( (UserProfile)session.getAttribute( AUTH_USER_PROFILE ) );
+	}
+	
+	public void setUserProfile( UserProfile profile ) {
+		HttpSession session = getRequest().getSession();
+		session.setAttribute( AUTH_USER_PROFILE, profile );
 	}
 }

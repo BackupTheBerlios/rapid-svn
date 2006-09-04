@@ -3,6 +3,7 @@ package org.syracus.rapid.issues;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
@@ -98,4 +99,15 @@ public class IssueService implements IIssueService {
 		getIssueDao().update( issue );
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Issue> getIssuesByCriteria(DetachedCriteria criteria) {
+		return( (List<Issue>)getIssueDao().findByCriteria( criteria ) );
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Issue> getIssuesByCriteria(DetachedCriteria criteria, int first, int max ) {
+		return( (List<Issue>)getIssueDao().findByCriteria( criteria, first, max ) );
+	}
+
+	
 }

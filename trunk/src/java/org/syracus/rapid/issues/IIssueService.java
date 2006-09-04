@@ -2,6 +2,7 @@ package org.syracus.rapid.issues;
 
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
@@ -32,4 +33,6 @@ public interface IIssueService {
 	public List<Issue> getIssuesByStatus( Status status );
 	public List<Issue> getIssuesByPriority( Priority priority );
 	
+	public List<Issue> getIssuesByCriteria( DetachedCriteria criteria );
+	public List<Issue> getIssuesByCriteria( DetachedCriteria criteria, int first, int max );
 }

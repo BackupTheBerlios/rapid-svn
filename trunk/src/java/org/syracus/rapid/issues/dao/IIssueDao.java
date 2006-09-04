@@ -2,6 +2,7 @@ package org.syracus.rapid.issues.dao;
 
 import java.util.List;
 
+import org.syracus.rapid.common.IPersistanceDao;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
@@ -11,7 +12,7 @@ import org.syracus.rapid.issues.Status;
 import org.syracus.rapid.issues.Type;
 import org.syracus.rapid.realm.User;
 
-public interface IIssueDao {
+public interface IIssueDao extends IPersistanceDao {
 
 	public void create( Issue issue );
 	public void update( Issue issue );
@@ -36,5 +37,5 @@ public interface IIssueDao {
 	public List<Issue> findByStatus( Status status );
 	public List<Issue> findByPriority( Priority priority );
 	
-	
+
 }
