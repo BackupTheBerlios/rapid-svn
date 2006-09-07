@@ -84,14 +84,6 @@ public class HibernateProjectDao extends AbstractHibernateDao implements
 				name
 		) );
 	}
-
-	@SuppressWarnings("unchecked")
-	public List<Project> findByParent(Project parent) {
-		return( (List<Project>)getHibernateTemplate().find(
-				"FROM Project p WHERE p.parent = ?",
-				parent
-		) );
-	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Project> findByLeader(User leader) {

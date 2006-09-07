@@ -189,10 +189,6 @@ public class ComponentServiceImpl implements IComponentService {
 		project.setModified( now );
 		getProjectDao().update( project );
 	}
-
-	public List<Project> getProjectsOfProject(Project project) {
-		return( getProjectDao().findByParent( project ) );
-	}
 	
 	public List<Module> getModulesByLeader( User leader ) {
 		return( getModuleDao().findByLeader( leader ) );
@@ -232,5 +228,11 @@ public class ComponentServiceImpl implements IComponentService {
 		
 		return( (List<Component>)getComponentDao().findByCriteria(criteria, 0, max ) );
 	}
+
+	public Integer getNumberOfProjects(Module module) {
+		return( getModuleDao().countProjects( module ) );
+	}
+	
+	
 	
 }

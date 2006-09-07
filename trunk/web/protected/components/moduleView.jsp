@@ -7,9 +7,20 @@
 			<tr>
 				<td align="left">Module Details</td>
 				<td align="right">
+					<stripes:link href="/protected/components/moduleList.jsp" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
+						all
+					</stripes:link>
+					<stripes:link href="/protected/project.action" event="create" onclick="ajaxUpdate(this.href,'_workbenchContent');return(false);">
+						<stripes:link-param name="moduleId" value="${actionBean.module.id}"/>
+						project
+					</stripes:link>
 					<stripes:link href="/protected/module.action" event="edit" onclick="ajaxUpdate(this.href,'_workbenchContent');return(false);">
 						<stripes:link-param name="moduleId" value="${actionBean.module.id}"/>
 						edit
+					</stripes:link>
+					<stripes:link href="/protected/module.action" event="delete" onclick="ajaxUpdate(this.href,'_workbenchContent');return(false);">
+						<stripes:link-param name="moduleId" value="${actionBean.module.id}"/>
+						delete
 					</stripes:link>
 				</td>
 			</tr>
@@ -31,7 +42,7 @@
 		<tr>
 			<td>Leader:</td>
 			<td>
-				<pre>${actionBean.module.leader.name}</pre>
+				${actionBean.module.leader.name}
 			</td>
 		</tr>
 	</table>

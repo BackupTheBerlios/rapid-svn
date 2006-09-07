@@ -63,12 +63,23 @@ public class ModuleActionBean extends BaseComponentActionBean {
 	
 	public Resolution delete() {
 		Module module = getComponentService().getModuleById( getModuleId() );
-		getComponentService().deleteModule( module, getContext().getAuthUser() );
-		return( new ForwardResolution( "" ) );
+		if ( null != module ) {
+			Integer projectCount = getComponentService().getNumberOfProjects( module );
+			if ( 0 == projectCount.intValue() ) {
+				getComponentService().deleteModule( module, getContext().getAuthUser() );
+				return( new ForwardResolution( "/protected/components/moduleList.jsp" ) );
+			}
+		}
+		System.out.println( "*** Module not empty !!" );
+		return( getContext().getSourcePageResolution() );
 	}
 	
 	public List<Module> getOwnModules() {
 		int maxModules = Integer.parseInt( getContext().getUserProfile().getProperty( UserProfile.KEY_MAX_MODULES, UserProfile.DEF_MAX_MODULES ) );
 		return( getComponentService().getNewestModulesByLeader( getContext().getAuthUser(), maxModules ) );
+	}
+	
+	public List<Module> getAllModules() {
+		return( getComponentService().getAllModules() );
 	}
 }

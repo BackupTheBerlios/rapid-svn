@@ -18,6 +18,28 @@ public class UserProfile {
 	public static final String DEF_MAX_TODOS = "10";
 	public static final String KEY_MAX_MESSAGES = "max-messages";
 	public static final String DEF_MAX_MESSAGES = "10";
+	public static final String KEY_REFRESH_MODULES = "refresh-modules";
+	public static final String DEF_REFRESH_MODULES = "false";
+	public static final String KEY_REFRESH_PROJECTS = "refresh-projects";
+	public static final String DEF_REFRESH_PROJECTS = "false";
+	public static final String KEY_REFRESH_COMPONENTS = "refresh-components";
+	public static final String DEF_REFRESH_COMPONENTS = "false";
+	public static final String KEY_REFRESH_TODOS = "refresh-todos";
+	public static final String DEF_REFRESH_TODOS = "false";
+	public static final String KEY_REFRESH_MESSAGES = "refresh-messages";
+	public static final String DEF_REFRESH_MESSAGES = "false";
+	
+	public static final String[][] DEFAULT_PROFILE = new String[][]{
+		{ KEY_MAX_MODULES, DEF_MAX_MODULES },
+		{ KEY_MAX_PROJECTS, DEF_MAX_PROJECTS },
+		{ KEY_MAX_COMPONENTS, DEF_MAX_COMPONENTS },
+		{ KEY_MAX_TODOS, DEF_MAX_TODOS },
+		{ KEY_REFRESH_MODULES, DEF_REFRESH_MODULES },
+		{ KEY_REFRESH_PROJECTS, DEF_REFRESH_PROJECTS },
+		{ KEY_REFRESH_COMPONENTS, DEF_REFRESH_COMPONENTS },
+		{ KEY_REFRESH_MESSAGES, DEF_REFRESH_MESSAGES },
+		{ KEY_REFRESH_TODOS, DEF_REFRESH_TODOS }
+	};
 	
 	private Long id;
 	private Properties properties;
@@ -67,11 +89,10 @@ public class UserProfile {
 	
 	public static Properties getDefaultProperties() {
 		Properties properties = new Properties();
-		properties.setProperty( KEY_MAX_MODULES, DEF_MAX_MODULES );
-		properties.setProperty( KEY_MAX_PROJECTS, DEF_MAX_PROJECTS );
-		properties.setProperty( KEY_MAX_COMPONENTS, DEF_MAX_COMPONENTS );
-		properties.setProperty( KEY_MAX_TODOS, DEF_MAX_TODOS );
-		properties.setProperty( KEY_MAX_MESSAGES, DEF_MAX_MESSAGES );
+		for ( int i = 0; i < DEFAULT_PROFILE.length; ++i ) {
+			properties.setProperty( DEFAULT_PROFILE[i][0], DEFAULT_PROFILE[i][1] );
+		}
+		
 		return( properties );
 	}
 	
@@ -90,6 +111,15 @@ public class UserProfile {
 		Properties properties = new Properties();
 		properties.load( istream );
 		return( properties );
+	}
+	
+	public static String getDefaultValue( String key ) {
+		for ( int i = 0; i < DEFAULT_PROFILE.length; ++i ) {
+			if ( DEFAULT_PROFILE[i][0].equals( key ) ) {
+				return( DEFAULT_PROFILE[i][1] );
+			}
+		}
+		return( null );
 	}
 	
 }

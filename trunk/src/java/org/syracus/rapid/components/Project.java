@@ -10,7 +10,6 @@ import org.syracus.rapid.realm.User;
 public class Project extends ABaseComponent {
 
 	private Module module;
-	private Project parent;
 	private User leader;
 	private String home;
 
@@ -38,19 +37,6 @@ public class Project extends ABaseComponent {
 
 	public void setLeader(User leader) {
 		this.leader = leader;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 * @hibernate.many-to-one
-	 */
-	public Project getParent() {
-		return parent;
-	}
-
-	public void setParent(Project parent) {
-		this.parent = parent;
 	}
 
 	/**

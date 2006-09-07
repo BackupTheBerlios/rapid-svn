@@ -25,7 +25,6 @@ alter table project_comments drop foreign key FK953D305A1BEB2FD8;
 alter table project_comments drop foreign key FK953D305A44DD732C;
 alter table projects drop foreign key FKC479187A9784E2B4;
 alter table projects drop foreign key FKC479187A3586655F;
-alter table projects drop foreign key FKC479187AF305ED69;
 alter table projects drop foreign key FKC479187A183EA791;
 alter table projects drop foreign key FKC479187A48DFE672;
 alter table todos drop foreign key FK696A0ED608A553B;
@@ -48,7 +47,7 @@ create table messages (id bigint not null auto_increment, status varchar(255), b
 create table module_comments (id bigint not null auto_increment, parent bigint, module bigint, primary key (id));
 create table modules (id bigint not null auto_increment, leader bigint, created datetime, creator bigint, description varchar(255), modified datetime, modifier bigint, name varchar(255), primary key (id));
 create table project_comments (id bigint not null auto_increment, parent bigint, project bigint, primary key (id));
-create table projects (id bigint not null auto_increment, home varchar(255), leader bigint, parent bigint, module bigint, created datetime, creator bigint, description varchar(255), modified datetime, modifier bigint, name varchar(255), primary key (id));
+create table projects (id bigint not null auto_increment, home varchar(255), leader bigint, module bigint, created datetime, creator bigint, description varchar(255), modified datetime, modifier bigint, name varchar(255), primary key (id));
 create table todos (id bigint not null auto_increment, done bit, created datetime, description text, modified datetime, owner bigint, summary varchar(255), primary key (id));
 create table users (id bigint not null auto_increment, email varchar(255), name varchar(255), account varchar(255), password varchar(255), primary key (id));
 alter table component_comments add index FK5AC23EF6FAB809C8 (parent), add constraint FK5AC23EF6FAB809C8 foreign key (parent) references component_comments (id);
@@ -78,7 +77,6 @@ alter table project_comments add index FK953D305A1BEB2FD8 (project), add constra
 alter table project_comments add index FK953D305A44DD732C (parent), add constraint FK953D305A44DD732C foreign key (parent) references project_comments (id);
 alter table projects add index FKC479187A9784E2B4 (creator), add constraint FKC479187A9784E2B4 foreign key (creator) references users (id);
 alter table projects add index FKC479187A3586655F (modifier), add constraint FKC479187A3586655F foreign key (modifier) references users (id);
-alter table projects add index FKC479187AF305ED69 (parent), add constraint FKC479187AF305ED69 foreign key (parent) references projects (id);
 alter table projects add index FKC479187A183EA791 (leader), add constraint FKC479187A183EA791 foreign key (leader) references users (id);
 alter table projects add index FKC479187A48DFE672 (module), add constraint FKC479187A48DFE672 foreign key (module) references modules (id);
 alter table todos add index FK696A0ED608A553B (owner), add constraint FK696A0ED608A553B foreign key (owner) references users (id);

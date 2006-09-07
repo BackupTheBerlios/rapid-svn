@@ -17,7 +17,6 @@ public interface IProjectDao extends IPersistanceDao {
 	
 	public List<Project> findAll();
 	public List<Project> findByModule( Module module );
-	public List<Project> findByParent( Project parent );
 	public List<Project> findByName( String name );
 	public List<Project> findLikeName( String name );
 	public List<Project> findByDescription( String description );

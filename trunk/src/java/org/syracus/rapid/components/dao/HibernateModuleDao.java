@@ -1,7 +1,11 @@
 package org.syracus.rapid.components.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.syracus.rapid.common.AbstractHibernateDao;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.realm.User;
@@ -86,6 +90,17 @@ public class HibernateModuleDao extends AbstractHibernateDao implements
 
 	public void update(Module module) {
 		getHibernateTemplate().update( module );
+	}
+
+	public Integer countProjects( final Module module ) {
+		return( (Integer)getHibernateTemplate().execute( new HibernateCallback() {
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				return( (Integer)session.createQuery( "SELECT COUNT(*) FROM Project p WHERE p.module = ?" )
+					.setEntity( 0, module )
+					.uniqueResult()
+				);
+			}
+		} ) );
 	}
 
 	

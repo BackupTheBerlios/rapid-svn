@@ -44,16 +44,6 @@
         />
 
         <many-to-one
-            name="parent"
-            class="org.syracus.rapid.components.Project"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="parent"
-        />
-
-        <many-to-one
             name="module"
             class="org.syracus.rapid.components.Module"
             cascade="none"

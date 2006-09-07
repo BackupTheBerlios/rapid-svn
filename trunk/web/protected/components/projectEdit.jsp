@@ -3,29 +3,46 @@
 <stripes:layout-render name="/WEB-INF/layouts/tileLayout.jsp">
 
 	<stripes:layout-component name="tileHeader">
-		Create Module
+		Create Project
 	</stripes:layout-component>
 	
 	<stripes:layout-component name="tileContent">
-	<stripes:form action="/protected/module.action" method="post">
+	<stripes:form action="/protected/project.action" method="post">
+		<stripes:hidden name="project.id" value="${project.id}"/>
+		<stripes:hidden name="project.module.id" value="${project.module.id}"/>
 		<table>
+			<tr>
+				<td>Module:</td>
+				<td>
+					<stripes:link href="/protected/module.action" event="view" onclick="ajaxUpdate(this.href,'_workbenchContent');return(false);">
+						<stripes:link-param name="moduleId" value="${actionBean.project.module.id}"/>
+						${actionBean.project.module.name}
+					</stripes:link>
+				</td>
+			</tr>
 			<tr>
 				<td>Name:</td>
 				<td>
-					<stripes:text name="module.name" value="${module.name}"/>
+					<stripes:text name="project.name" value="${project.name}"/>
+				</td>
+			</tr>
+			<tr>
+				<td>Project Home:</td>
+				<td>
+					<stripes:text name="project.home" value="${project.home}"/>
 				</td>
 			</tr>
 			<tr>
 				<td>Description:</td>
 				<td>
-					<stripes:textarea name="module.description" value="${module.description}"/>
+					<stripes:textarea name="project.description" value="${project.description}"/>
 				</td>
 			</tr>
 			<tr>
 				<td>Leader:</td>
 				<td>
 					<stripes:useActionBean var="realmAction" beanclass="org.syracus.rapid.actions.realm.RealmActionBean"/>
-					<stripes:select name="module.leader.id" value="${module.leader.id}">
+					<stripes:select name="project.leader.id" value="${project.leader.id}">
 						<stripes:options-collection collection="${realmAction.allUsers}" label="name" value="id"/>
 					</stripes:select>
 				</td>

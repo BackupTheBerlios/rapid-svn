@@ -33,7 +33,7 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-					<stripes:submit name="save" value="save"/>
+					<stripes:button name="save" value="save" onclick="ajaxForm(this.form,this.value,'_workbenchContent');"/>
 				</td>
 			</tr>
 		</table>

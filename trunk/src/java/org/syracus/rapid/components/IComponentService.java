@@ -18,6 +18,7 @@ public interface IComponentService {
 	public List<Module> getModulesByModifier( User modifier );
 	public List<Module> getModulesByLeader( User leader );
 	public List<Module> getNewestModulesByLeader( User leader, int max );
+	public Integer getNumberOfProjects( Module module );
 	
 	public void addProject( Project project, User user );
 	public void updateProject( Project project, User user );
@@ -26,7 +27,6 @@ public interface IComponentService {
 	public Project getProjectById( Long id );
 	public List<Project> getAllProjects();
 	public List<Project> getProjectsOfModule( Module module );
-	public List<Project> getProjectsOfProject( Project project );
 	public List<Project> getProjectsByName( String name );
 	public List<Project> getProjectsByDescription( String description );
 	public List<Project> getProjectsByCreator( User creator );

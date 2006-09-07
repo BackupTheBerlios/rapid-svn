@@ -2,7 +2,6 @@ package org.syracus.rapid.messages.dao;
 
 import java.util.List;
 
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.syracus.rapid.common.AbstractHibernateDao;
 import org.syracus.rapid.messages.Message;
 import org.syracus.rapid.messages.MessageStatus;
