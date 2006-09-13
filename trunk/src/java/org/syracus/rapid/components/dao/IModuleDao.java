@@ -23,5 +23,6 @@ public interface IModuleDao extends IPersistanceDao {
 	public List<Module> findByCreator( User creator );
 	public List<Module> findByModifier( User modifier );
 	
-	public Integer countProjects( Module module );
+	public Integer countProjectsOfModule( Module module );
+	public Integer countComponentsOfModule( Module module );
 }

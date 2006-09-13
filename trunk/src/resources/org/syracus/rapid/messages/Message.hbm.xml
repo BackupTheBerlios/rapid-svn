@@ -49,6 +49,7 @@
             update="true"
             insert="true"
             column="receiver"
+            not-null="true"
         />
 
         <property
@@ -57,6 +58,7 @@
             update="true"
             insert="true"
             column="send"
+            not-null="true"
         />
 
         <many-to-one
@@ -67,6 +69,7 @@
             update="true"
             insert="true"
             column="sender"
+            not-null="true"
         />
 
         <property

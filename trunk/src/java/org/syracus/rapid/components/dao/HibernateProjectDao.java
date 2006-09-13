@@ -1,7 +1,13 @@
 package org.syracus.rapid.components.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.syracus.rapid.common.AbstractHibernateDao;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
@@ -55,10 +61,13 @@ public class HibernateProjectDao extends AbstractHibernateDao implements
 
 	@SuppressWarnings("unchecked")
 	public List<Project> findByModule(Module module) {
-		return( (List<Project>)getHibernateTemplate().find(
-				"FROM Project p WHERE p.module = ?",
-				module
-		) );
+		DetachedCriteria criteria = DetachedCriteria.forClass( Project.class );
+		if ( null == module ) {
+			criteria.add( Restrictions.isNull( "module" ) );
+		} else {
+			criteria.add( Restrictions.eq( "module", module ) );
+		}
+		return( findByCriteria( criteria ) );
 	}
 
 	@SuppressWarnings("unchecked")
@@ -97,4 +106,14 @@ public class HibernateProjectDao extends AbstractHibernateDao implements
 		getHibernateTemplate().update( project );
 	}
 
+	public Integer countComponentsOfProject( final Project project ) {
+		return( (Integer)getHibernateTemplate().execute( new HibernateCallback() {
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				return( (Integer)session.createQuery( "SELECT COUNT(*) FROM Component c WHERE c.project = ?" )
+					.setEntity( 0, project )
+					.uniqueResult()
+				);
+			}
+		} ) );
+	}
 }

@@ -33,6 +33,7 @@
             update="true"
             insert="true"
             column="component"
+            not-null="false"
         />
 
         <many-to-one
@@ -43,6 +44,7 @@
             update="true"
             insert="true"
             column="module"
+            not-null="false"
         />
 
         <many-to-one
@@ -53,6 +55,7 @@
             update="true"
             insert="true"
             column="project"
+            not-null="false"
         />
 
         <property

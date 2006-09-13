@@ -29,6 +29,16 @@
 		<fileset dir="${xdoclet.home}/lib" includes="*.jar"/>
 	</path>
 	
+	<path id="classpath.xdoclet2">
+		<fileset dir="${xdoclet2.home}/lib" includes="**/*.jar"/>
+		<pathelement location="${xdoclet2.home}/plugins/xdoclet-plugin-hibernate-1.0.3.jar"/>
+	</path>
+	
+	<path id="classpath.schemaexport">
+		<path refid="classpath.compile.java"/>
+		<pathelement location="${build.dir.classes}"/>
+	</path>
+	
 	<path id="classpath.database">
 		<pathelement location="${jdbc.jar}"/>
 	</path>
@@ -38,9 +48,22 @@
 			classpathref="classpath.xdoclet"/>
 	<taskdef name="schemaexport"
 			classname="org.hibernate.tool.hbm2ddl.SchemaExportTask"
-			classpathref="classpath.compile.java"/>
+			classpathref="classpath.schemaexport"/>
+	<taskdef name="xdoclet"
+			classname="org.xdoclet.ant.XDocletTask"
+			classpathref="classpath.xdoclet2"/>
 		
 	<target name="hibernate.mappings">
+		<!--
+		<xdoclet>
+			<fileset dir="${src.dir.java}" includes="**/*.java"/>
+			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin"
+				destdir="${src.dir.resources}"
+				version="3.0"
+				force="${xdoclet.force}"
+				encoding="UTF-8"/>
+		</xdoclet>
+		-->
 		<hibernatedoclet destdir="${src.dir.resources}" mergedir="${xdoclet.dir}" verbose="${xdoclet.verbose}" force="${xdoclet.force}">
 			<fileset dir="${src.dir.java}" includes="**/*.java"/>
 			<hibernate version="3.0"/>
@@ -52,6 +75,20 @@
 	</target>
 	
 	<target name="hibernate.config" depends="hibernate.mappings,hibernate.properties">
+		<!--
+		<xdoclet>
+			<fileset dir="${src.dir.java}" includes="**/*.java"/>
+			<component classname="org.xdoclet.plugin.hibernate.HibernateConfigPlugin"
+				destdir="${src.dir.resources}"
+				version="3.0"
+				dialect="${hibernate.dialect}"
+				jndidatasource="${hibernate.connection.datasource}"
+				useouterjoin="true"
+				showsql="${hibernate.show_sql}"
+				usereflectionoptimizer="${hibernate.cglib.use_reflection_optimizer}"
+				encoding="UTF-8"/>
+		</xdoclet>
+		-->
 		<hibernatedoclet destdir="${src.dir.resources}" mergedir="${xdoclet.dir}" verbose="${xdoclet.verbose}" force="${xdoclet.force}">
 			<fileset dir="${src.dir.java}" includes="**/*.java"/>
 			<hibernatecfg version="3.0"

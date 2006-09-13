@@ -29,7 +29,7 @@ public class Project extends ABaseComponent {
 	/**
 	 * 
 	 * @return
-	 * @hibernate.many-to-one
+	 * @hibernate.many-to-one not-null="true"
 	 */
 	public User getLeader() {
 		return leader;
@@ -42,7 +42,7 @@ public class Project extends ABaseComponent {
 	/**
 	 * 
 	 * @return
-	 * @hibernate.many-to-one
+	 * @hibernate.many-to-one not-null="false"
 	 */
 	public Module getModule() {
 		return module;

@@ -13,6 +13,7 @@
 				<jsp:include page="/protected/workbench/tiles/moduleList.jsp" flush="true"/>
 				<jsp:include page="/protected/workbench/tiles/projectList.jsp" flush="true"/>
 				<jsp:include page="/protected/workbench/tiles/componentList.jsp" flush="true"/>
+				<jsp:include page="/protected/workbench/tiles/issueList.jsp" flush="true"/>
 			</stripes:layout-component>
 			
 			<stripes:layout-component name="centerColumn">

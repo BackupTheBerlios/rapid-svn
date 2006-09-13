@@ -2,6 +2,8 @@ package org.syracus.rapid.issues.dao;
 
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.syracus.rapid.common.AbstractHibernateDao;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
@@ -74,11 +76,20 @@ public class HibernateIssueDao extends AbstractHibernateDao implements IIssueDao
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Issue> findByModule(Module module) {
-		return( (List<Issue>)getHibernateTemplate().find(
-				"FROM Issue i WHERE i.module = ?",
-				module
-		) );
+	public List<Issue> findByModule(Module module, boolean recursive) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Issue.class );
+		if ( true == recursive ) {
+			criteria.add( Restrictions.eq( "module", module ) );
+		} else {
+			criteria.add( Restrictions.and(
+					Restrictions.eq( "module", module ),
+					Restrictions.and(
+							Restrictions.isNull( "project" ),
+							Restrictions.isNull( "component" )
+					)
+			) );
+		}
+		return( findByCriteria( criteria ) );
 	}
 
 	@SuppressWarnings("unchecked")
@@ -90,11 +101,17 @@ public class HibernateIssueDao extends AbstractHibernateDao implements IIssueDao
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Issue> findByProject(Project project) {
-		return( (List<Issue>)getHibernateTemplate().find(
-				"FROM Issue i WHERE i.project = ?",
-				project
-		) );
+	public List<Issue> findByProject(Project project, boolean recursive) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Issue.class );
+		if ( true == recursive ) {
+			criteria.add( Restrictions.eq( "project", project ) );
+		} else {
+			criteria.add( Restrictions.and(
+					Restrictions.eq( "project", project ),
+					Restrictions.isNull( "component" )
+			) );
+		}
+		return( findByCriteria( criteria ) );
 	}
 
 	@SuppressWarnings("unchecked")

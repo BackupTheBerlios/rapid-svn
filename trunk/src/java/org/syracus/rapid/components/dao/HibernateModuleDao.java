@@ -92,10 +92,21 @@ public class HibernateModuleDao extends AbstractHibernateDao implements
 		getHibernateTemplate().update( module );
 	}
 
-	public Integer countProjects( final Module module ) {
+	public Integer countProjectsOfModule( final Module module ) {
 		return( (Integer)getHibernateTemplate().execute( new HibernateCallback() {
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {
 				return( (Integer)session.createQuery( "SELECT COUNT(*) FROM Project p WHERE p.module = ?" )
+					.setEntity( 0, module )
+					.uniqueResult()
+				);
+			}
+		} ) );
+	}
+	
+	public Integer countComponentsOfModule( final Module module ) {
+		return( (Integer)getHibernateTemplate().execute( new HibernateCallback() {
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				return( (Integer)session.createQuery( "SELECT COUNT(*) FROM Component c WHERE c.module = ?" )
 					.setEntity( 0, module )
 					.uniqueResult()
 				);

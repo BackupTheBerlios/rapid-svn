@@ -3,11 +3,18 @@
 <%@page import="org.syracus.rapid.profiles.UserProfile"%>
 <stripes:layout-render name="/WEB-INF/layouts/tileLayout.jsp">
 
+	<rapid:profile var="refresh" key="<%= UserProfile.KEY_REFRESH_MODULES %>" dflt="false"/>
+	
 	<stripes:layout-component name="tileHeader">
 		<table width="100%">
 			<tr>
 				<td>Your Modules</td>
 				<td align="right">
+					<c:if test="${refresh eq 'false'}">
+						<stripes:link href="/protected/workbench/data/ownModules.jsp" onclick="ajaxUpdate(this.href, '_ownModuleList');return false;">
+							refresh
+						</stripes:link>
+					</c:if>
 					<stripes:link href="/protected/components/moduleList.jsp" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
 						all
 					</stripes:link>
@@ -22,17 +29,15 @@
 	<stripes:layout-component name="tileContent">
 	<!-- ModuleList: BEGIN -->
 	<div id="_ownModuleList">
-		<%--
-		<jsp:include page="/protected/workbench/data/ownTodos.jsp" flush="true"/>
-		--%>
-	</div>
-	<rapid:profile var="refresh" key="<%= UserProfile.KEY_REFRESH_MODULES %>">
-		<c:if test="${refresh eq 'true'}">
-			<script type="text/javascript">
-				new Ajax.PeriodicalUpdater( '_ownModuleList', '/rapid/protected/workbench/data/ownModules.jsp', {frequency:10} );
-			</script>
+		<c:if test="${refresh eq 'false'}">
+			<jsp:include page="/protected/workbench/data/ownModules.jsp" flush="true"/>
 		</c:if>
-	</rapid:profile>
+	</div>
+	<c:if test="${refresh eq 'true'}">
+		<script type="text/javascript">
+			new Ajax.PeriodicalUpdater( '_ownModuleList', '/rapid/protected/workbench/data/ownModules.jsp', {frequency:10} );
+		</script>
+	</c:if>
 	<!-- ModuleList: END -->
 	</stripes:layout-component>
 	

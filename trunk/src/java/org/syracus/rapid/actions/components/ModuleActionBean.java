@@ -6,8 +6,12 @@ import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import net.sourceforge.stripes.validation.SimpleError;
 
+import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
+import org.syracus.rapid.components.Project;
+import org.syracus.rapid.issues.Issue;
 import org.syracus.rapid.profiles.UserProfile;
 
 @UrlBinding("/protected/module.action")
@@ -66,12 +70,18 @@ public class ModuleActionBean extends BaseComponentActionBean {
 		if ( null != module ) {
 			Integer projectCount = getComponentService().getNumberOfProjects( module );
 			if ( 0 == projectCount.intValue() ) {
-				getComponentService().deleteModule( module, getContext().getAuthUser() );
-				return( new ForwardResolution( "/protected/components/moduleList.jsp" ) );
+				Integer componentCount = getComponentService().getNumberOfComponents( module );
+				if ( 0 == componentCount ) {
+					getComponentService().deleteModule( module, getContext().getAuthUser() );
+					return( new ForwardResolution( "/protected/components/moduleList.jsp" ) );
+				}
 			}
 		}
 		System.out.println( "*** Module not empty !!" );
-		return( getContext().getSourcePageResolution() );
+		getContext().getValidationErrors().addGlobalError(
+				new SimpleError( "You can't delete this module. There are still projects referencing it." )
+		);
+		return( new ForwardResolution( "/protected/components/moduleError.jsp" ) );
 	}
 	
 	public List<Module> getOwnModules() {
@@ -82,4 +92,46 @@ public class ModuleActionBean extends BaseComponentActionBean {
 	public List<Module> getAllModules() {
 		return( getComponentService().getAllModules() );
 	}
+	
+	/*
+	public List<Project> getModuleProjects() {
+		Module module = getComponentService().getModuleById( getModuleId() );
+		List<Project> projects = getComponentService().getProjectsOfModule( module );
+		return( projects );
+	}
+	*/
+	
+	public List<Project> getModuleProjects() {
+		List<Project> projects = null;
+		if ( null != getModuleId() && -1 != getModuleId() ) {
+			Module module = getComponentService().getModuleById( getModuleId() );
+			if ( null != module ) {
+				projects = getComponentService().getProjectsOfModule( module );
+			}
+		}
+		return( projects );
+	}
+	
+	public List<Component> getModuleComponents() {
+		List<Component> components = null;
+		if ( null != getModuleId() ) {
+			Module module = getComponentService().getModuleById( getModuleId() );
+			if ( null != module ) {
+				components = getComponentService().getAllComponentsOfModule( module );
+			}
+		}
+		return( components );
+	}
+	
+	public List<Issue> getModuleIssues() {
+		List<Issue> issues = null;
+		if ( null != getModuleId() ) {
+			Module module = getComponentService().getModuleById( getModuleId() );
+			if ( null != module ) {
+				issues = getIssueService().getAllIssuesOfModule( module );
+			}
+		}
+		return( issues );
+	}
+	
 }

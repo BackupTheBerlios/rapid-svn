@@ -16,7 +16,7 @@ public class Component extends ABaseComponent {
 	/**
 	 * 
 	 * @return
-	 * @hibernate.many-to-one
+	 * @hibernate.many-to-one not-null="true"
 	 */
 	public User getLeader() {
 		return leader;
@@ -29,7 +29,7 @@ public class Component extends ABaseComponent {
 	/**
 	 * 
 	 * @return
-	 * @hibernate.many-to-one
+	 * @hibernate.many-to-one not-null="false"
 	 */
 	public Module getModule() {
 		return module;
@@ -40,7 +40,7 @@ public class Component extends ABaseComponent {
 	/**
 	 * 
 	 * @return
-	 * @hibernate.many-to-one
+	 * @hibernate.many-to-one not-null="false"
 	 */
 	public Project getProject() {
 		return project;

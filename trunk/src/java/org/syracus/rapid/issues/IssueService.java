@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
@@ -84,12 +86,18 @@ public class IssueService implements IIssueService {
 		return( getIssueDao().findByComponent( component ) );
 	}
 
+	public List<Issue> getAllIssuesOfModule(Module module) {
+		return( getIssueDao().findByModule( module, true ) );
+	}
 	public List<Issue> getIssuesOfModule(Module module) {
-		return( getIssueDao().findByModule( module ) );
+		return( getIssueDao().findByModule( module, false ) );
 	}
 
+	public List<Issue> getAllIssuesOfProject(Project project) {
+		return( getIssueDao().findByProject( project, true ) );
+	}
 	public List<Issue> getIssuesOfProject(Project project) {
-		return( getIssueDao().findByProject( project ) );
+		return( getIssueDao().findByProject( project, false ) );
 	}
 
 	public void updateIssue(Issue issue, User user) {
@@ -107,6 +115,36 @@ public class IssueService implements IIssueService {
 	@SuppressWarnings("unchecked")
 	public List<Issue> getIssuesByCriteria(DetachedCriteria criteria, int first, int max ) {
 		return( (List<Issue>)getIssueDao().findByCriteria( criteria, first, max ) );
+	}
+
+	public void addIssue(Issue issue, Component component, User user) {
+		issue.setModule( component.getModule() );
+		issue.setProject( component.getProject() );
+		issue.setComponent( component );
+		addIssue( issue, user );
+	}
+
+	public void addIssue(Issue issue, Module module, User user) {
+		issue.setModule( module );
+		issue.setProject( null );
+		issue.setComponent( null );
+		addIssue( issue, user );
+	}
+
+	public void addIssue(Issue issue, Project project, User user) {
+		issue.setModule( project.getModule() );
+		issue.setProject( project );
+		issue.setComponent( null );
+		addIssue( issue, user );
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Issue> getNewestIssuesByAssignee(User assignee, int max) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Issue.class )
+			.add( Restrictions.eq( "assignee", assignee ) )
+			.addOrder( Order.desc( "modified" ) );
+	
+		return( (List<Issue>)getIssueDao().findByCriteria(criteria, 0, max ) );
 	}
 
 	

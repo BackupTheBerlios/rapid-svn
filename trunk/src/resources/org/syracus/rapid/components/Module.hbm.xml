@@ -33,6 +33,7 @@
             update="true"
             insert="true"
             column="leader"
+            not-null="true"
         />
 
         <property

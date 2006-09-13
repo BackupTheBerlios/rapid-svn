@@ -2,10 +2,32 @@ package org.syracus.rapid.comments;
 
 import java.util.List;
 
+import org.syracus.rapid.components.Component;
+import org.syracus.rapid.components.Module;
+import org.syracus.rapid.components.Project;
+import org.syracus.rapid.issues.Issue;
 import org.syracus.rapid.realm.User;
 
 public interface ICommentService {
 
+	public void addComment( Comment comment, User user );
+	public void addComment( Comment comment, Module module, User user );
+	public void addComment( Comment comment, Project project, User user );
+	public void addComment( Comment comment, Component component, User user );
+	public void addComment( Comment comment, Issue issue, User user );
+	public void addComment( Comment comment, Comment parent, User user );
+	
+	public Comment getCommentById( Long id );
+	
+	public void updateComment( Comment comment, User user );
+	public void deleteComment( Comment comment, User user );
+	
+	public List<Comment> getModuleComments( Module module );
+	public List<Comment> getProjectComments( Project project );
+	public List<Comment> getComponentComments( Component component );
+	public List<Comment> getIssueComments( Issue issue );
+	
+	/*
 	public void addComment( ModuleComment comment, User user );
 	public void addComment( ProjectComment comment, User user );
 	public void addComment( ComponentComment comment, User user );
@@ -55,5 +77,5 @@ public interface ICommentService {
 	public List<ProjectComment> getProjectCommentsByModifier( User creator );
 	public List<ComponentComment> getComponentCommentsByModifier( User creator );
 	public List<IssueComment> getIssueCommentsByModifier( User creator );
-	
+	*/
 }

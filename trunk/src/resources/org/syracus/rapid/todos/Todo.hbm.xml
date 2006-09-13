@@ -65,6 +65,7 @@
             update="true"
             insert="true"
             column="owner"
+            not-null="true"
         />
 
         <property

@@ -10,11 +10,11 @@ import org.syracus.rapid.realm.User;
 public class Module extends ABaseComponent {
 
 	private User leader;
-
+	
 	/**
 	 * 
 	 * @return
-	 * @hibernate.many-to-one
+	 * @hibernate.many-to-one not-null="true"
 	 */
 	public User getLeader() {
 		return leader;

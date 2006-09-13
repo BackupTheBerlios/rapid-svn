@@ -112,8 +112,16 @@ public class ComponentServiceImpl implements IComponentService {
 		return( getComponentDao().findLikeName( name ) );
 	}
 
+	public List<Component> getAllComponentsOfModule(Module module) {
+		return( getComponentDao().findByModule( module, true ) );
+	}
+	
+	public List<Component> getTopLevelComponents() {
+		return( getComponentDao().findByModuleAndProject(null, null) );
+	}
+	
 	public List<Component> getComponentsOfModule(Module module) {
-		return( getComponentDao().findByModule( module ) );
+		return( getComponentDao().findByModule( module, false ) );
 	}
 
 	public List<Component> getComponentsOfModuleAndProject(Module module,
@@ -163,6 +171,11 @@ public class ComponentServiceImpl implements IComponentService {
 
 	public List<Project> getProjectsByName(String name) {
 		return( getProjectDao().findLikeName( name ) );
+	}
+
+	
+	public List<Project> getTopLevelProjects() {
+		return( getProjectDao().findByModule( null ) );
 	}
 
 	public List<Project> getProjectsOfModule(Module module) {
@@ -230,7 +243,15 @@ public class ComponentServiceImpl implements IComponentService {
 	}
 
 	public Integer getNumberOfProjects(Module module) {
-		return( getModuleDao().countProjects( module ) );
+		return( getModuleDao().countProjectsOfModule( module ) );
+	}
+	
+	public Integer getNumberOfComponents(Module module) {
+		return( getModuleDao().countComponentsOfModule( module ) );
+	}
+	
+	public Integer getNumberOfComponents(Project project) {
+		return( getProjectDao().countComponentsOfProject( project ) );
 	}
 	
 	

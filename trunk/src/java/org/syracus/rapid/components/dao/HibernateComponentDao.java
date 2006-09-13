@@ -2,6 +2,8 @@ package org.syracus.rapid.components.dao;
 
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.syracus.rapid.common.AbstractHibernateDao;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
@@ -53,21 +55,60 @@ public class HibernateComponentDao extends AbstractHibernateDao implements
 				modifier
 		) );
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public List<Component> findByModule(Module module) {
-		return( (List<Component>)getHibernateTemplate().find(
-				"FROM Component c WHERE c.module = ?",
-				module
-		) );
+		DetachedCriteria criteria = DetachedCriteria.forClass( Component.class );
+		if ( null != module ) {
+			criteria.add( Restrictions.eq( "module", module ) );
+		} else {
+			criteria.add( Restrictions.isNull( "module" ) );
+		}
+		return( findByCriteria( criteria ) );
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Component> findByModule(Module module, boolean recursive) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Component.class );
+		if ( true == recursive ) {
+			criteria.add( Restrictions.eq( "module", module ) );
+		} else {
+			criteria.add( Restrictions.and(
+					Restrictions.eq( "module", module ),
+					Restrictions.isNull( "project" )
+				)
+			);
+		}
+		return( findByCriteria( criteria ) );
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Component> findByModuleAndProject(Module module, Project project) {
-		return( (List<Component>)getHibernateTemplate().find(
-				"FROM Component c WHERE c.module = ? AND c.project = ?",
-				new Object[]{ module, project }
-		) );
+		DetachedCriteria criteria = DetachedCriteria.forClass( Component.class );
+		if ( null == module ) {
+			if ( null == project ) {
+				criteria.add( Restrictions.and(
+						Restrictions.isNull( "module" ),
+						Restrictions.isNull( "project" )
+				) );
+			} else {
+				criteria.add( Restrictions.and(
+						Restrictions.isNull( "module" ),
+						Restrictions.eq( "project", project )
+				) );
+			}
+		} else if ( null == project ) {
+			criteria.add( Restrictions.and(
+					Restrictions.eq( "module", module ),
+					Restrictions.isNull( "project" )
+			) );
+		} else {
+			criteria.add( Restrictions.and(
+					Restrictions.eq( "module", module ),
+					Restrictions.eq( "project", project )
+			) );
+		}
+		return( findByCriteria( criteria ) );
 	}
 
 	@SuppressWarnings("unchecked")

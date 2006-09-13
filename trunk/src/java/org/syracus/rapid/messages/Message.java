@@ -63,7 +63,7 @@ public class Message {
 	/**
 	 * 
 	 * @return
-	 * @hibernate.many-to-one
+	 * @hibernate.many-to-one not-null="true"
 	 */
 	public User getReceiver() {
 		return receiver;
@@ -76,7 +76,7 @@ public class Message {
 	/**
 	 * 
 	 * @return
-	 * @hibernate.property
+	 * @hibernate.property not-null="true"
 	 */
 	public Date getSend() {
 		return send;
@@ -89,7 +89,7 @@ public class Message {
 	/**
 	 * 
 	 * @return
-	 * @hibernate.many-to-one
+	 * @hibernate.many-to-one not-null="true"
 	 */
 	public User getSender() {
 		return sender;

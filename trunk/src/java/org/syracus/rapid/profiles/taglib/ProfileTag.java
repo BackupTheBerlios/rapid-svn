@@ -18,6 +18,7 @@ public class ProfileTag extends TagSupport {
 	private static final long serialVersionUID = 2784668970171456505L;
 	private String key;
 	private String var;
+	private String dflt;
 	
 	public String getKey() {
 		return key;
@@ -32,6 +33,13 @@ public class ProfileTag extends TagSupport {
 		this.var = var;
 	}
 	
+	
+	public String getDflt() {
+		return dflt;
+	}
+	public void setDflt(String dflt) {
+		this.dflt = dflt;
+	}
 	@Override
 	public int doStartTag() throws JspException {
 		UserProfile profile = (UserProfile)pageContext.getSession().getAttribute( RapidActionBeanContext.AUTH_USER_PROFILE );
@@ -45,6 +53,12 @@ public class ProfileTag extends TagSupport {
 					log.debug( "[doStartTag] value for property '" + getKey() + "' is '" + value + "'" );
 				}
 				pageContext.setAttribute( getVar(), value );
+				return( EVAL_PAGE );
+			} else if ( null != getDflt() ) {
+				if ( log.isDebugEnabled() ) {
+					log.debug( "[doStartTag] default value specified using '" + getDflt() + "'" );
+				}
+				pageContext.setAttribute( getVar(), getDflt() );
 				return( EVAL_PAGE );
 			} else {
 				if ( log.isDebugEnabled() ) {
@@ -64,6 +78,12 @@ public class ProfileTag extends TagSupport {
 					return( SKIP_BODY );
 				}
 			}
+		} else if ( null != getDflt() ) {
+			if ( log.isDebugEnabled() ) {
+				log.debug( "[doStartTag] no user profile available but default value specified using '" + getDflt() + "'" );
+			}
+			pageContext.setAttribute( getVar(), getDflt() );
+			return( EVAL_PAGE );
 		} else {
 			if ( log.isDebugEnabled() ) {
 				log.debug( "[doStartTag] no user profile available, looking for default value of property '" + getKey() + "'" );

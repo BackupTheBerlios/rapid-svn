@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="org.syracus.rapid.comments.Comment"
+        table="comments"
+    >
+
+        <id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-Comment.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <many-to-one
+            name="parent"
+            class="org.syracus.rapid.comments.Comment"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="parent"
+        />
+
+        <property
+            name="body"
+            type="text"
+            update="true"
+            insert="true"
+            column="body"
+            not-null="true"
+        />
+
+        <many-to-one
+            name="component"
+            class="org.syracus.rapid.components.Component"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="component"
+            not-null="false"
+        />
+
+        <property
+            name="created"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            column="created"
+        />
+
+        <many-to-one
+            name="creator"
+            class="org.syracus.rapid.realm.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="creator"
+        />
+
+        <many-to-one
+            name="issue"
+            class="org.syracus.rapid.issues.Issue"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="issue"
+            not-null="false"
+        />
+
+        <property
+            name="modified"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            column="modified"
+        />
+
+        <many-to-one
+            name="module"
+            class="org.syracus.rapid.components.Module"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="module"
+            not-null="false"
+        />
+
+        <many-to-one
+            name="project"
+            class="org.syracus.rapid.components.Project"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="project"
+            not-null="false"
+        />
+
+        <property
+            name="title"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="title"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Comment.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

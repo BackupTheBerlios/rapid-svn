@@ -14,10 +14,15 @@
 			<tr>
 				<td>Module:</td>
 				<td>
+					<c:if test="${not empty actionBean.project.module}">
 					<stripes:link href="/protected/module.action" event="view" onclick="ajaxUpdate(this.href,'_workbenchContent');return(false);">
 						<stripes:link-param name="moduleId" value="${actionBean.project.module.id}"/>
 						${actionBean.project.module.name}
 					</stripes:link>
+					</c:if>
+					<c:if test="${empty actionBean.project.module}">
+						No module assigned.
+					</c:if>
 				</td>
 			</tr>
 			<tr>

@@ -187,4 +187,58 @@
 			</props>
 		</property>
 	</bean>
+	
+	<bean id="commentDao" class="org.syracus.rapid.comments.dao.HibernateCommentDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
+	<bean id="commentServiceImpl" class="org.syracus.rapid.comments.CommentService">
+		<property name="commentDao">
+			<ref local="commentDao"/>
+		</property>
+	</bean>
+	
+	<bean id="commentService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="hibernateTxManager"/>
+		<property name="target">
+			<ref local="commentServiceImpl"/>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="add*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="issueDao" class="org.syracus.rapid.issues.dao.HibernateIssueDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
+	<bean id="issueServiceImpl" class="org.syracus.rapid.issues.IssueService">
+		<property name="issueDao">
+			<ref local="issueDao"/>
+		</property>
+	</bean>
+	
+	<bean id="issueService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="hibernateTxManager"/>
+		<property name="target">
+			<ref local="issueServiceImpl"/>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="add*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
+			</props>
+		</property>
+	</bean>
 </beans>

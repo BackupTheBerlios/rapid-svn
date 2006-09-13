@@ -21,8 +21,8 @@ public interface IIssueDao extends IPersistanceDao {
 	public Issue find( Long id );
 	
 	public List<Issue> findAll();
-	public List<Issue> findByModule( Module module );
-	public List<Issue> findByProject( Project project );
+	public List<Issue> findByModule( Module module, boolean recursive );
+	public List<Issue> findByProject( Project project, boolean recursive );
 	public List<Issue> findByComponent( Component component );
 	public List<Issue> findBySummary( String summary );
 	public List<Issue> findLikeSummary( String summary );

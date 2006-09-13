@@ -9,6 +9,7 @@
 		<meta http-equiv="pragma" content="no-cache">
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/prototype.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/rapid.js"></script>
+		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/default.css">
 		<title>${pageTitle}</title>
 	</head>
 	<body>
@@ -16,6 +17,13 @@
 			<tr>
 				<td>
 					<stripes:layout-component name="pageHeader"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<stripes:layout-component name="pageNavigation">
+						<jsp:include page="/WEB-INF/includes/navigation.jsp" flush="true"/>
+					</stripes:layout-component>
 				</td>
 			</tr>
 			<tr>

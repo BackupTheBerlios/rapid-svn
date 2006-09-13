@@ -7,6 +7,7 @@
 		<td>
 			<stripes:link href="/protected/module.action" event="view" title="${module.description}" onclick="ajaxUpdate(this.href,'_workbenchContent');return(false);">
 				<stripes:link-param name="moduleId" value="${module.id}"/>
+				<stripes:link-param name="tab1" value="projects"/>
 					${module.name}
 			</stripes:link>
 		</td>

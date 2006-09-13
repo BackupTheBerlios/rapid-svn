@@ -16,6 +16,7 @@
 			<property name="hibernate.cglib.use_reflection_optimizer">true</property>
 
 		<!-- mapping files -->
+		<mapping resource="org/syracus/rapid/comments/Comment.hbm.xml"/>
 		<mapping resource="org/syracus/rapid/messages/Message.hbm.xml"/>
 		<mapping resource="org/syracus/rapid/todos/Todo.hbm.xml"/>
 		<mapping resource="org/syracus/rapid/comments/IssueComment.hbm.xml"/>

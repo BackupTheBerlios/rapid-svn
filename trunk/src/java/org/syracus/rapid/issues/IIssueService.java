@@ -11,6 +11,10 @@ import org.syracus.rapid.realm.User;
 public interface IIssueService {
 
 	public void addIssue( Issue issue, User user );
+	public void addIssue( Issue issue, Module module, User user );
+	public void addIssue( Issue issue, Project project, User user );
+	public void addIssue( Issue issue, Component component, User user );
+	
 	public void updateIssue( Issue issue, User user );
 	public void deleteIssue( Issue issue, User user );
 	
@@ -18,7 +22,9 @@ public interface IIssueService {
 	public List<Issue> getAllIssues();
 	
 	public List<Issue> getIssuesOfModule( Module module );
+	public List<Issue> getAllIssuesOfModule( Module module );
 	public List<Issue> getIssuesOfProject( Project project );
+	public List<Issue> getAllIssuesOfProject( Project project );
 	public List<Issue> getIssuesOfComponent( Component component );
 	
 	public List<Issue> getIssuesBySummary( String summary );
@@ -35,4 +41,6 @@ public interface IIssueService {
 	
 	public List<Issue> getIssuesByCriteria( DetachedCriteria criteria );
 	public List<Issue> getIssuesByCriteria( DetachedCriteria criteria, int first, int max );
+	
+	public List<Issue> getNewestIssuesByAssignee( User assignee, int max );
 }

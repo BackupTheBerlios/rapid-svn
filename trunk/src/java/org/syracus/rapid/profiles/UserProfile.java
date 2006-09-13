@@ -14,6 +14,8 @@ public class UserProfile {
 	public static final String DEF_MAX_PROJECTS = "10";
 	public static final String KEY_MAX_COMPONENTS = "max-components";
 	public static final String DEF_MAX_COMPONENTS = "10";
+	public static final String KEY_MAX_ISSUES = "max-issues";
+	public static final String DEF_MAX_ISSUES = "10";
 	public static final String KEY_MAX_TODOS = "max-todos";
 	public static final String DEF_MAX_TODOS = "10";
 	public static final String KEY_MAX_MESSAGES = "max-messages";
@@ -28,15 +30,20 @@ public class UserProfile {
 	public static final String DEF_REFRESH_TODOS = "false";
 	public static final String KEY_REFRESH_MESSAGES = "refresh-messages";
 	public static final String DEF_REFRESH_MESSAGES = "false";
+	public static final String KEY_REFRESH_ISSUES = "refresh-issues";
+	public static final String DEF_REFRESH_ISSUES = "false";
+	
 	
 	public static final String[][] DEFAULT_PROFILE = new String[][]{
 		{ KEY_MAX_MODULES, DEF_MAX_MODULES },
 		{ KEY_MAX_PROJECTS, DEF_MAX_PROJECTS },
 		{ KEY_MAX_COMPONENTS, DEF_MAX_COMPONENTS },
+		{ KEY_MAX_ISSUES, DEF_MAX_ISSUES },
 		{ KEY_MAX_TODOS, DEF_MAX_TODOS },
 		{ KEY_REFRESH_MODULES, DEF_REFRESH_MODULES },
 		{ KEY_REFRESH_PROJECTS, DEF_REFRESH_PROJECTS },
 		{ KEY_REFRESH_COMPONENTS, DEF_REFRESH_COMPONENTS },
+		{ KEY_REFRESH_ISSUES, DEF_REFRESH_ISSUES },
 		{ KEY_REFRESH_MESSAGES, DEF_REFRESH_MESSAGES },
 		{ KEY_REFRESH_TODOS, DEF_REFRESH_TODOS }
 	};
@@ -58,7 +65,7 @@ public class UserProfile {
 	}
 	
 	public String getProperty( String key ) {
-		return( (null != this.properties) ? this.properties.getProperty( key ) : null );
+		return( (null != this.properties) ? this.properties.getProperty( key ) : UserProfile.getDefaultValue( key ) );
 	}
 	
 	public String getProperty( String key, String defaultValue ) {

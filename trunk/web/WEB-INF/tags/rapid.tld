@@ -31,6 +31,12 @@
         	<required>true</required>
         	<rtexprvalue>false</rtexprvalue>
         </attribute>
+        <attribute>
+        	<description>Default value to use if no profile or key is available.</description>
+        	<name>dflt</name>
+        	<required>false</required>
+        	<rtexprvalue>true</rtexprvalue>
+        </attribute>
         <dynamic-attributes>false</dynamic-attributes>
     </tag>
 </taglib>

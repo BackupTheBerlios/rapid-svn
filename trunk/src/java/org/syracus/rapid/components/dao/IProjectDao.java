@@ -24,5 +24,7 @@ public interface IProjectDao extends IPersistanceDao {
 	public List<Project> findByCreator( User creator );
 	public List<Project> findByModifier( User modifier );
 	public List<Project> findByLeader( User leader );
+	
+	public Integer countComponentsOfProject( Project project );
 
 }

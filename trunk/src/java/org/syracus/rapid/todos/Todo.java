@@ -79,7 +79,7 @@ public class Todo {
 	/**
 	 * 
 	 * @return
-	 * @hibernate.many-to-one
+	 * @hibernate.many-to-one not-null="true"
 	 */
 	public User getOwner() {
 		return owner;

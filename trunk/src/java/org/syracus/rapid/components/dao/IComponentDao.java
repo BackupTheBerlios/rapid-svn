@@ -18,6 +18,7 @@ public interface IComponentDao extends IPersistanceDao {
 	
 	public List<Component> findAll();
 	public List<Component> findByModule( Module module );
+	public List<Component> findByModule( Module module, boolean recursive );
 	public List<Component> findByProject( Project project );
 	public List<Component> findByModuleAndProject( Module module, Project project );
 	public List<Component> findByName( String name );

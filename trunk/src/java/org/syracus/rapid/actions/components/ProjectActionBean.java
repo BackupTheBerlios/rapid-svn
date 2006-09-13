@@ -7,8 +7,10 @@ import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 
+import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
+import org.syracus.rapid.issues.Issue;
 import org.syracus.rapid.profiles.UserProfile;
 
 @UrlBinding("/protected/project.action")
@@ -55,6 +57,11 @@ public class ProjectActionBean extends BaseComponentActionBean {
 	public Resolution create() {
 		if ( null == getModuleId() ) {
 			List<Module> modules = getComponentService().getAllModules();
+			// insert dummy module
+			Module dummy = new Module();
+			dummy.setId( new Long(-1) );
+			dummy.setName( "No module" );
+			modules.add( 0, dummy );
 			setSelectableModules( modules );
 		} else {
 			Module module = getComponentService().getModuleById( getModuleId() );
@@ -79,6 +86,10 @@ public class ProjectActionBean extends BaseComponentActionBean {
 	
 	public Resolution save() {
 		if ( null == getProject().getId() ) {
+			// check if 'no module' has been selected
+			if ( null != getProject().getModule() && -1 == getProject().getModule().getId() ) {
+				getProject().setModule( null );
+			}
 			getComponentService().addProject( getProject(), getContext().getAuthUser() );
 		} else {
 			Project project = getComponentService().getProjectById( getProject().getId() );
@@ -96,17 +107,22 @@ public class ProjectActionBean extends BaseComponentActionBean {
 	}
 	
 	public Resolution delete() {
-		Project project = getComponentService().getProjectById( getProjectId() );
 		Resolution resolution = null;
+		Project project = getComponentService().getProjectById( getProjectId() );
 		if ( null != project ) {
-			Module module = project.getModule();
-			if ( null != module ) {
-				resolution = new RedirectResolution( "/protected/module.action" )
-					.addParameter( "view", "" )
-					.addParameter( "moduleId", module.getId() );
+			Integer componentCount = getComponentService().getNumberOfComponents( project );
+			if ( 0 == componentCount ) {
+				Module module = project.getModule();
+				if ( null != module ) {
+					resolution = new RedirectResolution( "/protected/module.action" )
+						.addParameter( "view", "" )
+						.addParameter( "moduleId", module.getId() );
+				} else {
+					resolution = new RedirectResolution( "/protected/components/projectList.jsp" );
+				}
+				// finally delete project
+				getComponentService().deleteProject( project, getContext().getAuthUser() );
 			}
-			// finally delete project
-			getComponentService().deleteProject( project, getContext().getAuthUser() );
 		}
 		return( resolution );
 	}
@@ -115,6 +131,59 @@ public class ProjectActionBean extends BaseComponentActionBean {
 		int maxProjects = Integer.parseInt( getContext().getUserProfile().getProperty( UserProfile.KEY_MAX_PROJECTS, UserProfile.DEF_MAX_PROJECTS ) );
 		return( getComponentService().getNewestProjectsByLeader( getContext().getAuthUser(), maxProjects ) );
 	}
+	
+	public List<Component> getProjectComponents() {
+		List<Component> components = null;
+		if ( null != getProjectId() ) {
+			Project project = getComponentService().getProjectById( getProjectId() );
+			if ( null != project ) {
+				components = getComponentService().getComponentsOfProject( project );
+			}
+		}
+		return( components );
+	}
+	
+	public List<Issue> getProjectIssues() {
+		List<Issue> issues = null;
+		if ( null != getProjectId() ) {
+			Project project = getComponentService().getProjectById( getProjectId() );
+			if ( null != project ) {
+				issues = getIssueService().getAllIssuesOfProject( project );
+			}
+		}
+		return( issues );
+	}
+	
+	/*
+	public List<Project> getSelectableProjects() {
+		List<Project> projects = null;
+		if ( null != getModuleId() && -1 != getModuleId() ) {
+			Module module = getComponentService().getModuleById( getModuleId() );
+			if ( null != module ) {
+				projects = getComponentService().getProjectsOfModule( module );
+			}
+		}
+		Project dummy = new Project();
+		dummy.setId( new Long( -1 ) );
+		dummy.setName( "No project" );
+		projects.add( 0, dummy );
+		return( projects );
+	}
+	*/
+	
+	/*
+	public List<Project> getModuleProjects() {
+		List<Project> projects = null;
+		if ( null != getModuleId() && -1 != getModuleId() ) {
+			Module module = getComponentService().getModuleById( getModuleId() );
+			if ( null != module ) {
+				projects = getComponentService().getProjectsOfModule( module );
+			}
+		}
+		return( projects );
+	}
+	*/
+	
 	
 	
 }

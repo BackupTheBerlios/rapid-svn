@@ -41,6 +41,7 @@
             update="true"
             insert="true"
             column="leader"
+            not-null="true"
         />
 
         <many-to-one
@@ -51,6 +52,7 @@
             update="true"
             insert="true"
             column="module"
+            not-null="false"
         />
 
         <property

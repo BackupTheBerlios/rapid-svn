@@ -7,6 +7,9 @@
 			<tr>
 				<td align="left">Available Modules</td>
 				<td align="right">
+					<stripes:link href="/protected/components/moduleCreate.jsp" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
+						new
+					</stripes:link>
 					<stripes:link href="/protected/components/moduleList.jsp" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
 						refresh
 					</stripes:link>

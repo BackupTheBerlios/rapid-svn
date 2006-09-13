@@ -3,14 +3,110 @@ package org.syracus.rapid.comments;
 import java.util.Date;
 import java.util.List;
 
-import org.syracus.rapid.comments.dao.IComponentCommentDao;
-import org.syracus.rapid.comments.dao.IIssueCommentDao;
-import org.syracus.rapid.comments.dao.IModuleCommentDao;
-import org.syracus.rapid.comments.dao.IProjectCommentDao;
+import org.syracus.rapid.comments.dao.ICommentDao;
+import org.syracus.rapid.components.Component;
+import org.syracus.rapid.components.Module;
+import org.syracus.rapid.components.Project;
+import org.syracus.rapid.issues.Issue;
 import org.syracus.rapid.realm.User;
 
 public class CommentService implements ICommentService {
 
+	private ICommentDao commentDao;
+
+	public ICommentDao getCommentDao() {
+		return commentDao;
+	}
+
+	public void setCommentDao(ICommentDao commentDao) {
+		this.commentDao = commentDao;
+	}
+
+	public void addComment(Comment comment, Comment parent, User user) {
+		comment.setIssue( parent.getIssue() );
+		comment.setComponent( parent.getComponent() );
+		comment.setProject( parent.getProject() );
+		comment.setModule( parent.getModule() );
+		comment.setParent( parent );
+		addComment( comment, user );
+	}
+
+	public void addComment(Comment comment, Component component, User user) {
+		comment.setIssue( null );
+		comment.setComponent( component );
+		comment.setProject( null );
+		comment.setModule( null );
+		comment.setParent( null );
+		addComment( comment, user );
+	}
+
+	public void addComment(Comment comment, Issue issue, User user) {
+		comment.setIssue( issue );
+		comment.setComponent( null );
+		comment.setProject( null );
+		comment.setModule( null );
+		comment.setParent( null );
+		addComment( comment, user );
+	}
+
+	public void addComment(Comment comment, Module module, User user) {
+		comment.setIssue( null );
+		comment.setComponent( null );
+		comment.setProject( null );
+		comment.setModule( module );
+		comment.setParent( null );
+		addComment( comment, user );
+	}
+
+	public void addComment(Comment comment, Project project, User user) {
+		comment.setIssue( null );
+		comment.setComponent( null );
+		comment.setProject( project );
+		comment.setModule( null );
+		comment.setParent( null );
+		addComment( comment, user );
+	}
+
+	public void addComment(Comment comment, User user) {
+		Date now = new Date();
+		comment.setCreator( user );
+		comment.setCreated( now );
+		comment.setModified( now );
+		getCommentDao().create( comment );
+	}
+
+	public void deleteComment(Comment comment, User user) {
+		getCommentDao().delete( comment );
+	}
+
+	public Comment getCommentById(Long id) {
+		return( getCommentDao().find( id ) );
+	}
+
+	public List<Comment> getComponentComments(Component component) {
+		return( getCommentDao().findByComponent( component ) );
+	}
+
+	public List<Comment> getIssueComments(Issue issue) {
+		return( getCommentDao().findByIssue( issue ) );
+	}
+
+	public List<Comment> getModuleComments(Module module) {
+		return( getCommentDao().findByModule( module ) );
+	}
+
+	public List<Comment> getProjectComments(Project project) {
+		return( getCommentDao().findByProject( project ) );
+	}
+
+	public void updateComment(Comment comment, User user) {
+		Date now = new Date();
+		comment.setModified( now );
+		getCommentDao().update( comment );
+	}
+	
+	
+	/*
 	private IModuleCommentDao moduleCommentDao;
 	private IProjectCommentDao projectCommentDao;
 	private IComponentCommentDao componentCommentDao;
@@ -231,5 +327,5 @@ public class CommentService implements ICommentService {
 	public void updateComment(IssueComment comment, User user) {
 		getIssueCommentDao().delete( comment );
 	}
-
+	*/
 }

@@ -7,6 +7,17 @@
 			<tr>
 				<td align="left">Project Details</td>
 				<td align="right">
+					<stripes:link href="/protected/components/projectList.jsp" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
+						all
+					</stripes:link>
+					<stripes:link href="/protected/issue.action" event="create" onclick="ajaxUpdate(this.href,'_workbenchContent');return(false);">
+						<stripes:link-param name="projectId" value="${actionBean.project.id}"/>
+						issue
+					</stripes:link>
+					<stripes:link href="/protected/component.action" event="create" onclick="ajaxUpdate(this.href,'_workbenchContent');return(false);">
+						<stripes:link-param name="projectId" value="${actionBean.project.id}"/>
+						component
+					</stripes:link>
 					<stripes:link href="/protected/project.action" event="edit" onclick="ajaxUpdate(this.href,'_workbenchContent');return(false);">
 						<stripes:link-param name="projectId" value="${actionBean.project.id}"/>
 						edit
@@ -25,10 +36,15 @@
 		<tr>
 			<td>Module:</td>
 			<td>
+				<c:if test="${not empty actionBean.project.module}">
 				<stripes:link href="/protected/module.action" event="view" onclick="ajaxUpdate(this.href,'_workbenchContent');return(false);">
 					<stripes:link-param name="moduleId" value="${actionBean.project.module.id}"/>
 					${actionBean.project.module.name}
 				</stripes:link>
+				</c:if>
+				<c:if test="${empty actionBean.project.module}">
+					No module assigned
+				</c:if>
 			</td>
 		</tr>
 		<tr>
@@ -53,7 +69,70 @@
 				${actionBean.project.leader.name}
 			</td>
 		</tr>
+		<tr>
+			<td>Created:</td>
+			<td>
+				${actionBean.project.created} by ${actionBean.project.creator.name}
+			</td>
+		</tr>
+		<tr>
+			<td>Last Modified:</td>
+			<td>
+				${actionBean.project.modified} by ${actionBean.project.modifier.name}
+			</td>
+		</tr>
 	</table>
+	
+	<table width="100%" border="1">
+		<tr>
+			<td>
+				<table>
+					<tr>
+						<td>
+							<stripes:link href="/protected/components/projectComponents.jsp" onclick="ajaxUpdate(this.href,'_projectViewContent');return false;">
+								<stripes:link-param name="projectId" value="${actionBean.project.id}"/>
+								Components
+							</stripes:link>
+						</td>
+						<td>
+							<stripes:link href="/protected/components/projectIssues.jsp" onclick="ajaxUpdate(this.href,'_projectViewContent');return false;">
+								<stripes:link-param name="projectId" value="${actionBean.project.id}"/>
+								Issues
+							</stripes:link>
+						</td>
+						<td>
+							<stripes:link href="" onclick="return false;">
+								<stripes:link-param name="moduleId" value="${actionBean.project.id}"/>
+								History
+							</stripes:link>
+						</td>
+						<td>
+							<stripes:link href="" onclick="return false;">
+								<stripes:link-param name="moduleId" value="${actionBean.project.id}"/>
+								Comments
+							</stripes:link>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div id="_projectViewContent">
+					<c:choose>
+						<c:when test="${param.tab1 eq 'issues'}">
+						</c:when>
+						<c:otherwise>
+							<c:import url="/protected/components/projectComponents.jsp">
+								<c:param name="projectId" value="${actionBean.project.id}"/>
+							</c:import>
+						</c:otherwise>
+					</c:choose>
+				</div>
+			</td>
+		</tr>
+	</table>
+	
 	</stripes:layout-component>
 	
 </stripes:layout-render>

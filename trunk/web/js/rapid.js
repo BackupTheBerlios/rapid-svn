@@ -19,3 +19,20 @@ function ajaxFormId(formId, event, container) {
 	//alert( '[ajaxFormId] formId:'+formId+',form:'+ form );
 	ajaxForm( form, event, container );
 }
+
+function selectedValueOf( selectId ) {
+	alert( 'selectedValueOf('+selectId+')' );
+	var select = document.getElementById( selectId );
+	return( selectedValue( select ) );
+}
+
+function selectedValue( select ) {
+	//alert( select );
+	for ( var i = 0; i < select.length; ++i ) {
+		if ( select.options[i].selected == true ) {
+			//alert( select.options[i].value );
+			return select.options[i].value;
+		}
+	}
+	return -1;
+}
