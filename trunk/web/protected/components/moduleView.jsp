@@ -38,6 +38,10 @@
 	<stripes:layout-component name="tileContent">
 	<table>
 		<tr>
+			<td>KEY:</td>
+			<td>${actionBean.module.key}</td>
+		</tr>
+		<tr>
 			<td>Name:</td>
 			<td>${actionBean.module.name}</td>
 		</tr>

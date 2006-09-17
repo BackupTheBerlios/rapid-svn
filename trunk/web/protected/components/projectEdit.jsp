@@ -12,6 +12,10 @@
 		<stripes:hidden name="project.module.id" value="${project.module.id}"/>
 		<table>
 			<tr>
+				<td>KEY:</td>
+				<td>${actionBean.project.key}</td>
+			</tr>
+			<tr>
 				<td>Module:</td>
 				<td>
 					<c:if test="${not empty actionBean.project.module}">

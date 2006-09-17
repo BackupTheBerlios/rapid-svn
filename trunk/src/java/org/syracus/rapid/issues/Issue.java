@@ -15,6 +15,7 @@ import org.syracus.rapid.realm.User;
 public class Issue {
 
 	private Long id;
+	private String key;
 	
 	private Module module;
 	private Project project;
@@ -38,6 +39,17 @@ public class Issue {
 	private User modifier;
 	private Date modified;
 	
+	/**
+	 * 
+	 * @return
+	 * @hibernate.property not-null="true" unique="true" column="ident"
+	 */
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
+	}
 	/**
 	 * 
 	 * @return

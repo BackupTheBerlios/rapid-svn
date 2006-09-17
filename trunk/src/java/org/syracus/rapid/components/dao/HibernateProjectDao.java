@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.syracus.rapid.common.AbstractHibernateDao;
@@ -28,6 +29,20 @@ public class HibernateProjectDao extends AbstractHibernateDao implements
 		return( (Project)getHibernateTemplate().get( Project.class, id ) );
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Project> findByKey(String key) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Project.class );
+		criteria.add( Restrictions.eqProperty( "key", key ) );
+		return( findByCriteria( criteria ) );
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Project> findLikeKey(String key) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Project.class );
+		criteria.add( Restrictions.ilike( "key", key, MatchMode.ANYWHERE ) );
+		return( findByCriteria( criteria ) );
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Project> findAll() {
 		return( (List<Project>)getHibernateTemplate().find(

@@ -3,6 +3,7 @@ package org.syracus.rapid.components.dao;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.syracus.rapid.common.AbstractHibernateDao;
 import org.syracus.rapid.components.Component;
@@ -25,6 +26,20 @@ public class HibernateComponentDao extends AbstractHibernateDao implements
 		return( (Component)getHibernateTemplate().get( Component.class, id ) );
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Component> findByKey(String key) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Component.class );
+		criteria.add( Restrictions.eqProperty( "key", key ) );
+		return( findByCriteria( criteria ) );
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Component> findLikeKey(String key) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Component.class );
+		criteria.add( Restrictions.ilike( "key", key, MatchMode.ANYWHERE ) );
+		return( findByCriteria( criteria ) );
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Component> findAll() {
 		return( (List<Component>)getHibernateTemplate().find(

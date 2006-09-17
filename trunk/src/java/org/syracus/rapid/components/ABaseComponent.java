@@ -7,6 +7,7 @@ import org.syracus.rapid.realm.User;
 public class ABaseComponent {
 
 	private Long id;
+	private String key;
 	private String name;
 	private String description;
 	private User creator;
@@ -14,6 +15,17 @@ public class ABaseComponent {
 	private User modifier;
 	private Date modified;
 	
+	/**
+	 * 
+	 * @return
+	 * @hibernate.property not-null="true" length="5" column="ident"
+	 */
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
+	}
 	/**
 	 * 
 	 * @return

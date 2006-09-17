@@ -6,6 +6,18 @@ function ajaxUpdate( url, container ) {
 	new Ajax.Updater( container, url );
 }
 
+function ajaxText( url, handler ) {
+	new Ajax.Request( url, {
+		method: 'get',
+		onComplete: handler
+	} );
+}
+
+function setKey( response ) {
+	//alert( response );
+	$('_key').value = response.responseText;
+}
+
 function ajaxForm(form, event, container) {
 	//alert( 'form:'+form+',event:'+event+',container:'+container );
     var params = Form.serialize(form);

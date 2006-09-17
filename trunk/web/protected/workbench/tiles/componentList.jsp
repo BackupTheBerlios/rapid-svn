@@ -15,6 +15,9 @@
 							refresh
 						</stripes:link>
 					</c:if>
+					<stripes:link href="/protected/components/componentList.jsp" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
+						all
+					</stripes:link>
 					<stripes:link href="/protected/component.action" event="create" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
 						new
 					</stripes:link>

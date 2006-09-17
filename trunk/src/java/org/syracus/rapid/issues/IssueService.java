@@ -46,6 +46,11 @@ public class IssueService implements IIssueService {
 		return( getIssueDao().find( id ) );
 	}
 
+	
+	public List<Issue> getIssuesByKey(String key) {
+		return( getIssueDao().findLikeKey( key ) );
+	}
+
 	public List<Issue> getIssuesByAssignee(User assignee) {
 		return( getIssueDao().findByAssignee( assignee ) );
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
+import net.sourceforge.stripes.action.StreamingResolution;
 import net.sourceforge.stripes.action.UrlBinding;
 
 import org.syracus.rapid.components.Component;
@@ -84,6 +85,11 @@ public class ComponentActionBean extends BaseComponentActionBean {
 			Project project = getComponentService().getProjectById( getProjectId() );
 			if ( null != project ) {
 				setSelectedProject( project );
+				
+				Component component = new Component();
+				component.setKey( project.getKey() );
+				setComponent( component );
+				
 				Module module = project.getModule();
 				if ( null != module ) {
 					setSelectedModule( module );
@@ -100,6 +106,11 @@ public class ComponentActionBean extends BaseComponentActionBean {
 			Module module = getComponentService().getModuleById( getModuleId() );
 			if ( null != module ) {
 				setSelectedModule( module );
+				
+				Component component = new Component();
+				component.setKey( module.getKey() );
+				setComponent( component );
+				
 				List<Project> projects = getComponentService().getProjectsOfModule( module );
 				if ( null != projects && false == projects.isEmpty() ) {
 					Project dummy = new Project();
@@ -170,6 +181,21 @@ public class ComponentActionBean extends BaseComponentActionBean {
 		Component component = getComponentService().getComponentById( getComponentId() );
 		getComponentService().deleteComponent( component, getContext().getAuthUser() );
 		return( new ForwardResolution( "" ) );
+	}
+	
+	public Resolution key() {
+		String key = "";
+		if ( null != getComponentId() && -1 != getComponentId() ) {
+			Component component = getComponentService().getComponentById( getComponentId() );
+			if ( null != component ) {
+				key = component.getKey();
+			}
+		}
+		return( new StreamingResolution( "text", key ) );
+	}
+	
+	public List<Component> getAllComponents() {
+		return( getComponentService().getAllComponents() );
 	}
 	
 	public List<Component> getOwnComponents() {

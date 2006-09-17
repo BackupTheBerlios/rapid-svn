@@ -18,7 +18,7 @@
 				</c:if>
 				<c:if test="${empty actionBean.selectedModule}">
 					<stripes:select name="component.module.id" id="_moduleSelector"
-						onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/components/selectableProjects.jsp?moduleId='+selectedValue(this),'_projectSelector');return true;">
+						onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/components/selectableProjects.jsp?moduleId='+selectedValue(this),'_projectSelector');ajaxText('${pageContext.request.contextPath}/protected/module.action?key=&moduleId='+selectedValue(this),setKey);return true;">
 						<stripes:options-collection collection="${actionBean.selectableModules}" label="name" value="id"/>
 					</stripes:select>
 				</c:if>
@@ -34,12 +34,19 @@
 				<c:if test="${empty actionBean.selectedProject}">
 					<div id="_projectSelector">
 						<c:if test="${not empty actionBean.selectableProjects}">
-							<stripes:select name="component.project.id">
+							<stripes:select name="component.project.id"
+								onchange="ajaxText('${pageContext.request.contextPath}/protected/project.action?key=&projectId='+selectedValue(this),setKey);">
 								<stripes:options-collection collection="${actionBean.selectableProjects}" label="name" value="id"/>
 							</stripes:select>
 						</c:if>
 					</div>
 				</c:if>
+				</td>
+			</tr>
+			<tr>
+				<td>KEY:</td>
+				<td>
+					<stripes:text id="_key" maxlength="5" size="5" name="component.key" value="${component.key}"/>
 				</td>
 			</tr>
 			<tr>

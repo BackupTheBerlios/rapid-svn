@@ -253,6 +253,23 @@ public class ComponentServiceImpl implements IComponentService {
 	public Integer getNumberOfComponents(Project project) {
 		return( getProjectDao().countComponentsOfProject( project ) );
 	}
+
+	public List<Component> getComponentsByKey(String key) {
+		return( getComponentDao().findLikeKey( key ) );
+	}
+
+	public List<Module> getModulesByKey(String key) {
+		return( getModuleDao().findLikeKey( key ) );
+	}
+
+	public List<Project> getProjectsByKey(String key) {
+		return( getProjectDao().findLikeKey( key ) );
+	}
+
+	public Integer getNumberOfModuleKeys(String key) {
+		return( getModuleDao().countMatchingKeys( key ) );
+	}
+
 	
 	
 	

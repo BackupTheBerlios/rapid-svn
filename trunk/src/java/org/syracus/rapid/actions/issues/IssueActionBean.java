@@ -1,6 +1,5 @@
 package org.syracus.rapid.actions.issues;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sourceforge.stripes.action.ForwardResolution;
@@ -152,6 +151,11 @@ public class IssueActionBean extends RapidActionBean {
 			Component component = getComponentService().getComponentById( getComponentId() );
 			if ( null != component ) {
 				setSelectedComponent( component );
+				
+				Issue issue = new Issue();
+				issue.setKey( component.getKey() );
+				setIssue( issue );
+				
 				Module module = component.getModule();
 				if ( null == module ) {
 					module = new Module();
@@ -175,6 +179,10 @@ public class IssueActionBean extends RapidActionBean {
 			if ( null != project ) {
 				setSelectedProject( project );
 				
+				Issue issue = new Issue();
+				issue.setKey( project.getKey() );
+				setIssue( issue );
+				
 				Module module = project.getModule();
 				if ( null == module ) {
 					module = new Module();
@@ -197,6 +205,10 @@ public class IssueActionBean extends RapidActionBean {
 			Module module = getComponentService().getModuleById( getModuleId() );
 			if ( null != module ) {
 				setSelectedModule( module );
+				
+				Issue issue = new Issue();
+				issue.setKey( module.getKey() );
+				setIssue( issue );
 				
 				List<Project> projects = getComponentService().getProjectsOfModule( module );
 				Project dummyProject = new Project();
@@ -235,6 +247,7 @@ public class IssueActionBean extends RapidActionBean {
 		dummyComponent.setName( "No component" );
 		components.add( 0, dummyComponent );
 		setSelectableComponents( components );
+		
 		return( new ForwardResolution( "/protected/issues/issueCreate.jsp" ) );
 	}
 	
@@ -249,8 +262,15 @@ public class IssueActionBean extends RapidActionBean {
 			if ( null != getIssue().getComponent() && -1 == getIssue().getComponent().getId() ) {
 				getIssue().setComponent( null );
 			}
+			if ( null == getIssue().getKey() || 0 == getIssue().getKey().trim().length() ) {
+				getIssue().setKey( "" );
+			}
 			getIssue().setStatus( Status.OPEN.toString() );
 			getIssueService().addIssue( getIssue(), getContext().getAuthUser() );
+			
+			// update issue with new generated key
+			getIssue().setKey( getIssue().getKey() + getIssue().getId() );
+			getIssueService().updateIssue( issue, getContext().getAuthUser() );
 		} else {
 			Issue issue = getIssueService().getIssueById( getIssue().getId() );
 			issue.setSummary( getIssue().getSummary() );
@@ -286,6 +306,10 @@ public class IssueActionBean extends RapidActionBean {
 			}
 		}
 		return( new ForwardResolution( "/protected/issues/issueEdit.jsp" ) );
+	}
+	
+	public List<Issue> getAllIssues() {
+		return( getIssueService().getAllIssues() );
 	}
 
 	public List<Issue> getOwnIssues() {

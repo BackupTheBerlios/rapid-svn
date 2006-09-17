@@ -12,6 +12,7 @@ public interface IComponentService {
 	
 	public Module getModuleById( Long id );
 	public List<Module> getAllModules();
+	public List<Module> getModulesByKey( String key );
 	public List<Module> getModulesByName( String name );
 	public List<Module> getModulesByDescription( String description );
 	public List<Module> getModulesByCreator( User creator );
@@ -20,6 +21,7 @@ public interface IComponentService {
 	public List<Module> getNewestModulesByLeader( User leader, int max );
 	public Integer getNumberOfProjects( Module module );
 	public Integer getNumberOfComponents( Module module );
+	public Integer getNumberOfModuleKeys( String key );
 	
 	public void addProject( Project project, User user );
 	public void updateProject( Project project, User user );
@@ -27,6 +29,7 @@ public interface IComponentService {
 	
 	public Project getProjectById( Long id );
 	public List<Project> getAllProjects();
+	public List<Project> getProjectsByKey( String key );
 	public List<Project> getTopLevelProjects();
 	public List<Project> getProjectsOfModule( Module module );
 	public List<Project> getProjectsByName( String name );
@@ -42,6 +45,7 @@ public interface IComponentService {
 	public void deleteComponent( Component project, User user );
 	
 	public Component getComponentById( Long id );
+	public List<Component> getComponentsByKey( String key );
 	public List<Component> getAllComponents();
 	public List<Component> getAllComponentsOfModule( Module module );
 	public List<Component> getTopLevelComponents();

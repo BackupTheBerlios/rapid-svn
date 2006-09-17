@@ -69,6 +69,12 @@
 				</td>
 			</tr>
 			<tr>
+				<td><label>KEY:</label></td>
+				<td>
+					<stripes:text maxlength="5" size="5" id="_key" name="issue.key" value="${issue.key}"/>
+				</td>
+			</tr>
+			<tr>
 				<td><label>Type:</label></td>
 				<td>
 					<stripes:select name="issue.type" value="${issue.type}">

@@ -30,6 +30,10 @@
 	<stripes:layout-component name="tileContent">
 	<table>
 		<tr>
+			<td>KEY:</td>
+			<td>${actionBean.component.key}</td>
+		</tr>
+		<tr>
 			<td>Module:</td>
 			<td>
 				<c:if test="${not empty actionBean.component.module}">

@@ -15,6 +15,8 @@ public interface IModuleDao extends IPersistanceDao {
 	public Module find( Long id );
 	
 	public List<Module> findAll();
+	public List<Module> findByKey( String key );
+	public List<Module> findLikeKey( String key );
 	public List<Module> findByName( String name );
 	public List<Module> findLikeName( String name );
 	public List<Module> findByDescription( String description );
@@ -25,4 +27,5 @@ public interface IModuleDao extends IPersistanceDao {
 	
 	public Integer countProjectsOfModule( Module module );
 	public Integer countComponentsOfModule( Module module );
+	public Integer countMatchingKeys( String key );
 }

@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.syracus.rapid.common.AbstractHibernateDao;
 import org.syracus.rapid.components.Module;
@@ -23,6 +26,21 @@ public class HibernateModuleDao extends AbstractHibernateDao implements
 
 	public Module find(Long id) {
 		return( (Module)getHibernateTemplate().get( Module.class, id ) );
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	public List<Module> findByKey(String key) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Module.class );
+		criteria.add( Restrictions.eqProperty( "key", key ) );
+		return( findByCriteria( criteria ) );
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Module> findLikeKey(String key) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Module.class );
+		criteria.add( Restrictions.ilike( "key", key, MatchMode.ANYWHERE ) );
+		return( findByCriteria( criteria ) );
 	}
 
 	@SuppressWarnings("unchecked")
@@ -114,5 +132,15 @@ public class HibernateModuleDao extends AbstractHibernateDao implements
 		} ) );
 	}
 
+	public Integer countMatchingKeys( final String key ) {
+		return( (Integer)getHibernateTemplate().execute( new HibernateCallback() {
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				return( (Integer)session.createQuery( "SELECT COUNT(*) FROM Module m WHERE m.key LIKE ?" )
+					.setString( 0, (key + "%") )
+					.uniqueResult()
+				);
+			}
+		} ) );
+	}
 	
 }

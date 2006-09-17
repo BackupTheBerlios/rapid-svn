@@ -5,6 +5,7 @@ import java.util.List;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
+import net.sourceforge.stripes.action.StreamingResolution;
 import net.sourceforge.stripes.action.UrlBinding;
 
 import org.syracus.rapid.components.Component;
@@ -67,6 +68,10 @@ public class ProjectActionBean extends BaseComponentActionBean {
 			Module module = getComponentService().getModuleById( getModuleId() );
 			if ( null != module ) {
 				setSelectedModule( module );
+				
+				project = new Project();
+				project.setKey( module.getKey() );
+				setProject( project );
 			}
 		}
 		return( new ForwardResolution( "/protected/components/projectCreate.jsp" ) );
@@ -127,6 +132,10 @@ public class ProjectActionBean extends BaseComponentActionBean {
 		return( resolution );
 	}
 	
+	public List<Project> getAllProjects() {
+		return( getComponentService().getAllProjects() );
+	}
+	
 	public List<Project> getOwnProjects() {
 		int maxProjects = Integer.parseInt( getContext().getUserProfile().getProperty( UserProfile.KEY_MAX_PROJECTS, UserProfile.DEF_MAX_PROJECTS ) );
 		return( getComponentService().getNewestProjectsByLeader( getContext().getAuthUser(), maxProjects ) );
@@ -152,6 +161,17 @@ public class ProjectActionBean extends BaseComponentActionBean {
 			}
 		}
 		return( issues );
+	}
+	
+	public Resolution key() {
+		String key = "";
+		if ( null != getProjectId() && -1 != getProjectId() ) {
+			Project project = getComponentService().getProjectById( getProjectId() );
+			if ( null != project ) {
+				key = project.getKey();
+			}
+		}
+		return( new StreamingResolution( "text", key ) );
 	}
 	
 	/*

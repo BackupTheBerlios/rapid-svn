@@ -10,6 +10,12 @@
 	<stripes:form action="/protected/module.action" method="post">
 		<table>
 			<tr>
+				<td>KEY:</td>
+				<td>
+					<stripes:text maxlength="5" size="5" name="module.key" value="${module.key}"/>
+				</td>
+			</tr>
+			<tr>
 				<td>Name:</td>
 				<td>
 					<stripes:text name="module.name" value="${module.name}"/>

@@ -17,10 +17,17 @@
 					${actionBean.selectedModule.name}
 				</c:if>
 				<c:if test="${empty actionBean.selectedModule}">
-					<stripes:select name="project.module.id">
+					<stripes:select name="project.module.id"
+						onchange="ajaxText('${pageContext.request.contextPath}/protected/module.action?key=&moduleId='+selectedValue(this),setProjectKey);">
 						<stripes:options-collection collection="${actionBean.selectableModules}" label="name" value="id"/>
 					</stripes:select>
 				</c:if>
+				</td>
+			</tr>
+			<tr>
+				<td>KEY:</td>
+				<td>
+					<stripes:text id="_key" maxlength="5" name="project.key" value="${project.key}"/>
 				</td>
 			</tr>
 			<tr>

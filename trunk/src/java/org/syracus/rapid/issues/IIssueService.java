@@ -27,6 +27,7 @@ public interface IIssueService {
 	public List<Issue> getAllIssuesOfProject( Project project );
 	public List<Issue> getIssuesOfComponent( Component component );
 	
+	public List<Issue> getIssuesByKey( String key );
 	public List<Issue> getIssuesBySummary( String summary );
 	public List<Issue> getIssuesByDescription( String description );
 	

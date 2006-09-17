@@ -11,6 +11,10 @@
 		<stripes:hidden name="module.id" value="${module.id}"/>
 		<table>
 			<tr>
+				<td>KEY:</td>
+				<td>${actionBean.module.key}</td>
+			</tr>
+			<tr>
 				<td>Name:</td>
 				<td>
 					<stripes:text name="module.name" value="${module.name}"/>

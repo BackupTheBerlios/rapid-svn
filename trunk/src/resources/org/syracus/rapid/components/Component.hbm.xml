@@ -59,6 +59,16 @@
         />
 
         <property
+            name="key"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="ident"
+            length="5"
+            not-null="true"
+        />
+
+        <property
             name="created"
             type="java.util.Date"
             update="true"

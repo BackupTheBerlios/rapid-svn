@@ -5,6 +5,7 @@ import java.util.List;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
+import net.sourceforge.stripes.action.StreamingResolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import net.sourceforge.stripes.validation.SimpleError;
 
@@ -82,6 +83,17 @@ public class ModuleActionBean extends BaseComponentActionBean {
 				new SimpleError( "You can't delete this module. There are still projects referencing it." )
 		);
 		return( new ForwardResolution( "/protected/components/moduleError.jsp" ) );
+	}
+	
+	public Resolution key() {
+		String key = "";
+		if ( null != getModuleId() && -1 != getModuleId() ) {
+			Module module = getComponentService().getModuleById( getModuleId() );
+			if ( null != module ) {
+				key = module.getKey();
+			}
+		}
+		return( new StreamingResolution( "text", key ) );
 	}
 	
 	public List<Module> getOwnModules() {

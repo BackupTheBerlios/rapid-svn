@@ -3,6 +3,7 @@ package org.syracus.rapid.issues.dao;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.syracus.rapid.common.AbstractHibernateDao;
 import org.syracus.rapid.components.Component;
@@ -26,6 +27,20 @@ public class HibernateIssueDao extends AbstractHibernateDao implements IIssueDao
 
 	public Issue find(Long id) {
 		return( (Issue)getHibernateTemplate().get( Issue.class, id) );
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Issue> findByKey(String key) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Issue.class );
+		criteria.add( Restrictions.eqProperty( "key", key ) );
+		return( findByCriteria( criteria ) );
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Issue> findLikeKey(String key) {
+		DetachedCriteria criteria = DetachedCriteria.forClass( Issue.class );
+		criteria.add( Restrictions.ilike( "key", key, MatchMode.ANYWHERE ) );
+		return( findByCriteria( criteria ) );
 	}
 
 	@SuppressWarnings("unchecked")

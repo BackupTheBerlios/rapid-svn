@@ -7,6 +7,9 @@
 			<tr>
 				<td align="left">Issue Details</td>
 				<td align="right">
+					<stripes:link href="/protected/issues/issueList.jsp" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
+						all
+					</stripes:link>
 					<stripes:link href="/protected/issue.action" event="edit" onclick="ajaxUpdate(this.href,'_workbenchContent');return(false);">
 						<stripes:link-param name="issueId" value="${actionBean.issue.id}"/>
 						edit
