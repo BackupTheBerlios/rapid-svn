@@ -4,6 +4,13 @@ import java.util.Date;
 
 import org.syracus.rapid.realm.User;
 
+/**
+ * Base class for all components.
+ * Just handle all common persistant attributes
+ * for all components used by the system.
+ * @author snwiem
+ *
+ */
 public class ABaseComponent {
 
 	private Long id;
@@ -14,7 +21,7 @@ public class ABaseComponent {
 	private Date created;
 	private User modifier;
 	private Date modified;
-	
+
 	/**
 	 * 
 	 * @return
