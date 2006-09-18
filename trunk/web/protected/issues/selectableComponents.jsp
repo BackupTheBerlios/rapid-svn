@@ -5,7 +5,8 @@
 <stripes:useActionBean binding="/protected/issue.action" var="issueAction"/>
 <c:set var="components" value="${issueAction.availableComponents}"/>
 <c:if test="${not empty components}">
-<select name="issue.component.id">
+<select name="issue.component.id"
+	onchange="ajaxText('${pageContext.request.contextPath}/protected/component.action?key=&componentId='+selectedValue(this),setKey);return true;">
 	<c:forEach var="component" items="${components}">
 	<option value="${component.id}">${component.name}</option>
 	</c:forEach>

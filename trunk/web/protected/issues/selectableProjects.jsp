@@ -4,7 +4,7 @@
 <c:set var="projects" value="${issueAction.availableProjects}"/>
 <c:if test="${not empty projects}">
 <select name="issue.project.id"
-	onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/issues/selectableComponents.jsp?projectId='+selectedValue(this)+'&moduleId='+selectedValue($(_moduleSelection)),'_componentSelector');return true;">
+	onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/issues/selectableComponents.jsp?projectId='+selectedValue(this)+'&moduleId='+selectedValue($(_moduleSelection)),'_componentSelector');ajaxText('${pageContext.request.contextPath}/protected/project.action?key=&projectId='+selectedValue(this),setKey);return true;">
 	<c:forEach var="project" items="${projects}">
 	<option value="${project.id}">${project.name}</option>
 	</c:forEach>

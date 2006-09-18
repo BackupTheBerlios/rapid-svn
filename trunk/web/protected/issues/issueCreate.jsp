@@ -23,7 +23,7 @@
 					</c:if>
 					<c:if test="${empty actionBean.selectedModule}">
 						<stripes:select id="_moduleSelection" name="issue.module.id" value="${issue.module.id}"
-							onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/issues/selectableProjects.jsp?moduleId='+selectedValue(this),'_projectSelector');ajaxUpdate('${pageContext.request.contextPath}/protected/issues/selectableComponents.jsp?moduleId='+selectedValue(this),'_componentSelector');return true;">
+							onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/issues/selectableProjects.jsp?moduleId='+selectedValue(this),'_projectSelector');ajaxUpdate('${pageContext.request.contextPath}/protected/issues/selectableComponents.jsp?moduleId='+selectedValue(this),'_componentSelector');ajaxText('${pageContext.request.contextPath}/protected/module.action?key=&moduleId='+selectedValue(this),setKey);return true;">
 							<stripes:options-collection collection="${actionBean.selectableModules}" label="name" value="id"/>
 						</stripes:select>
 					</c:if>
@@ -44,7 +44,7 @@
 					<c:if test="${empty actionBean.selectedProject}">
 						<div id="_projectSelector">
 						<stripes:select name="issue.project.id" value="${issue.project.id}"
-							onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/issues/selectableComponents.jsp?projectId='+selectedValue(this)+'&moduleId='+selectedValue($(_moduleSelection)),'_componentSelector');return true;">
+							onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/issues/selectableComponents.jsp?projectId='+selectedValue(this)+'&moduleId='+selectedValue($(_moduleSelection)),'_componentSelector');ajaxText('${pageContext.request.contextPath}/protected/project.action?key=&projectId='+selectedValue(this),setKey);return true;">
 							<stripes:options-collection collection="${actionBean.selectableProjects}" label="name" value="id"/>
 						</stripes:select>
 						</div>
@@ -61,7 +61,8 @@
 					</c:if>
 					<c:if test="${empty actionBean.selectedComponent}">
 						<div id="_componentSelector">
-						<stripes:select name="issue.component.id" value="${issue.component.id}">
+						<stripes:select name="issue.component.id" value="${issue.component.id}"
+							onchange="ajaxText('${pageContext.request.contextPath}/protected/component.action?key=&componentId='+selectedValue(this),setKey);return true;">
 							<stripes:options-collection collection="${actionBean.selectableComponents}" label="name" value="id"/>
 						</stripes:select>
 						</div>
@@ -71,7 +72,7 @@
 			<tr>
 				<td><label>KEY:</label></td>
 				<td>
-					<stripes:text maxlength="5" size="5" id="_key" name="issue.key" value="${issue.key}"/>
+					<stripes:text disabled="disabled" maxlength="5" size="5" id="_key" name="issue.key" value="${issue.key}"/>
 				</td>
 			</tr>
 			<tr>

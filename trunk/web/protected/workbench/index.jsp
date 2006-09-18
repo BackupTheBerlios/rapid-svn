@@ -18,6 +18,7 @@
 			
 			<stripes:layout-component name="centerColumn">
 				<div id="_workbenchContent">
+					<jsp:include page="/protected/workbench/data/overview.jsp"/>
 				</div>
 			</stripes:layout-component>
 			

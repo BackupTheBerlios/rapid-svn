@@ -7,6 +7,9 @@
 			<tr>
 				<td align="left">Available Components</td>
 				<td align="right">
+					<stripes:link href="/protected/components/componentList.jsp" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
+						all
+					</stripes:link>
 					<stripes:link href="/protected/component.action" event="create" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
 						<stripes:link-param name="moduleId" value="${param.moduleId}"/>
 						new

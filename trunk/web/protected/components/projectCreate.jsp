@@ -18,7 +18,7 @@
 				</c:if>
 				<c:if test="${empty actionBean.selectedModule}">
 					<stripes:select name="project.module.id"
-						onchange="ajaxText('${pageContext.request.contextPath}/protected/module.action?key=&moduleId='+selectedValue(this),setProjectKey);">
+						onchange="ajaxText('${pageContext.request.contextPath}/protected/module.action?key=&moduleId='+selectedValue(this),setKey);">
 						<stripes:options-collection collection="${actionBean.selectableModules}" label="name" value="id"/>
 					</stripes:select>
 				</c:if>
@@ -27,7 +27,7 @@
 			<tr>
 				<td>KEY:</td>
 				<td>
-					<stripes:text id="_key" maxlength="5" name="project.key" value="${project.key}"/>
+					<stripes:text id="_key" size="5" maxlength="5" name="project.key" value="${project.key}"/>
 				</td>
 			</tr>
 			<tr>
