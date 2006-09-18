@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.cglib.use_reflection_optimizer">true</property>
+    <property name="hibernate.connection.datasource">java:comp/env/jdbc/rapid</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.use_outer_join">true</property>
+    <property name="hibernate.show_sql">true</property>
+    <mapping resource="org/syracus/rapid/comments/Comment.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/comments/ComponentComment.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/comments/IssueComment.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/comments/ModuleComment.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/comments/ProjectComment.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/components/Component.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/components/Module.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/components/Project.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/files/ModuleFile.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/issues/Issue.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/messages/Message.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/realm/User.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/todos/Todo.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>
