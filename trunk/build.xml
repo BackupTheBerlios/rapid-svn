@@ -54,7 +54,6 @@
 			classpathref="classpath.xdoclet2"/>
 		
 	<target name="hibernate.mappings">
-		<!--
 		<xdoclet>
 			<fileset dir="${src.dir.java}" includes="**/*.java"/>
 			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin"
@@ -63,11 +62,12 @@
 				force="${xdoclet.force}"
 				encoding="UTF-8"/>
 		</xdoclet>
-		-->
+		<!--
 		<hibernatedoclet destdir="${src.dir.resources}" mergedir="${xdoclet.dir}" verbose="${xdoclet.verbose}" force="${xdoclet.force}">
 			<fileset dir="${src.dir.java}" includes="**/*.java"/>
 			<hibernate version="3.0"/>
 		</hibernatedoclet>
+		-->
 	</target>
 		
 	<target name="hibernate.properties">
@@ -75,7 +75,6 @@
 	</target>
 	
 	<target name="hibernate.config" depends="hibernate.mappings,hibernate.properties">
-		<!--
 		<xdoclet>
 			<fileset dir="${src.dir.java}" includes="**/*.java"/>
 			<component classname="org.xdoclet.plugin.hibernate.HibernateConfigPlugin"
@@ -88,7 +87,7 @@
 				usereflectionoptimizer="${hibernate.cglib.use_reflection_optimizer}"
 				encoding="UTF-8"/>
 		</xdoclet>
-		-->
+		<!--
 		<hibernatedoclet destdir="${src.dir.resources}" mergedir="${xdoclet.dir}" verbose="${xdoclet.verbose}" force="${xdoclet.force}">
 			<fileset dir="${src.dir.java}" includes="**/*.java"/>
 			<hibernatecfg version="3.0"
@@ -98,6 +97,7 @@
 					showSql="${hibernate.show_sql}"
 					cglibUseReflectionOptimizer="${hibernate.cglib.use_reflection_optimizer}"/>
 		</hibernatedoclet>
+		-->
 	</target>
 	
 	<target name="hibernate.schemaexport" depends="hibernate.config">
