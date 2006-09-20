@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.Date;
 
 import org.hibernate.Hibernate;
 
@@ -13,6 +14,7 @@ public abstract class AbstractFile {
 	private String fileName;
 	private Long fileSize;
 	private String contentType;
+	private Date fileDate;
 	private Blob content;
 	
 
@@ -31,7 +33,7 @@ public abstract class AbstractFile {
 	/**
 	 * 
 	 * @return
-	 * @hibernate.property type="binary"
+	 * @hibernate.property type="blob"
 	 */
 	public Blob getContent() {
 		return content;
@@ -82,6 +84,19 @@ public abstract class AbstractFile {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @hibernate.property
+	 */
+	public Date getFileDate() {
+		return fileDate;
+	}
+
+	public void setFileDate(Date fileDate) {
+		this.fileDate = fileDate;
 	}
 	
 	

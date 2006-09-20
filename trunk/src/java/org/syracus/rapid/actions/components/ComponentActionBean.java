@@ -1,22 +1,30 @@
 package org.syracus.rapid.actions.components;
 
 import java.util.List;
+import java.util.Set;
 
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.StreamingResolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import net.sourceforge.stripes.validation.SimpleError;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
+import org.syracus.rapid.files.ComponentAttachement;
 import org.syracus.rapid.issues.Issue;
 import org.syracus.rapid.profiles.UserProfile;
 
 @UrlBinding("/protected/component.action")
 public class ComponentActionBean extends BaseComponentActionBean {
 
+	protected static final transient Log log = LogFactory.getLog( ComponentActionBean.class );
+	
 	private Long moduleId;
 	private Long projectId;
 	
@@ -123,21 +131,19 @@ public class ComponentActionBean extends BaseComponentActionBean {
 			}
 		}
 		List<Module> modules = getComponentService().getAllModules();
-		if ( null != modules && !modules.isEmpty() ) {
-			Module dummyModule = new Module();
-			dummyModule.setId( new Long( -1 ) );
-			dummyModule.setName( "No module" );
-			modules.add( 0, dummyModule );
-			
-			List<Project> projects = getComponentService().getTopLevelProjects();
-			Project dummyProject = new Project();
-			dummyProject.setId( new Long( -1 ) );
-			dummyProject.setName( "No project" );
-			projects.add( 0, dummyProject );
-			
-			setSelectableProjects( projects );
-			setSelectableModules( modules );
-		}
+		Module dummyModule = new Module();
+		dummyModule.setId( new Long( -1 ) );
+		dummyModule.setName( "No module" );
+		modules.add( 0, dummyModule );
+		setSelectableModules( modules );
+		
+		List<Project> projects = getComponentService().getTopLevelProjects();
+		Project dummyProject = new Project();
+		dummyProject.setId( new Long( -1 ) );
+		dummyProject.setName( "No project" );
+		projects.add( 0, dummyProject );
+		setSelectableProjects( projects );
+		
 		return( new ForwardResolution( "/protected/components/componentCreate.jsp" ) );
 	}
 	
@@ -155,6 +161,75 @@ public class ComponentActionBean extends BaseComponentActionBean {
 	
 	public Resolution save() {
 		if ( null == getComponent().getId() ) {
+			if ( StringUtils.isBlank( getComponent().getKey() ) ) {
+				getContext().getValidationErrors().add( "key", new SimpleError( "A component key is required." ) );
+			}
+			if ( StringUtils.isBlank( getComponent().getName() ) ) {
+				getContext().getValidationErrors().add( "name", new SimpleError( "A component name is required." ) );
+			}
+			if ( getContext().getValidationErrors().hasFieldErrors() ) {
+				if ( null != getProjectId() ) {
+					// we came from creating a project component
+					Project project = getComponentService().getProjectById( getProjectId() );
+					if ( null != project ) {
+						setSelectedProject( project );
+						Module module = project.getModule();
+						if ( null == module ) {
+							module = new Module();
+							module.setId( new Long( -1 ) );
+							module.setName( "No module" );
+						}
+						setSelectedModule( module );
+					}
+				} else if ( null != getModuleId() ) {
+					// we came from creating a module component
+					Module module = getComponentService().getModuleById( getModuleId() );
+					if ( null != module ) {
+						setSelectedModule( module );
+						
+						List<Project> projects = getComponentService().getProjectsOfModule( module );
+						if ( null != projects && false == projects.isEmpty() ) {
+							Project dummy = new Project();
+							dummy.setId( new Long( -1 ) );
+							dummy.setName( "No project" );
+							projects.add( 0, dummy );
+							setSelectableProjects( projects );
+						}
+					}
+				} else {
+					// we came from creating a top level component
+					List<Module> modules = getComponentService().getAllModules();
+					Module dummyModule = new Module();
+					dummyModule.setId( new Long( -1 ) );
+					dummyModule.setName( "No module" );
+					modules.add( 0, dummyModule );
+					setSelectableModules( modules );
+					
+					Module module = getComponent().getModule();
+					if ( null != module
+					 && -1 != module.getId() )
+					{
+						// a module was selected. so just load module specific projects
+						List<Project> projects = getComponentService().getProjectsOfModule( module );
+						if ( null != projects && false == projects.isEmpty() ) {
+							Project dummy = new Project();
+							dummy.setId( new Long( -1 ) );
+							dummy.setName( "No project" );
+							projects.add( 0, dummy );
+							setSelectableProjects( projects );
+						}
+					} else {
+						// no module was selected. load all top level projects.
+						List<Project> projects = getComponentService().getTopLevelProjects();
+						Project dummyProject = new Project();
+						dummyProject.setId( new Long( -1 ) );
+						dummyProject.setName( "No project" );
+						projects.add( 0, dummyProject );
+						setSelectableProjects( projects );
+					}
+				}
+				return( getContext().getSourcePageResolution() );
+			}
 			if ( null != getComponent().getModule() && -1 == getComponent().getModule().getId() ) {
 				getComponent().setModule( null );
 			}
@@ -163,6 +238,18 @@ public class ComponentActionBean extends BaseComponentActionBean {
 			}
 			getComponentService().addComponent( getComponent(), getContext().getAuthUser() );
 		} else {
+			if ( StringUtils.isBlank( getComponent().getName() ) ) {
+				getContext().getValidationErrors().add( "name", new SimpleError( "A component name is required." ) );
+			}
+			if ( getContext().getValidationErrors().hasFieldErrors() ) {
+				if ( null != getComponent().getModule() ) {
+					getComponent().setModule( getComponentService().getModuleById( getComponent().getModule().getId() ) );
+				}
+				if ( null != getComponent().getProject() ) {
+					getComponent().setProject( getComponentService().getProjectById( getComponent().getProject().getId() ) );
+				}
+				return( getContext().getSourcePageResolution() );
+			}
 			Component component = getComponentService().getComponentById( getComponent().getId() );
 			component.setName( getComponent().getName() );
 			component.setDescription( getComponent().getDescription() );
@@ -283,5 +370,16 @@ public class ComponentActionBean extends BaseComponentActionBean {
 		dummy.setName( "No project" );
 		projects.add( 0, dummy );
 		return( projects );
+	}
+	
+	public Set<ComponentAttachement> getComponentAttachements() {
+		Set<ComponentAttachement> attachements = null;
+		if ( null != getComponentId() ) {
+			Component component = getComponentService().getComponentById( getComponentId() );
+			if ( null != component ) {
+				attachements = component.getAttachements();
+			}
+		}
+		return( attachements );
 	}
 }

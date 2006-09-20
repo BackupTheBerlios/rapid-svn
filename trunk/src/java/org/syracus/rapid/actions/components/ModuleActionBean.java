@@ -1,6 +1,7 @@
 package org.syracus.rapid.actions.components;
 
 import java.util.List;
+import java.util.Set;
 
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
@@ -9,9 +10,11 @@ import net.sourceforge.stripes.action.StreamingResolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import net.sourceforge.stripes.validation.SimpleError;
 
+import org.apache.commons.lang.StringUtils;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
+import org.syracus.rapid.files.ModuleAttachement;
 import org.syracus.rapid.issues.Issue;
 import org.syracus.rapid.profiles.UserProfile;
 
@@ -52,8 +55,23 @@ public class ModuleActionBean extends BaseComponentActionBean {
 	
 	public Resolution save() {
 		if ( null == getModule().getId() ) {
+			if ( StringUtils.isBlank( getModule().getKey() ) ) {
+				getContext().getValidationErrors().add( "key", new SimpleError( "A key is required." ) );
+			}
+			if ( StringUtils.isBlank( getModule().getName() ) ) {
+				getContext().getValidationErrors().add( "name", new SimpleError( "A name is required." ) );
+			}
+			if ( getContext().getValidationErrors().hasFieldErrors() ) {
+				return( getContext().getSourcePageResolution() );
+			}
 			getComponentService().addModule( getModule(), getContext().getAuthUser() );
 		} else {
+			if ( StringUtils.isBlank( getModule().getName() ) ) {
+				getContext().getValidationErrors().add( "name", new SimpleError( "A name is required." ) );
+			}
+			if ( getContext().getValidationErrors().hasFieldErrors() ) {
+				return( getContext().getSourcePageResolution() );
+			}
 			Module module = getComponentService().getModuleById( getModule().getId() );
 			module.setName( getModule().getName() );
 			module.setDescription( getModule().getDescription() );
@@ -144,6 +162,17 @@ public class ModuleActionBean extends BaseComponentActionBean {
 			}
 		}
 		return( issues );
+	}
+	
+	public Set<ModuleAttachement> getModuleAttachements() {
+		Set<ModuleAttachement> attachements = null;
+		if ( null != getModuleId() ) {
+			Module module = getComponentService().getModuleById( getModuleId() );
+			if ( null != module ) {
+				attachements = module.getAttachements();
+			}
+		}
+		return( attachements );
 	}
 	
 }

@@ -7,7 +7,7 @@ import org.syracus.rapid.components.Module;
  * @author snwiem
  * @hibernate.class table="module_attachements"
  */
-public class ModuleAttachement extends AbstractFile {
+public class ModuleAttachement extends AbstractAttachement {
 
 	private Module module;
 

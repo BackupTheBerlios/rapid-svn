@@ -1,5 +1,8 @@
 package org.syracus.rapid.components;
 
+import java.util.Set;
+
+import org.syracus.rapid.files.ProjectAttachement;
 import org.syracus.rapid.realm.User;
 
 /**
@@ -12,7 +15,21 @@ public class Project extends ABaseComponent {
 	private Module module;
 	private User leader;
 	private String home;
-
+	private Set<ProjectAttachement> attachements;
+	
+	/**
+	 * 
+	 * @return
+	 * @hibernate.set lazy="true" cascade="all-delete-orphan" inverse="true"
+	 * @hibernate.key column="project"
+	 * @hibernate.one-to-many class="org.syracus.rapid.files.ProjectAttachement"/>
+	 */
+	public Set<ProjectAttachement> getAttachements() {
+		return attachements;
+	}
+	public void setAttachements(Set<ProjectAttachement> attachements) {
+		this.attachements = attachements;
+	}
 	/**
 	 * 
 	 * @return

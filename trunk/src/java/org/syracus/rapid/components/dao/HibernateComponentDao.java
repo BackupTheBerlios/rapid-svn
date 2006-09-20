@@ -2,6 +2,8 @@ package org.syracus.rapid.components.dao;
 
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -14,7 +16,12 @@ import org.syracus.rapid.realm.User;
 public class HibernateComponentDao extends AbstractHibernateDao implements
 		IComponentDao {
 
+	protected static final transient Log log = LogFactory.getLog( HibernateComponentDao.class );
+	
 	public void create(Component component) {
+		if ( log.isDebugEnabled() ) {
+			log.debug( "[create] " + component.dump() );
+		}
 		getHibernateTemplate().save( component );
 	}
 

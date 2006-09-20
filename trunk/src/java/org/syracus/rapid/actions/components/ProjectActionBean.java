@@ -1,22 +1,30 @@
 package org.syracus.rapid.actions.components;
 
 import java.util.List;
+import java.util.Set;
 
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.StreamingResolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import net.sourceforge.stripes.validation.SimpleError;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
+import org.syracus.rapid.files.ProjectAttachement;
 import org.syracus.rapid.issues.Issue;
 import org.syracus.rapid.profiles.UserProfile;
 
 @UrlBinding("/protected/project.action")
 public class ProjectActionBean extends BaseComponentActionBean {
 
+	protected static final transient Log log = LogFactory.getLog( ProjectActionBean.class );
+	
 	private Long moduleId;
 	private Long projectId;
 	private Project project;
@@ -91,12 +99,56 @@ public class ProjectActionBean extends BaseComponentActionBean {
 	
 	public Resolution save() {
 		if ( null == getProject().getId() ) {
+			if ( StringUtils.isBlank( getProject().getKey() ) ) {
+				getContext().getValidationErrors().add( "key", new SimpleError( "A project key is required." ) );
+			}
+			if ( StringUtils.isBlank( getProject().getName() ) ) {
+				getContext().getValidationErrors().add( "name", new SimpleError( "A project name is required." ) );
+			}
+			if ( getContext().getValidationErrors().hasFieldErrors() ) {
+				if ( log.isDebugEnabled() ) {
+					log.debug( "[save] validation errors occured. preparing source page resolution." );
+				}
+				if ( null == getModuleId() ) {
+					if ( log.isDebugEnabled() ) {
+						log.debug( "[save] no module id found. loading all modules." );
+					}
+					List<Module> modules = getComponentService().getAllModules();
+					// insert dummy module
+					Module dummy = new Module();
+					dummy.setId( new Long(-1) );
+					dummy.setName( "No module" );
+					modules.add( 0, dummy );
+					setSelectableModules( modules );
+				} else {
+					if ( log.isDebugEnabled() ) {
+						log.debug( "[save] moduleId is '" + getModuleId() + "'" );
+					}
+					Module module = getComponentService().getModuleById( getModuleId() );
+					if ( null != module ) {
+						if ( log.isDebugEnabled() ) {
+							log.debug( "[save] setting selected module." );
+						}
+						setSelectedModule( module );
+					}
+				}
+				return( getContext().getSourcePageResolution() );
+			}
 			// check if 'no module' has been selected
 			if ( null != getProject().getModule() && -1 == getProject().getModule().getId() ) {
 				getProject().setModule( null );
 			}
 			getComponentService().addProject( getProject(), getContext().getAuthUser() );
 		} else {
+			if ( StringUtils.isBlank( getProject().getName() ) ) {
+				getContext().getValidationErrors().add( "name", new SimpleError( "A project name is required." ) );
+			}
+			if ( getContext().getValidationErrors().hasFieldErrors() ) {
+				if ( null != getProject().getModule() ) {
+					getProject().setModule( getComponentService().getModuleById( getProject().getModule().getId() ) );
+				}
+				return( getContext().getSourcePageResolution() );
+			}
 			Project project = getComponentService().getProjectById( getProject().getId() );
 			project.setModule( getProject().getModule() );
 			project.setName( getProject().getName() );
@@ -174,6 +226,16 @@ public class ProjectActionBean extends BaseComponentActionBean {
 		return( new StreamingResolution( "text", key ) );
 	}
 	
+	public Set<ProjectAttachement> getProjectAttachements() {
+		Set<ProjectAttachement> attachements = null;
+		if ( null != getProjectId() ) {
+			Project project = getComponentService().getProjectById( getProjectId() );
+			if ( null != project ) {
+				attachements = project.getAttachements();
+			}
+		}
+		return( attachements );
+	}
 	/*
 	public List<Project> getSelectableProjects() {
 		List<Project> projects = null;

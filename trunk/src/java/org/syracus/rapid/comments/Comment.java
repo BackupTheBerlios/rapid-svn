@@ -8,11 +8,6 @@ import org.syracus.rapid.components.Project;
 import org.syracus.rapid.issues.Issue;
 import org.syracus.rapid.realm.User;
 
-/**
- * 
- * @author snwiem
- * @hibernate.class table="comments"
- */
 public class Comment {
 
 	private Long id;

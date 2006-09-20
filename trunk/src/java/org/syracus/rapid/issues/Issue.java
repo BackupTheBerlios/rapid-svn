@@ -1,10 +1,12 @@
 package org.syracus.rapid.issues;
 
 import java.util.Date;
+import java.util.Set;
 
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
+import org.syracus.rapid.files.IssueAttachement;
 import org.syracus.rapid.realm.User;
 
 /**
@@ -39,6 +41,21 @@ public class Issue {
 	private User modifier;
 	private Date modified;
 	
+	private Set<IssueAttachement> attachements;
+	
+	/**
+	 * 
+	 * @return
+	 * @hibernate.set lazy="true" cascade="all-delete-orphan" inverse="true"
+	 * @hibernate.key column="issue"
+	 * @hibernate.one-to-many class="org.syracus.rapid.files.IssueAttachement"/>
+	 */
+	public Set<IssueAttachement> getAttachements() {
+		return attachements;
+	}
+	public void setAttachements(Set<IssueAttachement> attachements) {
+		this.attachements = attachements;
+	}
 	/**
 	 * 
 	 * @return

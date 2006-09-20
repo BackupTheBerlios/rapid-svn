@@ -1,17 +1,23 @@
 package org.syracus.rapid.actions.issues;
 
 import java.util.List;
+import java.util.Set;
 
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import net.sourceforge.stripes.integration.spring.SpringBean;
+import net.sourceforge.stripes.validation.SimpleError;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.IComponentService;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
+import org.syracus.rapid.files.IssueAttachement;
 import org.syracus.rapid.issues.IIssueService;
 import org.syracus.rapid.issues.Issue;
 import org.syracus.rapid.issues.Status;
@@ -21,8 +27,12 @@ import org.syracus.rapid.stripes.RapidActionBean;
 @UrlBinding("/protected/issue.action")
 public class IssueActionBean extends RapidActionBean {
 	
+	protected static final transient Log log = LogFactory.getLog( IssueActionBean.class );
+	
 	private Long issueId;
 	private Issue issue;
+	
+	
 	
 	private Long moduleId;
 	private Long projectId;
@@ -40,6 +50,8 @@ public class IssueActionBean extends RapidActionBean {
 	private IComponentService componentService;
 	
 	
+	
+
 	public Issue getIssue() {
 		return issue;
 	}
@@ -253,6 +265,145 @@ public class IssueActionBean extends RapidActionBean {
 	
 	public Resolution save() {
 		if ( null == getIssue().getId() ) {
+			if ( (null == getIssue().getModule() || -1 == getIssue().getModule().getId())
+			  && (null == getIssue().getProject() || -1 == getIssue().getProject().getId())
+			  && (null == getIssue().getComponent() || -1 == getIssue().getComponent().getId()) )
+			{
+				getContext().getValidationErrors().add( "selection", new SimpleError( "Either module, project or component is required." ) );
+			}
+			
+			if ( StringUtils.isBlank( getIssue().getKey() ) ) {
+				getContext().getValidationErrors().add( "key", new SimpleError( "An issue key is required." ) );
+			}
+			if ( StringUtils.isBlank( getIssue().getSummary() ) ) {
+				getContext().getValidationErrors().add( "summary", new SimpleError( "An issue summary is required." ) );
+			}
+			if ( getContext().getValidationErrors().hasFieldErrors() ) {
+				if ( null != getComponentId() ) {
+					Component component = getComponentService().getComponentById( getComponentId() );
+					if ( null != component ) {
+						setSelectedComponent( component );
+						
+						Module module = component.getModule();
+						if ( null == module ) {
+							module = new Module();
+							module.setId( new Long( -1 ) );
+							module.setName( "No module" );
+						}
+						setSelectedModule( module );
+						
+						Project project = component.getProject();
+						if ( null == project ) {
+							project = new Project();
+							project.setId( new Long( -1 ) );
+							project.setName( "No project" );
+						}
+						setSelectedProject( project );
+					}
+				} else if ( null != getProjectId() ) {
+					Project project = getComponentService().getProjectById( getProjectId() );
+					if ( null != project ) {
+						setSelectedProject( project );
+						
+						Module module = project.getModule();
+						if ( null == module ) {
+							module = new Module();
+							module.setId( new Long( -1 ) );
+							module.setName( "No module" );
+						}
+						setSelectedModule( module );
+						
+						
+						List<Component> components = getComponentService().getComponentsOfProject( project );
+						Component dummyComponent = new Component();
+						dummyComponent.setId( new Long( -1 ) );
+						dummyComponent.setName( "No component" );
+						components.add( 0, dummyComponent );
+						
+						setSelectableComponents( components );
+					}
+				} else if ( null != getModuleId() ) {
+					Module module = getComponentService().getModuleById( getModuleId() );
+					if ( null != module ) {
+						setSelectedModule( module );
+						
+						List<Project> projects = getComponentService().getProjectsOfModule( module );
+						Project dummyProject = new Project();
+						dummyProject.setId( new Long( -1 ) );
+						dummyProject.setName( "No project" );
+						projects.add( 0, dummyProject );
+						setSelectableProjects( projects );
+						
+						List<Component> components = getComponentService().getComponentsOfModule( module );
+						Component dummyComponent = new Component();
+						dummyComponent.setId( new Long( -1 ) );
+						dummyComponent.setName( "No component" );
+						components.add( 0, dummyComponent );
+						setSelectableComponents( components );
+					}
+				} else {
+					List<Module> modules = getComponentService().getAllModules();
+					Module dummyModule = new Module();
+					dummyModule.setId( new Long( -1 ) );
+					dummyModule.setName( "No module" );
+					modules.add( 0, dummyModule );
+					setSelectableModules( modules );
+					
+					Module module = getIssue().getModule();
+					if ( null != module && -1 != module.getId() ) {
+						List<Project> projects = getComponentService().getProjectsOfModule( module );
+						Project dummyProject = new Project();
+						dummyProject.setId( new Long( -1 ) );
+						dummyProject.setName( "No project" );
+						projects.add( 0, dummyProject );
+						setSelectableProjects( projects );
+						
+						Project project = getIssue().getProject();
+						if ( null != project && -1 != project.getId() ) {
+							List<Component> components = getComponentService().getComponentsOfProject( project );
+							Component dummyComponent = new Component();
+							dummyComponent.setId( new Long( -1 ) );
+							dummyComponent.setName( "No component" );
+							components.add( 0, dummyComponent );
+							setSelectableComponents( components );
+						} else {
+							List<Component> components = getComponentService().getComponentsOfModule( module );
+							Component dummyComponent = new Component();
+							dummyComponent.setId( new Long( -1 ) );
+							dummyComponent.setName( "No component" );
+							components.add( 0, dummyComponent );
+							setSelectableComponents( components );
+						}
+					} else {
+						List<Project> projects = getComponentService().getTopLevelProjects();
+						Project dummyProject = new Project();
+						dummyProject.setId( new Long( -1 ) );
+						dummyProject.setName( "No project" );
+						projects.add( 0, dummyProject );
+						setSelectableProjects( projects );
+						
+						Project project = getIssue().getProject();
+						if ( null != project && -1 != project.getId() ) {
+							List<Component> components = getComponentService().getComponentsOfProject( project );
+							Component dummyComponent = new Component();
+							dummyComponent.setId( new Long( -1 ) );
+							dummyComponent.setName( "No component" );
+							components.add( 0, dummyComponent );
+							setSelectableComponents( components );
+						} else {
+							List<Component> components = getComponentService().getTopLevelComponents();
+							Component dummyComponent = new Component();
+							dummyComponent.setId( new Long( -1 ) );
+							dummyComponent.setName( "No component" );
+							components.add( 0, dummyComponent );
+							setSelectableComponents( components );
+						}
+					}
+				}
+				
+				return( getContext().getSourcePageResolution() );
+			}
+			
 			if ( null != getIssue().getModule() && -1 == getIssue().getModule().getId() ) {
 				getIssue().setModule( null );
 			}
@@ -262,16 +413,33 @@ public class IssueActionBean extends RapidActionBean {
 			if ( null != getIssue().getComponent() && -1 == getIssue().getComponent().getId() ) {
 				getIssue().setComponent( null );
 			}
-			if ( null == getIssue().getKey() || 0 == getIssue().getKey().trim().length() ) {
+			if ( StringUtils.isBlank( getIssue().getKey() ) ) {
 				getIssue().setKey( "" );
 			}
 			getIssue().setStatus( Status.OPEN.toString() );
+			
+			
 			getIssueService().addIssue( getIssue(), getContext().getAuthUser() );
 			
 			// update issue with new generated key
 			getIssue().setKey( getIssue().getKey() + getIssue().getId() );
 			getIssueService().updateIssue( issue, getContext().getAuthUser() );
 		} else {
+			if ( StringUtils.isBlank( getIssue().getSummary() ) ) {
+				getContext().getValidationErrors().add( "summary", new SimpleError( "An issue summary is required." ) );
+			}
+			if ( getContext().getValidationErrors().hasFieldErrors() ) {
+				if ( null != getIssue().getModule() ) {
+					getIssue().setModule( getComponentService().getModuleById( getIssue().getModule().getId() ) );
+				}
+				if ( null != getIssue().getProject() ) {
+					getIssue().setProject( getComponentService().getProjectById( getIssue().getProject().getId() ) );
+				}
+				if ( null != getIssue().getComponent() ) {
+					getIssue().setComponent( getComponentService().getComponentById( getIssue().getComponent().getId() ) );
+				}
+				return( getContext().getSourcePageResolution() );
+			}
 			Issue issue = getIssueService().getIssueById( getIssue().getId() );
 			issue.setSummary( getIssue().getSummary() );
 			issue.setDescription( getIssue().getDescription() );
@@ -372,4 +540,18 @@ public class IssueActionBean extends RapidActionBean {
 		components.add( 0, dummyComponent );
 		return( components );
 	}
+	
+	public Set<IssueAttachement> getIssueAttachements() {
+		Set<IssueAttachement> attachements = null;
+		if ( null != getIssueId() ) {
+			Issue issue = getIssueService().getIssueById( getIssueId() );
+			if ( null != issue ) {
+				attachements = issue.getAttachements();
+			}
+		}
+		return( attachements );
+	}
+	
+	
+	
 }
