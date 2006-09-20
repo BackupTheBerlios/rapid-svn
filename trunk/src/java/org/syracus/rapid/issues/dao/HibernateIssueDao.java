@@ -10,9 +10,9 @@ import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
 import org.syracus.rapid.issues.Issue;
+import org.syracus.rapid.issues.IssueType;
 import org.syracus.rapid.issues.Priority;
 import org.syracus.rapid.issues.Status;
-import org.syracus.rapid.issues.Type;
 import org.syracus.rapid.realm.User;
 
 public class HibernateIssueDao extends AbstractHibernateDao implements IIssueDao {
@@ -154,7 +154,7 @@ public class HibernateIssueDao extends AbstractHibernateDao implements IIssueDao
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Issue> findByType(Type type) {
+	public List<Issue> findByType(IssueType type) {
 		return( (List<Issue>)getHibernateTemplate().find(
 				"FROM Issue i WHERE i.type = ?",
 				type

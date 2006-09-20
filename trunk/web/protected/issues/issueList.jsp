@@ -40,7 +40,7 @@
 				<td>
 					<stripes:link href="/protected/issue.action" event="view" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
 						<stripes:link-param name="issueId" value="${issue.id}"/>
-						${issue.summary}
+						[${issue.key}] ${issue.summary}
 					</stripes:link>
 				</td>
 				<td>
@@ -77,13 +77,13 @@
 					</c:if>
 				</td>
 				<td>
-					${issue.type}
+					${issue.type.name}
 				</td>
 				<td>
-					${issue.status}
+					${issue.status.name}
 				</td>
 				<td>
-					${issue.priority}
+					${issue.priority.name}
 				</td>
 				<td>
 					${issue.assignee.name}

@@ -15,6 +15,7 @@
 		<stripes:hidden name="moduleId" value="${moduleId}"/>
 		<stripes:hidden name="projectId" value="${projectId}"/>
 		<stripes:hidden name="componentId" value="${componentId}"/>
+		<stripes:hidden name="issue.status.id" value="${issue.status.id}"/>
 		<table width="100%">
 			<tr>
 				<td><label>Module:</label></td>
@@ -29,6 +30,9 @@
 							onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/issues/selectableProjects.jsp?moduleId='+selectedValue(this),'_projectSelector');ajaxUpdate('${pageContext.request.contextPath}/protected/issues/selectableComponents.jsp?moduleId='+selectedValue(this),'_componentSelector');ajaxText('${pageContext.request.contextPath}/protected/module.action?key=&moduleId='+selectedValue(this),setKey);return true;">
 							<stripes:options-collection collection="${actionBean.selectableModules}" label="name" value="id"/>
 						</stripes:select>
+						<stripes:link href="/protected/components/moduleCreate.jsp" onclick="ajaxUpdate(this.href,'_workbenchContent');return false;">
+							create
+						</stripes:link>
 					</c:if>
 					<stripes:errors field="selection"/>
 				</td>
@@ -51,6 +55,9 @@
 							onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/issues/selectableComponents.jsp?projectId='+selectedValue(this)+'&moduleId='+selectedValue($(_moduleSelection)),'_componentSelector');ajaxText('${pageContext.request.contextPath}/protected/project.action?key=&projectId='+selectedValue(this),setKey);return true;">
 							<stripes:options-collection collection="${actionBean.selectableProjects}" label="name" value="id"/>
 						</stripes:select>
+						<stripes:link href="/protected/project.action" event="create" onclick="ajaxUpdate(this.href,'_workbenchContent');return false;">
+							create
+						</stripes:link>
 						</div>
 					</c:if>
 				</td>
@@ -69,6 +76,9 @@
 							onchange="ajaxText('${pageContext.request.contextPath}/protected/component.action?key=&componentId='+selectedValue(this),setKey);return true;">
 							<stripes:options-collection collection="${actionBean.selectableComponents}" label="name" value="id"/>
 						</stripes:select>
+						<stripes:link href="/protected/component.action" event="create" onclick="ajaxUpdate(this.href,'_workbenchContent');return false;">
+							create
+						</stripes:link>
 						</div>
 					</c:if>
 				</td>
@@ -83,18 +93,56 @@
 			<tr>
 				<td><label>Type:</label></td>
 				<td>
-					<stripes:select name="issue.type" value="${issue.type}">
-						<stripes:options-enumeration enum="org.syracus.rapid.issues.Type"/>
+					<c:set var="types" value="${actionBean.issueTypes}"/>
+					<stripes:select name="issue.type.id"
+						onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/issue.action?typeDescription=&typeId='+selectedValue(this),'_typeDescription');">
+						<stripes:options-collection collection="${types}" label="name" value="id"/>
 					</stripes:select>
+					<div id="_typeDescription">
+						<c:if test="${not empty actionBean.issue.type.description}">
+							${actionBean.issue.type.description}
+						</c:if>
+						<c:if test="${empty actionBean.issue.type.description}">
+							<c:if test="${not empty types}">
+								<c:if test="${not empty types[0].description}">
+									${types[0].description}
+								</c:if>
+								<c:if test="${empty types[0].description}">
+									No description available.
+								</c:if>
+							</c:if>
+						</c:if>
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<td><label>Priority:</label></td>
 				<td>
-					<stripes:select name="issue.priority" value="${issue.priority}">
-						<stripes:options-enumeration enum="org.syracus.rapid.issues.Priority"/>
+					<c:set var="priorities" value="${actionBean.issuePriorities}"/>
+					<stripes:select name="issue.priority.id"
+						onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/issue.action?priorityDescription=&priorityId='+selectedValue(this),'_priorityDescription');">
+						<stripes:options-collection collection="${priorities}" label="name" value="id"/>
 					</stripes:select>
+					<div id="_priorityDescription">
+						<c:if test="${not empty actionBean.issue.priority.description}">
+							${actionBean.issue.priority.description}
+						</c:if>
+						<c:if test="${empty actionBean.issue.priority.description}">
+							<c:if test="${not empty priorities}">
+								<c:if test="${not empty priorities[0].description}">
+									${priorities[0].description}
+								</c:if>
+								<c:if test="${empty priorities[0].description}">
+									No description available.
+								</c:if>
+							</c:if>
+						</c:if>
+					</div>
 				</td>
+			</tr>
+			<tr>
+				<td><label>Status:</label></td>
+				<td>${actionBean.issue.status.name}</td>
 			</tr>
 			<tr>
 				<td><label>Summary:</label></td>

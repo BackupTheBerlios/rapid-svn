@@ -22,6 +22,9 @@
 						onchange="ajaxText('${pageContext.request.contextPath}/protected/module.action?key=&moduleId='+selectedValue(this),setKey);">
 						<stripes:options-collection collection="${actionBean.selectableModules}" label="name" value="id"/>
 					</stripes:select>
+					<stripes:link href="/protected/components/moduleCreate.jsp" onclick="ajaxUpdate(this.href,'_workbenchContent');return false;">
+						create
+					</stripes:link>
 				</c:if>
 				</td>
 			</tr>

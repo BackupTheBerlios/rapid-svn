@@ -3,6 +3,7 @@ package org.syracus.rapid.components;
 import java.util.Set;
 
 import org.syracus.rapid.files.ComponentAttachement;
+import org.syracus.rapid.history.ComponentHistory;
 import org.syracus.rapid.realm.User;
 
 /**
@@ -16,7 +17,21 @@ public class Component extends ABaseComponent {
 	private Project project;
 	private User leader;
 	private Set<ComponentAttachement> attachements;
+	private Set<ComponentHistory> history;
 	
+	/**
+	 * 
+	 * @return
+	 * @hibernate.set lazy="true" cascade="all-delete-orphan" inverse="true"
+	 * @hibernate.key column="component"
+	 * @hibernate.one-to-many class="org.syracus.rapid.history.ComponentHistory"/>
+	 */
+	public Set<ComponentHistory> getHistory() {
+		return history;
+	}
+	public void setHistory(Set<ComponentHistory> history) {
+		this.history = history;
+	}
 	/**
 	 * 
 	 * @return

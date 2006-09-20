@@ -67,25 +67,55 @@
 			<tr>
 				<td><label>Status:</label></td>
 				<td>
-					<stripes:select name="issue.status" value="${issue.status}">
-						<stripes:options-enumeration enum="org.syracus.rapid.issues.Status"/>
+					<c:set var="status" value="${actionBean.issueStatus}"/>
+					<stripes:select name="issue.status.id"
+						onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/issue.action?statusDescription=&statusId='+selectedValue(this),'_statusDescription');">
+						<stripes:options-collection collection="${status}" label="name" value="id"/>
 					</stripes:select>
+					<div id="_statusDescription">
+						<c:if test="${not empty actionBean.issue.status.description}">
+							${actionBean.issue.status.description}
+						</c:if>
+						<c:if test="${empty actionBean.issue.status.description}">
+							No description available.
+						</c:if>
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<td><label>Type:</label></td>
 				<td>
-					<stripes:select name="issue.type" value="${issue.type}">
-						<stripes:options-enumeration enum="org.syracus.rapid.issues.Type"/>
+					<c:set var="types" value="${actionBean.issueTypes}"/>
+					<stripes:select name="issue.type.id"
+						onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/issue.action?typeDescription=&typeId='+selectedValue(this),'_typeDescription');">
+						<stripes:options-collection collection="${types}" label="name" value="id"/>
 					</stripes:select>
+					<div id="_typeDescription">
+						<c:if test="${not empty actionBean.issue.type.description}">
+							${actionBean.issue.type.description}
+						</c:if>
+						<c:if test="${empty actionBean.issue.type.description}">
+							No description available.
+						</c:if>
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<td><label>Priority:</label></td>
 				<td>
-					<stripes:select name="issue.priority" value="${issue.priority}">
-						<stripes:options-enumeration enum="org.syracus.rapid.issues.Priority"/>
+					<c:set var="priorities" value="${actionBean.issuePriorities}"/>
+					<stripes:select name="issue.priority.id"
+						onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/issue.action?priorityDescription=&priorityId='+selectedValue(this),'_priorityDescription');">
+						<stripes:options-collection collection="${priorities}" label="name" value="id"/>
 					</stripes:select>
+					<div id="_priorityDescription">
+						<c:if test="${not empty actionBean.issue.priority.description}">
+							${actionBean.issue.priority.description}
+						</c:if>
+						<c:if test="${empty actionBean.issue.priority.description}">
+							No description available.
+						</c:if>
+					</div>
 				</td>
 			</tr>
 			<tr>
@@ -118,6 +148,10 @@
 				</td>
 			</tr>
 			<tr>
+				<td><label>Comment:</label></td>
+				<td>
+					<stripes:textarea name="historyComment"/>
+				</td>
 			</tr>
 			<tr>
 				<td colspan="2">

@@ -28,16 +28,16 @@
 		<tr>
 			<th>Issue</th>
 			<th>Component</th>
-			<th>Assignee</th>
-			<th>Created</th>
-			<th>Modified</th>
+			<th>Type</th>
+			<th>Status</th>
+			<th>Priority</th>
 		</tr>
 	<c:forEach var="issue" items="${issues}">
 		<tr>
 			<td>
 				<stripes:link href="/protected/issue.action" event="view" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
 					<stripes:link-param name="issueId" value="${issue.id}"/>
-					${issue.summary}
+					[${issue.key}] ${issue.summary}
 				</stripes:link>
 			</td>
 			<td>
@@ -52,13 +52,13 @@
 				</c:if>
 			</td>
 			<td>
-				${issue.assignee.name}
+				${issue.type.name}
 			</td>
 			<td>
-				${issue.created}
+				${issue.status.name}
 			</td>
 			<td>
-				${issue.modified}
+				${issue.priority.name}
 			</td>
 		</tr>
 	</c:forEach>

@@ -221,7 +221,34 @@
 		</property>
 	</bean>
 	
+	<bean id="issueTypeDao" class="org.syracus.rapid.issues.dao.HibernateIssueTypeDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
+	<bean id="issuePriorityDao" class="org.syracus.rapid.issues.dao.HibernateIssuePriorityDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
+	<bean id="issueStatusDao" class="org.syracus.rapid.issues.dao.HibernateIssueStatusDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
 	<bean id="issueServiceImpl" class="org.syracus.rapid.issues.IssueService">
+		<property name="issueTypeDao">
+			<ref local="issueTypeDao"/>
+		</property>
+		<property name="issuePriorityDao">
+			<ref local="issuePriorityDao"/>
+		</property>
+		<property name="issueStatusDao">
+			<ref local="issueStatusDao"/>
+		</property>
 		<property name="issueDao">
 			<ref local="issueDao"/>
 		</property>
@@ -231,6 +258,33 @@
 		<property name="transactionManager" ref="hibernateTxManager"/>
 		<property name="target">
 			<ref local="issueServiceImpl"/>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="add*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="historyDao" class="org.syracus.rapid.history.dao.HibernateHistoryDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
+	<bean id="historyServiceImpl" class="org.syracus.rapid.history.HistoryService">
+		<property name="historyDao">
+			<ref local="historyDao"/>
+		</property>
+	</bean>
+	
+	<bean id="historyService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="hibernateTxManager"/>
+		<property name="target">
+			<ref local="historyServiceImpl"/>
 		</property>
 		<property name="transactionAttributes">
 			<props>
@@ -258,6 +312,33 @@
 		<property name="transactionManager" ref="hibernateTxManager"/>
 		<property name="target">
 			<ref local="attachementServiceImpl"/>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="add*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="watchDao" class="org.syracus.rapid.watches.dao.HibernateGenericWatchDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>	
+	</bean>
+	
+	<bean id="watchServiceImpl" class="org.syracus.rapid.watches.GenericWatchService">
+		<property name="watchDao">
+			<ref local="watchDao"/>
+		</property>
+	</bean>
+	
+	<bean id="watchService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="hibernateTxManager"/>
+		<property name="target">
+			<ref local="watchServiceImpl"/>
 		</property>
 		<property name="transactionAttributes">
 			<props>

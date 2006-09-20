@@ -31,7 +31,7 @@
 	
 	<path id="classpath.xdoclet2">
 		<fileset dir="${xdoclet2.home}/lib" includes="**/*.jar"/>
-		<pathelement location="${xdoclet2.home}/plugins/xdoclet-plugin-hibernate-1.0.3.jar"/>
+		<pathelement location="${xdoclet2.home}/plugins/xdoclet-plugin-hibernate-1.0.4-SNAPSHOT.jar"/>
 	</path>
 	
 	<path id="classpath.schemaexport">

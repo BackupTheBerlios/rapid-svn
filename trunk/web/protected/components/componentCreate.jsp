@@ -23,6 +23,9 @@
 						onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/components/selectableProjects.jsp?moduleId='+selectedValue(this),'_projectSelector');ajaxText('${pageContext.request.contextPath}/protected/module.action?key=&moduleId='+selectedValue(this),setKey);return true;">
 						<stripes:options-collection collection="${actionBean.selectableModules}" label="name" value="id"/>
 					</stripes:select>
+					<stripes:link href="/protected/components/moduleCreate.jsp" onclick="ajaxUpdate(this.href,'_workbenchContent');return false;">
+						create
+					</stripes:link>
 				</c:if>
 				</td>
 			</tr>
@@ -30,10 +33,12 @@
 				<td>Project:</td>
 				<td>
 				<c:if test="${not empty actionBean.selectedProject}">
+					<log:debug category="org.syracus.rapid.JSP">I have an selected project</log:debug>
 					<stripes:hidden name="component.project.id" value="${actionBean.selectedProject.id}"/>
 					${actionBean.selectedProject.name}
 				</c:if>
 				<c:if test="${empty actionBean.selectedProject}">
+					<log:debug category="org.syracus.rapid.JSP">I expect an list a projects</log:debug>
 					<div id="_projectSelector">
 						<c:if test="${not empty actionBean.selectableProjects}">
 							<stripes:select name="component.project.id"

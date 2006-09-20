@@ -7,6 +7,18 @@
 			<tr>
 				<td align="left">Module Details</td>
 				<td align="right">
+					<stripes:useActionBean var="watchAction" binding="/protected/watch.action"/>
+					<c:set var="watched" value="${watchAction.watched}"/>
+					<stripes:link id="_watch" href="/protected/watch.action" event="toggle" onclick="ajaxUpdate(this.href, '_watch');return false;">
+						<stripes:link-param name="moduleId" value="${actionBean.module.id}"/>
+						<c:if test="${empty watched}">
+						watch
+						</c:if>
+						<c:if test="${not empty watched}">
+						unwatch
+						</c:if>
+					</stripes:link>
+					
 					<stripes:link href="/protected/components/moduleList.jsp" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
 						all
 					</stripes:link>
@@ -101,7 +113,7 @@
 							</stripes:link>
 						</td>
 						<td>
-							<stripes:link href="" onclick="return false;">
+							<stripes:link href="/protected/components/moduleHistory.jsp" onclick="ajaxUpdate(this.href,'_moduleViewContent');return false;">
 								<stripes:link-param name="moduleId" value="${actionBean.module.id}"/>
 								History
 							</stripes:link>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.cglib.use_reflection_optimizer">false</property>
+    <property name="hibernate.connection.datasource">java:comp/env/jdbc/rapid</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.use_outer_join">true</property>
+    <property name="hibernate.show_sql">true</property>
+    <mapping resource="org/syracus/rapid/components/Component.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/components/Module.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/components/Project.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/files/ComponentAttachement.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/files/IssueAttachement.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/files/ModuleAttachement.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/files/ProjectAttachement.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/history/ComponentHistory.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/history/IssueHistory.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/history/ModuleHistory.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/history/ProjectHistory.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/issues/Issue.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/issues/IssuePriority.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/issues/IssueStatus.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/issues/IssueType.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/messages/Message.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/realm/User.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/todos/Todo.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/watches/GenericWatch.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>

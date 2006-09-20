@@ -7,12 +7,33 @@
 			<tr>
 				<td align="left">Issue Details</td>
 				<td align="right">
+					<c:set var="status" value="${actionBean.issueStatus}"/>
+					<label>Status:</label>
+					<select name=""
+						onchange="ajaxUpdate('${pageContext.request.contextPath}/protected/status.action?init=&issueId=${actionBean.issue.id}&statusId='+selectedValue(this),'_workbenchContent');">
+						<c:forEach var="s" items="${status}">
+							<c:choose>
+								<c:when test="${s.id eq actionBean.issue.status.id}">
+									<option value="${s.id}" selected="selected">${s.name}</option>
+								</c:when>
+								<c:otherwise>
+									<option value="${s.id}">${s.name}</option>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+					</select>
+				</td>
+				<td align="right">
 					<stripes:link href="/protected/issues/issueList.jsp" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
 						all
 					</stripes:link>
 					<stripes:link href="/protected/issue.action" event="edit" onclick="ajaxUpdate(this.href,'_workbenchContent');return(false);">
 						<stripes:link-param name="issueId" value="${actionBean.issue.id}"/>
 						edit
+					</stripes:link>
+					<stripes:link href="/protected/issue.action" event="delete" onclick="ajaxUpdate(this.href,'_workbenchContent');return(false);">
+						<stripes:link-param name="issueId" value="${actionBean.issue.id}"/>
+						delete
 					</stripes:link>
 				</td>
 				<%--
@@ -90,15 +111,15 @@
 		</tr>
 		<tr>
 			<td>Type:</td>
-			<td>${actionBean.issue.type}</td>
+			<td>${actionBean.issue.type.name}</td>
 		</tr>
 		<tr>
 			<td>Priority:</td>
-			<td>${actionBean.issue.priority}</td>
+			<td>${actionBean.issue.priority.name}</td>
 		</tr>
 		<tr>
 			<td>Status:</td>
-			<td>${actionBean.issue.status}</td>
+			<td>${actionBean.issue.status.name}</td>
 		</tr>
 		<tr>
 			<td>Summary:</td>
@@ -148,7 +169,7 @@
 							</stripes:link>
 						</td>
 						<td>
-							<stripes:link href="" onclick="return false;">
+							<stripes:link href="/protected/issues/issueHistory.jsp" onclick="ajaxUpdate(this.href,'_issueViewContent');return false;">
 								<stripes:link-param name="issueId" value="${actionBean.issue.id}"/>
 								History
 							</stripes:link>

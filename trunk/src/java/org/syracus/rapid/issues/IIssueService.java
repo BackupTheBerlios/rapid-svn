@@ -10,6 +10,25 @@ import org.syracus.rapid.realm.User;
 
 public interface IIssueService {
 
+	public void addIssueType( IssueType type );
+	public void updateIssueType( IssueType type );
+	public void deleteIssueType( IssueType type );
+	public IssueType getIssueTypeById( Long id );
+	public List<IssueType> getAllIssueTypes();
+	
+	public void addIssuePriority( IssuePriority priority );
+	public void updateIssuePriority( IssuePriority priority );
+	public void deleteIssuePriority( IssuePriority priority );
+	public IssuePriority getIssuePriorityById( Long id );
+	public List<IssuePriority> getAllIssuePriorities();
+	
+	public void addIssueStatus( IssueStatus status );
+	public void updateIssueStatus( IssueStatus status );
+	public void deleteIssueStatus( IssueStatus status );
+	public IssueStatus getIssueStatusById( Long id );
+	public List<IssueStatus> getAllIssueStatus();
+	public IssueStatus getDefaultIssueStatus();
+	
 	public void addIssue( Issue issue, User user );
 	public void addIssue( Issue issue, Module module, User user );
 	public void addIssue( Issue issue, Project project, User user );
@@ -36,7 +55,7 @@ public interface IIssueService {
 	public List<Issue> getIssuesByReporter( User reporter );
 	public List<Issue> getIssuesByAssignee( User assignee );
 	
-	public List<Issue> getIssuesByType( Type type );
+	public List<Issue> getIssuesByType( IssueType type );
 	public List<Issue> getIssuesByStatus( Status status );
 	public List<Issue> getIssuesByPriority( Priority priority );
 	

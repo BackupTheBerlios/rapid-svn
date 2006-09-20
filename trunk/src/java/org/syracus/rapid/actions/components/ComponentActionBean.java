@@ -1,5 +1,10 @@
 package org.syracus.rapid.actions.components;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,8 +22,12 @@ import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
 import org.syracus.rapid.files.ComponentAttachement;
+import org.syracus.rapid.history.ComponentHistory;
+import org.syracus.rapid.history.ModuleHistory;
+import org.syracus.rapid.history.ProjectHistory;
 import org.syracus.rapid.issues.Issue;
 import org.syracus.rapid.profiles.UserProfile;
+import org.syracus.rapid.realm.User;
 
 @UrlBinding("/protected/component.action")
 public class ComponentActionBean extends BaseComponentActionBean {
@@ -120,13 +129,12 @@ public class ComponentActionBean extends BaseComponentActionBean {
 				setComponent( component );
 				
 				List<Project> projects = getComponentService().getProjectsOfModule( module );
-				if ( null != projects && false == projects.isEmpty() ) {
-					Project dummy = new Project();
-					dummy.setId( new Long( -1 ) );
-					dummy.setName( "No project" );
-					projects.add( 0, dummy );
-					setSelectableProjects( projects );
-				}
+				Project dummy = new Project();
+				dummy.setId( new Long( -1 ) );
+				dummy.setName( "No project" );
+				projects.add( 0, dummy );
+				setSelectableProjects( projects );
+				
 				return( new ForwardResolution( "/protected/components/componentCreate.jsp" ) );
 			}
 		}
@@ -236,7 +244,35 @@ public class ComponentActionBean extends BaseComponentActionBean {
 			if ( null != getComponent().getProject() && -1 == getComponent().getProject().getId() ) {
 				getComponent().setProject( null );
 			}
+			
+			ComponentHistory history = new ComponentHistory();
+			history.setCreated( new Date() );
+			history.setCreator( getContext().getAuthUser() );
+			history.setText( "Component created." );
+			history.setComponent( getComponent() );
+			
+			Set<ComponentHistory> initialHistory = new HashSet<ComponentHistory>();
+			initialHistory.add( history );
+			getComponent().setHistory( initialHistory );
+			
 			getComponentService().addComponent( getComponent(), getContext().getAuthUser() );
+			
+			// finally add history entry to module
+			if ( null != getComponent().getProject() ) {
+				ProjectHistory projectHistory = new ProjectHistory();
+				projectHistory.setCreated( new Date() );
+				projectHistory.setCreator( getContext().getAuthUser() );
+				projectHistory.setText( "New component '" + getComponent().getName() + "' added." );
+				projectHistory.setProject( getComponent().getProject() );
+				getHistoryService().addHistory( projectHistory );
+			} else if ( null != getComponent().getModule() ) {
+				ModuleHistory moduleHistory = new ModuleHistory();
+				moduleHistory.setCreated( new Date() );
+				moduleHistory.setCreator( getContext().getAuthUser() );
+				moduleHistory.setText( "New component '" + getComponent().getName() + "' added." );
+				moduleHistory.setModule( getComponent().getModule() );
+				getHistoryService().addHistory( moduleHistory );
+			}
 		} else {
 			if ( StringUtils.isBlank( getComponent().getName() ) ) {
 				getContext().getValidationErrors().add( "name", new SimpleError( "A component name is required." ) );
@@ -251,11 +287,49 @@ public class ComponentActionBean extends BaseComponentActionBean {
 				return( getContext().getSourcePageResolution() );
 			}
 			Component component = getComponentService().getComponentById( getComponent().getId() );
-			component.setName( getComponent().getName() );
-			component.setDescription( getComponent().getDescription() );
-			component.setLeader( getComponent().getLeader() );
-			component.setModule( getComponent().getModule() );
-			component.setProject( getComponent().getProject() );
+			StringBuffer message = new StringBuffer();
+			
+			String oldName = component.getName();
+			String newName = StringUtils.trimToNull( getComponent().getName() );
+			if ( false == StringUtils.equals( oldName, newName ) ) {
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Name changed from '" + oldName + "' to '" + newName + "'." );
+				component.setName( newName );
+			}
+			
+			String oldDescription = component.getDescription();
+			String newDescription = StringUtils.trimToNull( getComponent().getDescription() );
+			if ( false == StringUtils.equals( oldDescription, newDescription ) ) {
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Description changed." );
+				component.setDescription( newDescription );
+			}
+			
+			User oldLeader = component.getLeader();
+			User newLeader = getComponent().getLeader();
+			if ( false == oldLeader.getId().equals( newLeader.getId() ) ) {
+				newLeader = getRealmService().getUserById( newLeader.getId() );
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Leader changed from '" + oldLeader.getName() + "' to '" + newLeader.getName() + "'." );
+				component.setLeader( newLeader );
+			}
+			
+			//component.setModule( getComponent().getModule() );
+			//component.setProject( getComponent().getProject() );
+			
+			ComponentHistory history = new ComponentHistory();
+			history.setCreated( new Date() );
+			history.setCreator( getContext().getAuthUser() );
+			history.setText( (0 < message.length()) ? message.toString() : "No changes applied." );
+			history.setComponent( component );
+			component.getHistory().add( history );
+			
 			getComponentService().updateComponent( component, getContext().getAuthUser() );
 		}
 		return( new RedirectResolution( "/protected/component.action" )
@@ -265,9 +339,42 @@ public class ComponentActionBean extends BaseComponentActionBean {
 	}
 	
 	public Resolution delete() {
+		Resolution resolution = null;
 		Component component = getComponentService().getComponentById( getComponentId() );
-		getComponentService().deleteComponent( component, getContext().getAuthUser() );
-		return( new ForwardResolution( "" ) );
+		if ( null != component ) {
+			Project project = component.getProject();
+			Module module = component.getModule();
+			if ( null != project ) {
+				resolution = new RedirectResolution( "/protected/project.action" )
+					.addParameter( "view", "" )
+					.addParameter( "projectId", project.getId() );
+			} else if ( null != module ) {
+				resolution = new RedirectResolution( "/protected/module.action" )
+					.addParameter( "view", "" )
+					.addParameter( "moduleId", module.getId() );
+			} else {
+				resolution = new ForwardResolution( "/protected/components/componentList.jsp" );
+			}
+			
+			getComponentService().deleteComponent( component, getContext().getAuthUser() );
+			
+			if ( null != project ) {
+				ProjectHistory projectHistory = new ProjectHistory();
+				projectHistory.setCreated( new Date() );
+				projectHistory.setCreator( getContext().getAuthUser() );
+				projectHistory.setText( "Component '" + component.getName() + "' deleted." );
+				projectHistory.setProject( project );
+				getHistoryService().addHistory( projectHistory );
+			} else if ( null != module ) {
+				ModuleHistory moduleHistory = new ModuleHistory();
+				moduleHistory.setCreated( new Date() );
+				moduleHistory.setCreator( getContext().getAuthUser() );
+				moduleHistory.setText( "Component '" + component.getName() + "' deleted." );
+				moduleHistory.setModule( module );
+				getHistoryService().addHistory( moduleHistory );
+			}
+		}
+		return( resolution );
 	}
 	
 	public Resolution key() {
@@ -381,5 +488,23 @@ public class ComponentActionBean extends BaseComponentActionBean {
 			}
 		}
 		return( attachements );
+	}
+	
+	public List<ComponentHistory> getComponentHistory() {
+		List<ComponentHistory> history = null;
+		if ( null != getComponentId() ) {
+			Component component = getComponentService().getComponentById( getComponentId() );
+			if ( null != component ) {
+				history = new ArrayList<ComponentHistory>( component.getHistory() );
+			}
+		}
+		if ( null != history ) {
+			Collections.sort( history, new Comparator<ComponentHistory>() {
+				public int compare(ComponentHistory arg0, ComponentHistory arg1) {
+					return( arg0.getCreated().compareTo( arg1.getCreated() ) );
+				}
+			} );
+		}
+		return( history );
 	}
 }

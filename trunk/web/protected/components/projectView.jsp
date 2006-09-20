@@ -7,6 +7,17 @@
 			<tr>
 				<td align="left">Project Details</td>
 				<td align="right">
+					<stripes:useActionBean var="watchAction" binding="/protected/watch.action"/>
+					<c:set var="watched" value="${watchAction.watched}"/>
+					<stripes:link id="_watch" href="/protected/watch.action" event="toggle" onclick="ajaxUpdate(this.href, '_watch');return false;">
+						<stripes:link-param name="projectId" value="${actionBean.project.id}"/>
+						<c:if test="${empty watched}">
+						watch
+						</c:if>
+						<c:if test="${not empty watched}">
+						unwatch
+						</c:if>
+					</stripes:link>
 					<stripes:link href="/protected/components/projectList.jsp" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
 						all
 					</stripes:link>
@@ -111,8 +122,8 @@
 							</stripes:link>
 						</td>
 						<td>
-							<stripes:link href="" onclick="return false;">
-								<stripes:link-param name="moduleId" value="${actionBean.project.id}"/>
+							<stripes:link href="/protected/components/projectHistory.jsp" onclick="ajaxUpdate(this.href,'_projectViewContent');return false;">
+								<stripes:link-param name="projectId" value="${actionBean.project.id}"/>
 								History
 							</stripes:link>
 						</td>

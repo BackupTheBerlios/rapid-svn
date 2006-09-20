@@ -20,33 +20,39 @@
 	
 	<stripes:layout-component name="tileContent">
 	<stripes:useActionBean var="moduleAction" binding="/protected/module.action"/>
-	<table width="100%" border="1">
-		<tr>
-			<th>Module</th>
-			<th>Leader</th>
-			<th>Created</th>
-			<th>Modified</th>
-		</tr>
-	<c:forEach var="module" items="${moduleAction.allModules}">
-		<tr>
-			<td>
-				<stripes:link href="/protected/module.action" event="view" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
-					<stripes:link-param name="moduleId" value="${module.id}"/>
-					${module.name}
-				</stripes:link>
-			</td>
-			<td>
-				${module.leader.name}
-			</td>
-			<td>
-				${module.created}
-			</td>
-			<td>
-				${module.modified}
-			</td>
-		</tr>
-	</c:forEach>
-	</table>
+	<c:set var="modules" value="${moduleAction.allModules}"/>
+	<c:if test="${not empty modules}">
+		<table width="100%" border="1">
+			<tr>
+				<th>Module</th>
+				<th>Leader</th>
+				<th>Created</th>
+				<th>Modified</th>
+			</tr>
+		<c:forEach var="module" items="${modules}">
+			<tr>
+				<td>
+					<stripes:link href="/protected/module.action" event="view" onclick="ajaxUpdate(this.href, '_workbenchContent');return false;">
+						<stripes:link-param name="moduleId" value="${module.id}"/>
+						${module.name}
+					</stripes:link>
+				</td>
+				<td>
+					${module.leader.name}
+				</td>
+				<td>
+					${module.created}
+				</td>
+				<td>
+					${module.modified}
+				</td>
+			</tr>
+		</c:forEach>
+		</table>
+	</c:if>
+	<c:if test="${empty modules}">
+		No modules available.
+	</c:if>
 	</stripes:layout-component>
 	
 </stripes:layout-render>

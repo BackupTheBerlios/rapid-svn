@@ -10,13 +10,43 @@ import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
 import org.syracus.rapid.issues.dao.IIssueDao;
+import org.syracus.rapid.issues.dao.IIssuePriorityDao;
+import org.syracus.rapid.issues.dao.IIssueStatusDao;
+import org.syracus.rapid.issues.dao.IIssueTypeDao;
 import org.syracus.rapid.realm.User;
 
 public class IssueService implements IIssueService {
 
 	private IIssueDao issueDao;
+	private IIssueTypeDao issueTypeDao;
+	private IIssuePriorityDao issuePriorityDao;
+	private IIssueStatusDao issueStatusDao;
 	
 	
+	public IIssueStatusDao getIssueStatusDao() {
+		return issueStatusDao;
+	}
+
+	public void setIssueStatusDao(IIssueStatusDao issueStatusDao) {
+		this.issueStatusDao = issueStatusDao;
+	}
+
+	public IIssuePriorityDao getIssuePriorityDao() {
+		return issuePriorityDao;
+	}
+
+	public void setIssuePriorityDao(IIssuePriorityDao issuePriorityDao) {
+		this.issuePriorityDao = issuePriorityDao;
+	}
+
+	public IIssueTypeDao getIssueTypeDao() {
+		return issueTypeDao;
+	}
+
+	public void setIssueTypeDao(IIssueTypeDao issueTypeDao) {
+		this.issueTypeDao = issueTypeDao;
+	}
+
 	public IIssueDao getIssueDao() {
 		return issueDao;
 	}
@@ -83,7 +113,7 @@ public class IssueService implements IIssueService {
 		return( getIssueDao().findLikeSummary( summary ) );
 	}
 
-	public List<Issue> getIssuesByType(Type type) {
+	public List<Issue> getIssuesByType(IssueType type) {
 		return( getIssueDao().findByType( type ) );
 	}
 
@@ -152,5 +182,70 @@ public class IssueService implements IIssueService {
 		return( (List<Issue>)getIssueDao().findByCriteria(criteria, 0, max ) );
 	}
 
+	public void addIssueType(IssueType type) {
+		getIssueTypeDao().create( type );
+	}
+
+	public void deleteIssueType(IssueType type) {
+		getIssueTypeDao().delete( type );
+	}
+
+	public List<IssueType> getAllIssueTypes() {
+		return( getIssueTypeDao().findAll() );
+	}
+
+	public IssueType getIssueTypeById(Long id) {
+		return( getIssueTypeDao().find( id ) );
+	}
+
+	public void updateIssueType(IssueType type) {
+		getIssueTypeDao().update( type );
+	}
+
+	public void addIssuePriority(IssuePriority priority) {
+		getIssuePriorityDao().create( priority );
+	}
+
+	public void deleteIssuePriority(IssuePriority priority) {
+		getIssuePriorityDao().delete( priority );
+	}
+
+	public List<IssuePriority> getAllIssuePriorities() {
+		return( getIssuePriorityDao().findAll() );
+	}
+
+	public IssuePriority getIssuePriorityById(Long id) {
+		return( getIssuePriorityDao().find( id ) );
+	}
+
+	public void updateIssuePriority(IssuePriority priority) {
+		getIssuePriorityDao().update( priority );
+	}
+
+	public void addIssueStatus(IssueStatus status) {
+		getIssueStatusDao().create( status );
+	}
+
+	public void deleteIssueStatus(IssueStatus status) {
+		getIssueStatusDao().delete( status );
+	}
+
+	public List<IssueStatus> getAllIssueStatus() {
+		return( getIssueStatusDao().findAll() );
+	}
+
+	public IssueStatus getIssueStatusById(Long id) {
+		return( getIssueStatusDao().find( id ) );
+	}
+
+	public void updateIssueStatus(IssueStatus status) {
+		getIssueStatusDao().update( status );
+	}
+
+	public IssueStatus getDefaultIssueStatus() {
+		return( getIssueStatusDao().findByOrder( 0 ) );
+	}
+
+	
 	
 }

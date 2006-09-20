@@ -7,9 +7,9 @@ import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
 import org.syracus.rapid.issues.Issue;
+import org.syracus.rapid.issues.IssueType;
 import org.syracus.rapid.issues.Priority;
 import org.syracus.rapid.issues.Status;
-import org.syracus.rapid.issues.Type;
 import org.syracus.rapid.realm.User;
 
 public interface IIssueDao extends IPersistanceDao {
@@ -35,7 +35,7 @@ public interface IIssueDao extends IPersistanceDao {
 	public List<Issue> findByAssignee( User leader );
 	public List<Issue> findByReporter( User reporter );
 	
-	public List<Issue> findByType( Type type );
+	public List<Issue> findByType( IssueType type );
 	public List<Issue> findByStatus( Status status );
 	public List<Issue> findByPriority( Priority priority );
 	

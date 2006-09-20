@@ -11,4 +11,9 @@
 	<option value="${component.id}">${component.name}</option>
 	</c:forEach>
 </select>
+<stripes:link href="/protected/component.action" event="create" onclick="ajaxUpdate(this.href,'_workbenchContent');return false;">
+	<stripes:link-param name="moduleId" value="${param.moduleId}"/>
+	<stripes:link-param name="projectId" value="${param.projectId}"/>
+	create
+</stripes:link>
 </c:if>

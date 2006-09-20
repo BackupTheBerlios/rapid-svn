@@ -1,11 +1,17 @@
 package org.syracus.rapid.actions.issues;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
+import net.sourceforge.stripes.action.StreamingResolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import net.sourceforge.stripes.integration.spring.SpringBean;
 import net.sourceforge.stripes.validation.SimpleError;
@@ -18,10 +24,19 @@ import org.syracus.rapid.components.IComponentService;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
 import org.syracus.rapid.files.IssueAttachement;
+import org.syracus.rapid.history.ComponentHistory;
+import org.syracus.rapid.history.IHistoryService;
+import org.syracus.rapid.history.IssueHistory;
+import org.syracus.rapid.history.ModuleHistory;
+import org.syracus.rapid.history.ProjectHistory;
 import org.syracus.rapid.issues.IIssueService;
 import org.syracus.rapid.issues.Issue;
-import org.syracus.rapid.issues.Status;
+import org.syracus.rapid.issues.IssuePriority;
+import org.syracus.rapid.issues.IssueStatus;
+import org.syracus.rapid.issues.IssueType;
 import org.syracus.rapid.profiles.UserProfile;
+import org.syracus.rapid.realm.IRealmService;
+import org.syracus.rapid.realm.User;
 import org.syracus.rapid.stripes.RapidActionBean;
 
 @UrlBinding("/protected/issue.action")
@@ -32,6 +47,9 @@ public class IssueActionBean extends RapidActionBean {
 	private Long issueId;
 	private Issue issue;
 	
+	private Long typeId;
+	private Long priorityId;
+	private Long statusId;
 	
 	
 	private Long moduleId;
@@ -41,16 +59,78 @@ public class IssueActionBean extends RapidActionBean {
 	private Module selectedModule;
 	private Project selectedProject;
 	private Component selectedComponent;
+	private IssueStatus selectedStatus;
 	
 	private List<Module> selectableModules;
 	private List<Project> selectableProjects;
 	private List<Component> selectableComponents;
 	
+	
 	private IIssueService issueService;
 	private IComponentService componentService;
+	private IRealmService realmService;
+	private IHistoryService historyService;
+	
+	private String historyComment;
 	
 	
-	
+	public IHistoryService getHistoryService() {
+		return historyService;
+	}
+
+	@SpringBean("historyService")
+	public void setHistoryService(IHistoryService historyService) {
+		this.historyService = historyService;
+	}
+
+	public IRealmService getRealmService() {
+		return realmService;
+	}
+
+	@SpringBean("realmService")
+	public void setRealmService(IRealmService realmService) {
+		this.realmService = realmService;
+	}
+
+	public String getHistoryComment() {
+		return historyComment;
+	}
+
+	public void setHistoryComment(String historyComment) {
+		this.historyComment = historyComment;
+	}
+
+	public IssueStatus getSelectedStatus() {
+		return selectedStatus;
+	}
+
+	public void setSelectedStatus(IssueStatus selectedStatus) {
+		this.selectedStatus = selectedStatus;
+	}
+
+	public Long getStatusId() {
+		return statusId;
+	}
+
+	public void setStatusId(Long statusId) {
+		this.statusId = statusId;
+	}
+
+	public Long getPriorityId() {
+		return priorityId;
+	}
+
+	public void setPriorityId(Long priorityId) {
+		this.priorityId = priorityId;
+	}
+
+	public Long getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(Long typeId) {
+		this.typeId = typeId;
+	}
 
 	public Issue getIssue() {
 		return issue;
@@ -157,6 +237,58 @@ public class IssueActionBean extends RapidActionBean {
 	public void setIssueService(IIssueService issueService) {
 		this.issueService = issueService;
 	}
+	
+	public Resolution delete() {
+		Resolution resolution = null;
+		Issue issue = getIssueService().getIssueById( getIssueId() );
+		if ( null != issue ) {
+			Component component = issue.getComponent();
+			Project project = issue.getProject();
+			Module module = issue.getModule();
+			
+			if ( null != component ) {
+				resolution = new RedirectResolution( "/protected/component.action" )
+					.addParameter( "view", "" )
+					.addParameter( "componentId", component.getId() );
+			} else if ( null != project ) {
+				resolution = new RedirectResolution( "/protected/project.action" )
+					.addParameter( "view", "" )
+					.addParameter( "projectId", project.getId() );
+			} else if ( null != module ) {
+				resolution = new RedirectResolution( "/protected/module.action" )
+					.addParameter( "view", "" )
+					.addParameter( "moduleId", module.getId() );
+			} else {
+				resolution = new ForwardResolution( "/protected/issues/issueList.jsp" );
+			}
+			
+			getIssueService().deleteIssue( issue, getContext().getAuthUser() );
+			
+			if ( null != component ) {
+				ComponentHistory componentHistory = new ComponentHistory();
+				componentHistory.setCreated( new Date() );
+				componentHistory.setCreator( getContext().getAuthUser() );
+				componentHistory.setText( "Issue '" + issue.getKey() + "' deleted." );
+				componentHistory.setComponent( component );
+				getHistoryService().addHistory( componentHistory );
+			} else if ( null != project ) {
+				ProjectHistory projectHistory = new ProjectHistory();
+				projectHistory.setCreated( new Date() );
+				projectHistory.setCreator( getContext().getAuthUser() );
+				projectHistory.setText( "Issue '" + issue.getKey() + "' deleted." );
+				projectHistory.setProject( project );
+				getHistoryService().addHistory( projectHistory );
+			} else if ( null != module ) {
+				ModuleHistory moduleHistory = new ModuleHistory();
+				moduleHistory.setCreated( new Date() );
+				moduleHistory.setCreator( getContext().getAuthUser() );
+				moduleHistory.setText( "Issue '" + issue.getKey() + "' deleted." );
+				moduleHistory.setModule( module );
+				getHistoryService().addHistory( moduleHistory );
+			}
+		}
+		return( resolution );
+	}
 
 	public Resolution create() {
 		if ( null != getComponentId() ) {
@@ -166,6 +298,7 @@ public class IssueActionBean extends RapidActionBean {
 				
 				Issue issue = new Issue();
 				issue.setKey( component.getKey() );
+				issue.setStatus( getIssueService().getDefaultIssueStatus() );
 				setIssue( issue );
 				
 				Module module = component.getModule();
@@ -193,6 +326,7 @@ public class IssueActionBean extends RapidActionBean {
 				
 				Issue issue = new Issue();
 				issue.setKey( project.getKey() );
+				issue.setStatus( getIssueService().getDefaultIssueStatus() );
 				setIssue( issue );
 				
 				Module module = project.getModule();
@@ -220,6 +354,7 @@ public class IssueActionBean extends RapidActionBean {
 				
 				Issue issue = new Issue();
 				issue.setKey( module.getKey() );
+				issue.setStatus( getIssueService().getDefaultIssueStatus() );
 				setIssue( issue );
 				
 				List<Project> projects = getComponentService().getProjectsOfModule( module );
@@ -239,6 +374,11 @@ public class IssueActionBean extends RapidActionBean {
 				return( new ForwardResolution( "/protected/issues/issueCreate.jsp" ) );
 			}
 		}
+		
+		Issue issue = new Issue();
+		issue.setStatus( getIssueService().getDefaultIssueStatus() );
+		setIssue( issue );
+		
 		List<Module> modules = getComponentService().getAllModules();
 		Module dummyModule = new Module();
 		dummyModule.setId( new Long( -1 ) );
@@ -279,6 +419,22 @@ public class IssueActionBean extends RapidActionBean {
 				getContext().getValidationErrors().add( "summary", new SimpleError( "An issue summary is required." ) );
 			}
 			if ( getContext().getValidationErrors().hasFieldErrors() ) {
+				// restore issue status
+				if ( null != getIssue().getStatus() ) {
+					getIssue().setStatus( getIssueService().getIssueStatusById( getIssue().getStatus().getId() ) );
+				}
+				if ( null != getIssue().getType() ) {
+					if ( log.isDebugEnabled() ) {
+						log.debug( "[create] issue type found '" + getIssue().getType().getId() + "'" );
+					}
+					getIssue().setType( getIssueService().getIssueTypeById( getIssue().getType().getId() ) );
+				} else if ( log.isDebugEnabled() ) {
+					log.debug( "[create] no issue type available." );
+				}
+				if ( null != getIssue().getPriority() ) {
+					getIssue().setPriority( getIssueService().getIssuePriorityById( getIssue().getPriority().getId() ) );
+				}
+				
 				if ( null != getComponentId() ) {
 					Component component = getComponentService().getComponentById( getComponentId() );
 					if ( null != component ) {
@@ -416,14 +572,48 @@ public class IssueActionBean extends RapidActionBean {
 			if ( StringUtils.isBlank( getIssue().getKey() ) ) {
 				getIssue().setKey( "" );
 			}
-			getIssue().setStatus( Status.OPEN.toString() );
 			
+			
+			//getIssue().setStatus( getIssueService().getDefaultIssueStatus() );
+			IssueHistory history = new IssueHistory();
+			history.setCreated( new Date() );
+			history.setCreator( getContext().getAuthUser() );
+			history.setText( "Issue created." );
+			history.setIssue( getIssue() );
+			
+			Set<IssueHistory> initialHistory = new HashSet<IssueHistory>();
+			initialHistory.add( history );
+			getIssue().setHistory( initialHistory );
 			
 			getIssueService().addIssue( getIssue(), getContext().getAuthUser() );
 			
 			// update issue with new generated key
 			getIssue().setKey( getIssue().getKey() + getIssue().getId() );
 			getIssueService().updateIssue( issue, getContext().getAuthUser() );
+			
+			if ( null != getIssue().getComponent() ) {
+				ComponentHistory componentHistory = new ComponentHistory();
+				componentHistory.setCreated( new Date() );
+				componentHistory.setCreator( getContext().getAuthUser() );
+				componentHistory.setText( "New issue '" + getIssue().getKey() + "' added." );
+				componentHistory.setComponent( getIssue().getComponent() );
+				getHistoryService().addHistory( componentHistory );
+			}
+			if ( null != getIssue().getProject() ) {
+				ProjectHistory projectHistory = new ProjectHistory();
+				projectHistory.setCreated( new Date() );
+				projectHistory.setCreator( getContext().getAuthUser() );
+				projectHistory.setText( "New issue '" + getIssue().getKey() + "' added." );
+				projectHistory.setProject( getIssue().getProject() );
+				getHistoryService().addHistory( projectHistory );
+			} else if ( null != getIssue().getModule() ) {
+				ModuleHistory moduleHistory = new ModuleHistory();
+				moduleHistory.setCreated( new Date() );
+				moduleHistory.setCreator( getContext().getAuthUser() );
+				moduleHistory.setText( "New issue '" + getIssue().getKey() + "' added." );
+				moduleHistory.setModule( getIssue().getModule() );
+				getHistoryService().addHistory( moduleHistory );
+			}
 		} else {
 			if ( StringUtils.isBlank( getIssue().getSummary() ) ) {
 				getContext().getValidationErrors().add( "summary", new SimpleError( "An issue summary is required." ) );
@@ -440,14 +630,99 @@ public class IssueActionBean extends RapidActionBean {
 				}
 				return( getContext().getSourcePageResolution() );
 			}
+			
+			StringBuffer message = new StringBuffer();
+			
 			Issue issue = getIssueService().getIssueById( getIssue().getId() );
-			issue.setSummary( getIssue().getSummary() );
-			issue.setDescription( getIssue().getDescription() );
-			issue.setType( getIssue().getType() );
-			issue.setPriority( getIssue().getPriority() );
-			issue.setStatus( getIssue().getStatus() );
-			issue.setReporter( getIssue().getReporter() );
-			issue.setAssignee( getIssue().getAssignee() );
+			
+			String oldSummary = issue.getSummary();
+			String newSummary = StringUtils.trimToNull( getIssue().getSummary() );
+			if ( false == StringUtils.equals( oldSummary, newSummary ) ) {
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Summary changed." );
+				issue.setSummary( newSummary );
+			}
+			String oldDescription = issue.getDescription();
+			String newDescription = StringUtils.trimToNull( getIssue().getDescription() );
+			if ( false == StringUtils.equals( oldDescription, newDescription ) ) {
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Description changed." );
+				issue.setDescription( newDescription );
+			}
+			
+			IssueType oldType = issue.getType();
+			IssueType newType = getIssue().getType();
+			if ( false == oldType.getId().equals( newType.getId() ) ) {
+				newType = getIssueService().getIssueTypeById( newType.getId() );
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Type changed from '" + oldType.getName() + "' to '" + newType.getName() + "'." );
+				issue.setType( newType );
+			}
+			
+			IssuePriority oldPriority = issue.getPriority();
+			IssuePriority newPriority = getIssue().getPriority();
+			if ( false == oldPriority.getId().equals( newPriority.getId() ) ) {
+				newPriority = getIssueService().getIssuePriorityById( newPriority.getId() );
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Priority changed from '" + oldPriority.getName() + "' to '" + newPriority.getName() + "'." );
+				issue.setPriority( newPriority );
+			}
+			
+			IssueStatus oldStatus = issue.getStatus();
+			IssueStatus newStatus = getIssue().getStatus();
+			if ( false == oldStatus.getId().equals( newStatus.getId() ) ) {
+				newStatus = getIssueService().getIssueStatusById( newStatus.getId() );
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Status changed from '" + oldStatus.getName() + "' to '" + newStatus.getName() + "'." );
+				issue.setStatus( newStatus );
+			}
+			
+			User oldReporter = issue.getReporter();
+			User newReporter = getIssue().getReporter();
+			if ( false == oldReporter.getId().equals( newReporter.getId() ) ) {
+				newReporter = getRealmService().getUserById( newReporter.getId() );
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Reporter changed from '" + oldReporter.getName() + "' to '" + newReporter.getName() + "'." );
+				issue.setReporter( newReporter );
+			}
+			
+			User oldAssignee = issue.getAssignee();
+			User newAssignee = getIssue().getAssignee();
+			if ( false == oldAssignee.getId().equals( newAssignee.getId() ) ) {
+				newAssignee = getRealmService().getUserById( newAssignee.getId() );
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Assignee changed from '" + oldAssignee.getName() + "' to '" + newAssignee.getName() + "'." );
+				issue.setAssignee( newAssignee );
+			}
+			
+			IssueHistory history = new IssueHistory();
+			history.setCreated( new Date() );
+			history.setCreator( getContext().getAuthUser() );
+			if ( 0 < message.length() ) {
+				history.setText( message.toString() );
+			} else {
+				history.setText( "No changes applied" );
+			}
+			if ( StringUtils.isNotBlank( getHistoryComment() ) ) {
+				history.setComment( getHistoryComment() );
+			}
+			history.setIssue( issue );
+			issue.getHistory().add( history );
+			
 			getIssueService().updateIssue( issue, getContext().getAuthUser() );
 		}
 		return( new RedirectResolution( "/protected/issue.action" )
@@ -552,6 +827,95 @@ public class IssueActionBean extends RapidActionBean {
 		return( attachements );
 	}
 	
+	public List<IssueHistory> getIssueHistory() {
+		List<IssueHistory> history = null;
+		if ( null != getIssueId() ) {
+			Issue issue = getIssueService().getIssueById( getIssueId() );
+			if ( null != issue ) {
+				history = new ArrayList<IssueHistory>( issue.getHistory() );
+			}
+		}
+		if ( null != history ) {
+			Collections.sort( history, new Comparator<IssueHistory>() {
+				public int compare(IssueHistory arg0, IssueHistory arg1) {
+					return( arg0.getCreated().compareTo( arg1.getCreated() ) );
+				}
+			} );
+		}
+		return( history );
+	}
 	
+	public List<IssueType> getIssueTypes() {
+		return( getIssueService().getAllIssueTypes() );
+	}
+	
+	public List<IssuePriority> getIssuePriorities() {
+		return( getIssueService().getAllIssuePriorities() );
+	}
+	
+	public List<IssueStatus> getIssueStatus() {
+		return( getIssueService().getAllIssueStatus() );
+	}
+	
+	/*
+	public List<IssueStatus> getOtherIssueStatus() {
+		if ( log.isDebugEnabled() ) {
+			log.debug( "[getOtherIssueStatus] issueId = '" + getIssueId() + "'" );
+		}
+		List<IssueStatus> allStatus = getIssueStatus();
+		if ( null != getIssueId() ) {
+			Issue issue = getIssueService().getIssueById( getIssueId() );
+			if ( null != issue ) {
+				IssueStatus issueStatus = issue.getStatus();
+				if ( null != issueStatus ) {
+					for( Iterator i = allStatus.iterator(); i.hasNext(); ) {
+						IssueStatus currentStatus = (IssueStatus)i.next();
+						if ( currentStatus.getId().equals( issueStatus.getId() ) ) {
+							i.remove();
+							break;
+						}
+					}
+				}
+			}
+		}
+		return( allStatus );
+	}
+	*/
+	
+	public Resolution typeDescription() {
+		String description = null;
+		if ( null != getTypeId() ) {
+			IssueType type = getIssueService().getIssueTypeById( getTypeId() );
+			description = type.getDescription();
+		}
+		if ( StringUtils.isBlank( description ) ) {
+			description = "No description available.";
+		}
+		return( new StreamingResolution( "text/plain", description ) );
+	}
+	
+	public Resolution priorityDescription() {
+		String description = null;
+		if ( null != getPriorityId() ) {
+			IssuePriority priority = getIssueService().getIssuePriorityById( getPriorityId() );
+			description = priority.getDescription();
+		}
+		if ( StringUtils.isBlank( description ) ) {
+			description = "No description available.";
+		}
+		return( new StreamingResolution( "text/plain", description ) );
+	}
+	
+	public Resolution statusDescription() {
+		String description = null;
+		if ( null != getStatusId() ) {
+			IssueStatus status = getIssueService().getIssueStatusById( getStatusId() );
+			description = status.getDescription();
+		}
+		if ( StringUtils.isBlank( description ) ) {
+			description = "No description available.";
+		}
+		return( new StreamingResolution( "text/plain", description ) );
+	}
 	
 }

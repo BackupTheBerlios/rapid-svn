@@ -1,5 +1,10 @@
 package org.syracus.rapid.actions.components;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,8 +22,11 @@ import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
 import org.syracus.rapid.files.ProjectAttachement;
+import org.syracus.rapid.history.ModuleHistory;
+import org.syracus.rapid.history.ProjectHistory;
 import org.syracus.rapid.issues.Issue;
 import org.syracus.rapid.profiles.UserProfile;
+import org.syracus.rapid.realm.User;
 
 @UrlBinding("/protected/project.action")
 public class ProjectActionBean extends BaseComponentActionBean {
@@ -138,7 +146,28 @@ public class ProjectActionBean extends BaseComponentActionBean {
 			if ( null != getProject().getModule() && -1 == getProject().getModule().getId() ) {
 				getProject().setModule( null );
 			}
+			
+			ProjectHistory history = new ProjectHistory();
+			history.setCreated( new Date() );
+			history.setCreator( getContext().getAuthUser() );
+			history.setText( "Project created." );
+			history.setProject( getProject() );
+			
+			Set<ProjectHistory> initialHistory = new HashSet<ProjectHistory>();
+			initialHistory.add( history );
+			getProject().setHistory( initialHistory );
+			
 			getComponentService().addProject( getProject(), getContext().getAuthUser() );
+			
+			// finally add history entry to module
+			if ( null != getProject().getModule() ) {
+				ModuleHistory moduleHistory = new ModuleHistory();
+				moduleHistory.setCreated( new Date() );
+				moduleHistory.setCreator( getContext().getAuthUser() );
+				moduleHistory.setText( "New project '" + getProject().getName() + "' added." );
+				moduleHistory.setModule( getProject().getModule() );
+				getHistoryService().addHistory( moduleHistory );
+			}
 		} else {
 			if ( StringUtils.isBlank( getProject().getName() ) ) {
 				getContext().getValidationErrors().add( "name", new SimpleError( "A project name is required." ) );
@@ -149,13 +178,63 @@ public class ProjectActionBean extends BaseComponentActionBean {
 				}
 				return( getContext().getSourcePageResolution() );
 			}
+			
 			Project project = getComponentService().getProjectById( getProject().getId() );
-			project.setModule( getProject().getModule() );
-			project.setName( getProject().getName() );
-			project.setDescription( getProject().getDescription() );
-			project.setHome( getProject().getHome() );
-			project.setLeader( getProject().getLeader() );
+			StringBuffer message = new StringBuffer();
+			
+			//project.setModule( getProject().getModule() );
+			
+			String oldName = project.getName();
+			String newName = StringUtils.trimToNull( getProject().getName() );
+			if ( false == StringUtils.equals( oldName, newName ) ) {
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Name changed from '" + oldName + "' to '" + newName + "'." );
+				project.setName( newName );
+			}
+			
+			String oldDescription = project.getDescription();
+			String newDescription = StringUtils.trimToNull( getProject().getDescription() );
+			if ( false == StringUtils.equals( oldDescription, newDescription ) ) {
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Description changed." );
+				project.setDescription( newDescription );
+			}
+			
+			String oldHome = project.getHome();
+			String newHome = StringUtils.trimToNull( getProject().getHome() );
+			if ( false == StringUtils.equals( oldHome, newHome ) ) {
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Project home changed from '" + oldHome + "' to '" + newHome + "'." );
+				project.setHome( newHome );
+			}
+			
+			User oldLeader = project.getLeader();
+			User newLeader = getProject().getLeader();
+			if ( false == oldLeader.getId().equals( newLeader.getId() ) ) {
+				newLeader = getRealmService().getUserById( newLeader.getId() );
+				if ( 0 < message.length() ) {
+					message.append( "\n" );
+				}
+				message.append( "Leader changed from '" + oldLeader.getName() + "' to '" + newLeader.getName() + "'." );
+				project.setLeader( newLeader );
+			}
+			
+			ProjectHistory history = new ProjectHistory();
+			history.setCreated( new Date() );
+			history.setCreator( getContext().getAuthUser() );
+			history.setText( (0 < message.length()) ? message.toString() : "No changed applied." );
+			history.setProject( project );
+			project.getHistory().add( history );
+			
 			getComponentService().updateProject( project, getContext().getAuthUser() );
+			
+			
 		}
 		return( new RedirectResolution( "/protected/project.action" )
 			.addParameter( "view", "" )
@@ -175,10 +254,19 @@ public class ProjectActionBean extends BaseComponentActionBean {
 						.addParameter( "view", "" )
 						.addParameter( "moduleId", module.getId() );
 				} else {
-					resolution = new RedirectResolution( "/protected/components/projectList.jsp" );
+					resolution = new ForwardResolution( "/protected/components/projectList.jsp" );
 				}
 				// finally delete project
 				getComponentService().deleteProject( project, getContext().getAuthUser() );
+				
+				if ( null != module ) {
+					ModuleHistory moduleHistory = new ModuleHistory();
+					moduleHistory.setCreated( new Date() );
+					moduleHistory.setCreator( getContext().getAuthUser() );
+					moduleHistory.setText( "Project '" + project.getName() + "' deleted." );
+					moduleHistory.setModule( project.getModule() );
+					getHistoryService().addHistory( moduleHistory );
+				}
 			}
 		}
 		return( resolution );
@@ -235,6 +323,24 @@ public class ProjectActionBean extends BaseComponentActionBean {
 			}
 		}
 		return( attachements );
+	}
+	
+	public List<ProjectHistory> getProjectHistory() {
+		List<ProjectHistory> history = null;
+		if ( null != getProjectId() ) {
+			Project project = getComponentService().getProjectById( getProjectId() );
+			if ( null != project ) {
+				history = new ArrayList<ProjectHistory>( project.getHistory() );
+			}
+		}
+		if ( null != history ) {
+			Collections.sort( history, new Comparator<ProjectHistory>() {
+				public int compare(ProjectHistory arg0, ProjectHistory arg1) {
+					return( arg0.getCreated().compareTo( arg1.getCreated() ) );
+				}
+			} );
+		}
+		return( history );
 	}
 	/*
 	public List<Project> getSelectableProjects() {

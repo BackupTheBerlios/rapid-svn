@@ -7,6 +7,7 @@ import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
 import org.syracus.rapid.files.IssueAttachement;
+import org.syracus.rapid.history.IssueHistory;
 import org.syracus.rapid.realm.User;
 
 /**
@@ -26,9 +27,9 @@ public class Issue {
 	private String summary;
 	private String description;
 	
-	private String type;
-	private String status;
-	private String priority;
+	private IssueType type;
+	private IssueStatus status;
+	private IssuePriority priority;
 	
 	private User assignee;
 	private Date assigned;
@@ -42,7 +43,21 @@ public class Issue {
 	private Date modified;
 	
 	private Set<IssueAttachement> attachements;
+	private Set<IssueHistory> history;
 	
+	/**
+	 * 
+	 * @return
+	 * @hibernate.set lazy="true" cascade="all-delete-orphan" inverse="true"
+	 * @hibernate.key column="issue"
+	 * @hibernate.one-to-many class="org.syracus.rapid.history.IssueHistory"/>
+	 */
+	public Set<IssueHistory> getHistory() {
+		return history;
+	}
+	public void setHistory(Set<IssueHistory> history) {
+		this.history = history;
+	}
 	/**
 	 * 
 	 * @return
@@ -191,12 +206,12 @@ public class Issue {
 	/**
 	 * 
 	 * @return
-	 * @hibernate.property
+	 * @hibernate.many-to-one
 	 */
-	public String getPriority() {
+	public IssuePriority getPriority() {
 		return priority;
 	}
-	public void setPriority(String priority) {
+	public void setPriority(IssuePriority priority) {
 		this.priority = priority;
 	}
 	/**
@@ -224,12 +239,12 @@ public class Issue {
 	/**
 	 * 
 	 * @return
-	 * @hibernate.property
+	 * @hibernate.many-to-one
 	 */
-	public String getStatus() {
+	public IssueStatus getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	public void setStatus(IssueStatus status) {
 		this.status = status;
 	}
 	/**
@@ -246,12 +261,12 @@ public class Issue {
 	/**
 	 * 
 	 * @return
-	 * @hibernate.property
+	 * @hibernate.many-to-one
 	 */
-	public String getType() {
+	public IssueType getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public void setType(IssueType type) {
 		this.type = type;
 	}
 	
