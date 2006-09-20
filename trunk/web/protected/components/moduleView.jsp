@@ -95,6 +95,12 @@
 							</stripes:link>
 						</td>
 						<td>
+							<stripes:link href="/protected/components/moduleAttachements.jsp" onclick="ajaxUpdate(this.href,'_moduleViewContent');return false;">
+								<stripes:link-param name="moduleId" value="${actionBean.module.id}"/>
+								Attachements
+							</stripes:link>
+						</td>
+						<td>
 							<stripes:link href="" onclick="return false;">
 								<stripes:link-param name="moduleId" value="${actionBean.module.id}"/>
 								History

@@ -12,7 +12,10 @@
 	<c:set var="allUsers" value="${realmAction.allUsers}"/>
 	
 	<stripes:form action="/protected/issue.action" method="post">
-		<table>
+		<stripes:hidden name="moduleId" value="${moduleId}"/>
+		<stripes:hidden name="projectId" value="${projectId}"/>
+		<stripes:hidden name="componentId" value="${componentId}"/>
+		<table width="100%">
 			<tr>
 				<td><label>Module:</label></td>
 				<td>
@@ -27,6 +30,7 @@
 							<stripes:options-collection collection="${actionBean.selectableModules}" label="name" value="id"/>
 						</stripes:select>
 					</c:if>
+					<stripes:errors field="selection"/>
 				</td>
 			</tr>
 			<tr>
@@ -73,6 +77,7 @@
 				<td><label>KEY:</label></td>
 				<td>
 					<stripes:text disabled="disabled" maxlength="5" size="5" id="_key" name="issue.key" value="${issue.key}"/>
+					<stripes:errors field="key"/>
 				</td>
 			</tr>
 			<tr>
@@ -95,6 +100,7 @@
 				<td><label>Summary:</label></td>
 				<td>
 					<stripes:text name="issue.summary" value="${issue.summary}"/>
+					<stripes:errors field="summary"/>
 				</td>
 			</tr>
 			<tr>
@@ -120,12 +126,11 @@
 				</td>
 			</tr>
 			<tr>
-			</tr>
-			<tr>
 				<td colspan="2">
 					<stripes:button name="save" value="save" onclick="ajaxForm(this.form,this.value,'_workbenchContent');"/>
 				</td>
 			</tr>
+		</table>
 	</stripes:form>
 	</stripes:layout-component>
 	

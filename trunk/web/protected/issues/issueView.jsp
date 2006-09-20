@@ -135,27 +135,27 @@
 			</td>
 		</tr>
 	</table>
-	<%--
+	
 	<table width="100%" border="1">
 		<tr>
 			<td>
 				<table>
 					<tr>
 						<td>
-							<stripes:link href="" onclick="return false;">
-								<stripes:link-param name="moduleId" value="${actionBean.component.id}"/>
-								Issues
+							<stripes:link href="/protected/issues/issueAttachements.jsp" onclick="ajaxUpdate(this.href,'_issueViewContent');return false;">
+								<stripes:link-param name="issueId" value="${actionBean.issue.id}"/>
+								Attachements
 							</stripes:link>
 						</td>
 						<td>
 							<stripes:link href="" onclick="return false;">
-								<stripes:link-param name="moduleId" value="${actionBean.component.id}"/>
+								<stripes:link-param name="issueId" value="${actionBean.issue.id}"/>
 								History
 							</stripes:link>
 						</td>
 						<td>
 							<stripes:link href="" onclick="return false;">
-								<stripes:link-param name="moduleId" value="${actionBean.component.id}"/>
+								<stripes:link-param name="issueId" value="${actionBean.issue.id}"/>
 								Comments
 							</stripes:link>
 						</td>
@@ -165,15 +165,13 @@
 		</tr>
 		<tr>
 			<td>
-				<div id="_componentViewContent">
+				<div id="_issueViewContent">
 					<c:choose>
-						<c:when test="${param.tab1 eq 'issues'}">
+						<c:when test="${param.tab1 eq 'comments'}">
 						</c:when>
 						<c:otherwise>
-							<c:import url="/protected/components/componentList.jsp">
-								<c:param name="projectId" value="${actionBean.component.id}"/>
-								<c:param name="menu" value="false"/>
-								<c:param name="projects" value="false"/>
+							<c:import url="/protected/issues/issueAttachements.jsp">
+								<c:param name="issueId" value="${actionBean.issue.id}"/>
 							</c:import>
 						</c:otherwise>
 					</c:choose>
@@ -181,7 +179,7 @@
 			</td>
 		</tr>
 	</table>
-	--%>
+	
 	</stripes:layout-component>
 	
 </stripes:layout-render>

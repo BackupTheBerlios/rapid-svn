@@ -11,6 +11,7 @@
 		<stripes:hidden name="component.id" value="${component.id}"/>
 		<stripes:hidden name="component.module.id" value="${component.module.id}"/>
 		<stripes:hidden name="component.project.id" value="${component.project.id}"/>
+		<stripes:hidden name="component.key" value="${component.key}"/>
 		<table>
 			<tr>
 				<td>KEY:</td>
@@ -48,6 +49,7 @@
 				<td>Name:</td>
 				<td>
 					<stripes:text name="component.name" value="${component.name}"/>
+					<stripes:errors field="name"/>
 				</td>
 			</tr>
 			<tr>

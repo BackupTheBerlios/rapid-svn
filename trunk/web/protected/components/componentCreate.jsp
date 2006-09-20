@@ -8,6 +8,8 @@
 	
 	<stripes:layout-component name="tileContent">
 	<stripes:form action="/protected/component.action" method="post">
+		<stripes:hidden name="moduleId" value="${moduleId}"/>
+		<stripes:hidden name="projectId" value="${projectId}"/>
 		<table>
 			<tr>
 				<td>Module:</td>
@@ -47,12 +49,14 @@
 				<td>KEY:</td>
 				<td>
 					<stripes:text id="_key" maxlength="5" size="5" name="component.key" value="${component.key}"/>
+					<stripes:errors field="key"/>
 				</td>
 			</tr>
 			<tr>
 				<td>Name:</td>
 				<td>
 					<stripes:text name="component.name" value="${component.name}"/>
+					<stripes:errors field="name"/>
 				</td>
 			</tr>
 			<tr>

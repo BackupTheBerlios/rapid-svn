@@ -3,7 +3,7 @@
 <stripes:layout-render name="/WEB-INF/layouts/tileLayout.jsp">
 
 	<stripes:layout-component name="tileHeader">
-		Create Issue
+		Edit Issue
 	</stripes:layout-component>
 	
 	<stripes:layout-component name="tileContent">
@@ -12,11 +12,16 @@
 	<c:set var="allUsers" value="${realmAction.allUsers}"/>
 	
 	<stripes:form action="/protected/issue.action" method="post">
-		<stripes:hidden name="issue.id" value="${actionBean.issue.id}"/>
-		<stripes:hidden name="issue.module.id" value="${actionBean.issue.module.id}"/>
-		<stripes:hidden name="issue.project.id" value="${actionBean.issue.project.id}"/>
-		<stripes:hidden name="issue.component.id" value="${actionBean.issue.component.id}"/>
+		<stripes:hidden name="issue.id" value="${issue.id}"/>
+		<stripes:hidden name="issue.module.id" value="${issue.module.id}"/>
+		<stripes:hidden name="issue.project.id" value="${issue.project.id}"/>
+		<stripes:hidden name="issue.component.id" value="${issue.component.id}"/>
+		<stripes:hidden name="issue.key" value="${issue.key}"/>
 		<table>
+			<tr>
+				<td><label>KEY:</label></td>
+				<td>${actionBean.issue.key}</td>
+			</tr>
 			<tr>
 				<td><label>Module:</label></td>
 				<td>
@@ -87,6 +92,7 @@
 				<td><label>Summary:</label></td>
 				<td>
 					<stripes:text name="issue.summary" value="${issue.summary}"/>
+					<stripes:errors field="summary"/>
 				</td>
 			</tr>
 			<tr>
@@ -118,6 +124,7 @@
 					<stripes:button name="save" value="save" onclick="ajaxForm(this.form,this.value,'_workbenchContent');"/>
 				</td>
 			</tr>
+		</table>
 	</stripes:form>
 	</stripes:layout-component>
 	

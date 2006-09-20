@@ -13,18 +13,21 @@
 				<td>KEY:</td>
 				<td>
 					<stripes:text maxlength="5" size="5" name="module.key" value="${module.key}"/>
+					<stripes:errors field="key"/>
 				</td>
 			</tr>
 			<tr>
 				<td>Name:</td>
 				<td>
 					<stripes:text name="module.name" value="${module.name}"/>
+					<stripes:errors field="name"/>
 				</td>
 			</tr>
 			<tr>
 				<td>Description:</td>
 				<td>
 					<stripes:textarea name="module.description" value="${module.description}"/>
+					<stripes:errors field="description"/>
 				</td>
 			</tr>
 			<tr>

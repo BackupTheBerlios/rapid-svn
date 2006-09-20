@@ -23,7 +23,8 @@ function ajaxForm(form, event, container) {
     var params = Form.serialize(form);
     if (event != null) params = event + '&' + params;
     //alert( 'params:'+params );
-    new Ajax.Updater(container, form.action, {method:'post', postBody:params});
+    //new Ajax.Updater(container, form.action, {method:'post', postBody:params});
+    new Ajax.Updater(container, form.action, {method:'post', parameters:params});
 }
 
 function ajaxFormId(formId, event, container) {

@@ -10,6 +10,7 @@
 	<stripes:form action="/protected/project.action" method="post">
 		<stripes:hidden name="project.id" value="${project.id}"/>
 		<stripes:hidden name="project.module.id" value="${project.module.id}"/>
+		<stripes:hidden name="project.key" value="${project.key}"/>
 		<table>
 			<tr>
 				<td>KEY:</td>
@@ -33,6 +34,7 @@
 				<td>Name:</td>
 				<td>
 					<stripes:text name="project.name" value="${project.name}"/>
+					<stripes:errors field="name"/>
 				</td>
 			</tr>
 			<tr>

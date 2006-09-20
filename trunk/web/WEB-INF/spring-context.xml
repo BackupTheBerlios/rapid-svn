@@ -241,4 +241,31 @@
 			</props>
 		</property>
 	</bean>
+	
+	<bean id="attachementDao" class="org.syracus.rapid.files.dao.HibernateAttachementDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	
+	<bean id="attachementServiceImpl" class="org.syracus.rapid.files.AttachementService">
+		<property name="attachementDao">
+			<ref local="attachementDao"/>
+		</property>
+	</bean>
+	
+	<bean id="attachementService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="hibernateTxManager"/>
+		<property name="target">
+			<ref local="attachementServiceImpl"/>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="add*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
+			</props>
+		</property>
+	</bean>
 </beans>
