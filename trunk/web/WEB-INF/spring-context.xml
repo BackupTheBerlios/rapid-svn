@@ -349,4 +349,40 @@
 			</props>
 		</property>
 	</bean>
+	
+	<bean id="eventTypeDao" class="org.syracus.rapid.events.dao.HibernateEventTypeDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>	
+	</bean>
+	
+	<bean id="eventDao" class="org.syracus.rapid.events.dao.HibernateEventDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>	
+	</bean>
+	
+	<bean id="eventServiceImpl" class="org.syracus.rapid.events.EventService">
+		<property name="typeDao">
+			<ref local="eventTypeDao"/>
+		</property>
+		<property name="eventDao">
+			<ref local="eventDao"/>
+		</property>
+	</bean>
+	
+	<bean id="eventService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="hibernateTxManager"/>
+		<property name="target">
+			<ref local="eventServiceImpl"/>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="add*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
+			</props>
+		</property>
+	</bean>
 </beans>

@@ -13,3 +13,7 @@
 <%@ taglib prefix="rapid" uri="http://rapid.syracus.org/rapid.tld" %>
 <%@ taglib prefix="log" uri="http://jakarta.apache.org/taglibs/log-1.0" %>
 <%@ taglib prefix="xtags" uri="http://jakarta.apache.org/taglibs/xtags-1.0"%>
+<%@ taglib prefix="cal" uri="http://rapid.syracus.org/calendar.tld" %>
+<%--
+<%@ taglib tagdir="/WEB-INF/tags" prefix="t" %>
+--%>

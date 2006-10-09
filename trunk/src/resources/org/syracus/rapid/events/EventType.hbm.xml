@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="event_types" name="org.syracus.rapid.events.EventType">
+    <id name="id">
+      <generator class="native"/>
+    </id>
+    <property name="description" type="text"/>
+    <property name="icon"/>
+    <property name="name" not-null="true"/>
+  </class>
+</hibernate-mapping>

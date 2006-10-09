@@ -2,20 +2,14 @@ package org.syracus.rapid.messages.dao;
 
 import java.util.List;
 
-import org.syracus.rapid.common.IPersistanceDao;
+import org.syracus.rapid.common.IGenericHibernateDao;
 import org.syracus.rapid.messages.Message;
 import org.syracus.rapid.messages.MessageStatus;
 import org.syracus.rapid.realm.User;
 
-public interface IMessageDao extends IPersistanceDao {
+public interface IMessageDao extends IGenericHibernateDao<Message,Long> {
 
-	public void create( Message message );
-	public void update( Message message );
-	public void delete( Message message );
 	
-	public Message find( Long id );
-	
-	public List<Message> findAll();
 	public List<Message> findBySender( User sender );
 	public List<Message> findByReceiver( User receiver );
 	

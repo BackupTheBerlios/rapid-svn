@@ -9,24 +9,14 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.HibernateCallback;
-import org.syracus.rapid.common.AbstractHibernateDao;
+import org.syracus.rapid.common.GenericHibernateDao;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.realm.User;
 
-public class HibernateModuleDao extends AbstractHibernateDao implements
+public class HibernateModuleDao extends GenericHibernateDao<Module, Long> implements
 		IModuleDao {
 
-	public void create(Module module) {
-		getHibernateTemplate().save( module );
-	}
-
-	public void delete(Module module) {
-		getHibernateTemplate().delete( module );
-	}
-
-	public Module find(Long id) {
-		return( (Module)getHibernateTemplate().get( Module.class, id ) );
-	}
+	
 
 	
 	@SuppressWarnings("unchecked")
@@ -43,12 +33,7 @@ public class HibernateModuleDao extends AbstractHibernateDao implements
 		return( findByCriteria( criteria ) );
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Module> findAll() {
-		return( (List<Module>)getHibernateTemplate().find(
-				"FROM Module"
-		) );
-	}
+	
 
 	@SuppressWarnings("unchecked")
 	public List<Module> findByCreator(User creator) {
@@ -106,9 +91,7 @@ public class HibernateModuleDao extends AbstractHibernateDao implements
 		) );
 	}
 
-	public void update(Module module) {
-		getHibernateTemplate().update( module );
-	}
+	
 
 	public Integer countProjectsOfModule( final Module module ) {
 		return( (Integer)getHibernateTemplate().execute( new HibernateCallback() {

@@ -3,28 +3,12 @@ package org.syracus.rapid.realm.dao;
 import java.util.List;
 
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.syracus.rapid.common.GenericHibernateDao;
 import org.syracus.rapid.realm.User;
 
-public class HibernateUserDao extends HibernateDaoSupport implements IUserDao {
+public class HibernateUserDao extends GenericHibernateDao<User, Long> implements IUserDao {
 
-	public void create(User user) {
-		getHibernateTemplate().save( user );
-	}
-
-	public void delete(User user) {
-		getHibernateTemplate().delete( user );
-	}
-
-	public User find(Long id) {
-		return( (User)getHibernateTemplate().get( User.class, id ) );
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<User> findAll() {
-		return( (List<User>)getHibernateTemplate().find(
-				"FROM User"
-		) );
-	}
+	
 
 	@SuppressWarnings("unchecked")
 	public List<User> findByAccount(String account) {
@@ -72,10 +56,6 @@ public class HibernateUserDao extends HibernateDaoSupport implements IUserDao {
 				"FROM User u WHERE u.name LIKE ?",
 				name
 		) );
-	}
-
-	public void update(User user) {
-		getHibernateTemplate().update( user );
 	}
 
 }

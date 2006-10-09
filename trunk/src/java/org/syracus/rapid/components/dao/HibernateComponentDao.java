@@ -7,31 +7,17 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.syracus.rapid.common.AbstractHibernateDao;
+import org.syracus.rapid.common.GenericHibernateDao;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
 import org.syracus.rapid.realm.User;
 
-public class HibernateComponentDao extends AbstractHibernateDao implements
+public class HibernateComponentDao extends GenericHibernateDao<Component, Long> implements
 		IComponentDao {
 
 	protected static final transient Log log = LogFactory.getLog( HibernateComponentDao.class );
 	
-	public void create(Component component) {
-		if ( log.isDebugEnabled() ) {
-			log.debug( "[create] " + component.dump() );
-		}
-		getHibernateTemplate().save( component );
-	}
-
-	public void delete(Component component) {
-		getHibernateTemplate().delete( component );
-	}
-
-	public Component find(Long id) {
-		return( (Component)getHibernateTemplate().get( Component.class, id ) );
-	}
 
 	@SuppressWarnings("unchecked")
 	public List<Component> findByKey(String key) {
@@ -47,12 +33,7 @@ public class HibernateComponentDao extends AbstractHibernateDao implements
 		return( findByCriteria( criteria ) );
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<Component> findAll() {
-		return( (List<Component>)getHibernateTemplate().find(
-				"FROM Component"
-		) );
-	}
+	
 
 	@SuppressWarnings("unchecked")
 	public List<Component> findByCreator(User creator) {
@@ -173,8 +154,6 @@ public class HibernateComponentDao extends AbstractHibernateDao implements
 		) ); 
 	}
 
-	public void update(Component component) {
-		getHibernateTemplate().update( component );
-	}
+	
 
 }

@@ -10,3 +10,18 @@ table {
 a:visited {
 	color: red;
 }
+.calendarTable {
+	width:100%;
+}
+.calendarToday{
+	color:blue;
+}
+.calendarMonth {
+	color:red;
+}
+.calendarDay {
+	color:white;
+}
+.calendarLink {
+	color:white;
+}

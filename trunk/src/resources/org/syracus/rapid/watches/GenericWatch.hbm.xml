@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="generic_watches" name="org.syracus.rapid.watches.GenericWatch">
+    <id name="id">
+      <generator class="native"/>
+    </id>
+    <many-to-one not-null="false" name="component"/>
+    <many-to-one not-null="false" name="module"/>
+    <many-to-one not-null="false" name="project"/>
+    <many-to-one not-null="true" name="user"/>
+  </class>
+</hibernate-mapping>

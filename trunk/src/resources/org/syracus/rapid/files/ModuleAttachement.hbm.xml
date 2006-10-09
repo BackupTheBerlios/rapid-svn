@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="module_attachements" name="org.syracus.rapid.files.ModuleAttachement">
+    <id name="id">
+      <generator class="native"/>
+    </id>
+    <many-to-one not-null="true" name="module"/>
+    <property name="description" not-null="false" type="text"/>
+    <many-to-one name="creator"/>
+    <property name="content" type="blob"/>
+    <property name="contentType"/>
+    <property name="fileName"/>
+    <property name="fileSize"/>
+    <property name="fileDate"/>
+  </class>
+</hibernate-mapping>

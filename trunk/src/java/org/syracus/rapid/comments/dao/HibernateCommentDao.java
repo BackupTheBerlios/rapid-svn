@@ -2,28 +2,16 @@ package org.syracus.rapid.comments.dao;
 
 import java.util.List;
 
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.syracus.rapid.comments.Comment;
+import org.syracus.rapid.common.GenericHibernateDao;
 import org.syracus.rapid.components.Component;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
 import org.syracus.rapid.issues.Issue;
 import org.syracus.rapid.realm.User;
 
-public class HibernateCommentDao extends HibernateDaoSupport implements
+public class HibernateCommentDao extends GenericHibernateDao<Comment, Long> implements
 		ICommentDao {
-
-	public void create(Comment comment) {
-		getHibernateTemplate().save( comment );
-	}
-
-	public void delete(Comment comment) {
-		getHibernateTemplate().delete( comment );
-	}
-
-	public Comment find(Long id) {
-		return( (Comment)getHibernateTemplate().get( Comment.class, id ) );
-	}
 
 	@SuppressWarnings("unchecked")
 	public List<Comment> findByComponent(Component component) {
@@ -156,10 +144,6 @@ public class HibernateCommentDao extends HibernateDaoSupport implements
 						project, parent
 				}
 		) ); 
-	}
-
-	public void update(Comment comment) {
-		getHibernateTemplate().update( comment );
 	}
 
 	@SuppressWarnings("unchecked")

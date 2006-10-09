@@ -1,48 +1,82 @@
 package org.syracus.rapid.files;
 
-import org.syracus.rapid.files.dao.IAttachementDao;
+import org.syracus.rapid.files.dao.IComponentAttachementDao;
+import org.syracus.rapid.files.dao.IIssueAttachementDao;
+import org.syracus.rapid.files.dao.IModuleAttachementDao;
+import org.syracus.rapid.files.dao.IProjectAttachementDao;
 
 public class AttachementService implements IAttachementService {
 
-	private IAttachementDao attachementDao;
+	private IModuleAttachementDao moduleAttachementDao;
+	private IProjectAttachementDao projectAttachementDao;
+	private IComponentAttachementDao componentAttachementDao;
+	private IIssueAttachementDao issueAttachementDao;
 
-	public IAttachementDao getAttachementDao() {
-		return attachementDao;
+	
+
+	public IComponentAttachementDao getComponentAttachementDao() {
+		return componentAttachementDao;
 	}
 
-	public void setAttachementDao(IAttachementDao attachementDao) {
-		this.attachementDao = attachementDao;
+	public void setComponentAttachementDao(
+			IComponentAttachementDao componentAttachementDao) {
+		this.componentAttachementDao = componentAttachementDao;
+	}
+
+	public IIssueAttachementDao getIssueAttachementDao() {
+		return issueAttachementDao;
+	}
+
+	public void setIssueAttachementDao(IIssueAttachementDao issueAttachementDao) {
+		this.issueAttachementDao = issueAttachementDao;
+	}
+
+	public IModuleAttachementDao getModuleAttachementDao() {
+		return moduleAttachementDao;
+	}
+
+	public void setModuleAttachementDao(IModuleAttachementDao moduleAttachementDao) {
+		this.moduleAttachementDao = moduleAttachementDao;
+	}
+
+	public IProjectAttachementDao getProjectAttachementDao() {
+		return projectAttachementDao;
+	}
+
+	public void setProjectAttachementDao(
+			IProjectAttachementDao projectAttachementDao) {
+		this.projectAttachementDao = projectAttachementDao;
 	}
 
 	public ComponentAttachement getComponentAttachementById(Long id) {
-		return( getAttachementDao().findComponentAttachement( id ) );
+		return( getComponentAttachementDao().find( id ) );
 	}
 
 	public ModuleAttachement getModuleAttachementById(Long id) {
-		return( getAttachementDao().findModuleAttachement( id ) );
+		return( getModuleAttachementDao().find( id ) );
 	}
 
 	public ProjectAttachement getProjectAttachementById(Long id) {
-		return( getAttachementDao().findProjectAttachement( id ) );
+		return( getProjectAttachementDao().find( id ) );
 	}
 	public IssueAttachement getIssueAttachementById(Long id) {
-		return( getAttachementDao().findIssueAttachement( id ) );
+		return( getIssueAttachementDao().find( id ) );
 	}
 
 	public void deleteAttachement(ComponentAttachement attachement) {
-		getAttachementDao().deleteAttachement( attachement );
+		getComponentAttachementDao().delete( attachement );
 	}
 
 	public void deleteAttachement(IssueAttachement attachement) {
-		getAttachementDao().deleteAttachement( attachement );
+		getIssueAttachementDao().delete( attachement );
 	}
 
 	public void deleteAttachement(ModuleAttachement attachement) {
-		getAttachementDao().deleteAttachement( attachement );
+		getModuleAttachementDao().delete( attachement );
 	}
 
 	public void deleteAttachement(ProjectAttachement attachement) {
-		getAttachementDao().deleteAttachement( attachement );
+		getProjectAttachementDao().delete( attachement );
 	}
 
 	

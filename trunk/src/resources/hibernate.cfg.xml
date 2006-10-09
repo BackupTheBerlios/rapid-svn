@@ -11,6 +11,8 @@
     <mapping resource="org/syracus/rapid/components/Component.hbm.xml"/>
     <mapping resource="org/syracus/rapid/components/Module.hbm.xml"/>
     <mapping resource="org/syracus/rapid/components/Project.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/events/Event.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/events/EventType.hbm.xml"/>
     <mapping resource="org/syracus/rapid/files/ComponentAttachement.hbm.xml"/>
     <mapping resource="org/syracus/rapid/files/IssueAttachement.hbm.xml"/>
     <mapping resource="org/syracus/rapid/files/ModuleAttachement.hbm.xml"/>
@@ -24,6 +26,7 @@
     <mapping resource="org/syracus/rapid/issues/IssueStatus.hbm.xml"/>
     <mapping resource="org/syracus/rapid/issues/IssueType.hbm.xml"/>
     <mapping resource="org/syracus/rapid/messages/Message.hbm.xml"/>
+    <mapping resource="org/syracus/rapid/realm/Role.hbm.xml"/>
     <mapping resource="org/syracus/rapid/realm/User.hbm.xml"/>
     <mapping resource="org/syracus/rapid/todos/Todo.hbm.xml"/>
     <mapping resource="org/syracus/rapid/watches/GenericWatch.hbm.xml"/>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="components" name="org.syracus.rapid.components.Component">
+    <id name="id">
+      <generator class="native"/>
+    </id>
+    <set lazy="true" inverse="true" cascade="all-delete-orphan" name="history">
+      <key column="component"/>
+      <one-to-many class="org.syracus.rapid.history.ComponentHistory"/>
+    </set>
+    <set lazy="true" inverse="true" cascade="all-delete-orphan" name="attachements">
+      <key column="component"/>
+      <one-to-many class="org.syracus.rapid.files.ComponentAttachement"/>
+    </set>
+    <many-to-one not-null="true" name="leader"/>
+    <many-to-one not-null="false" name="module"/>
+    <many-to-one not-null="false" name="project"/>
+    <property name="key" not-null="true" length="5" column="ident"/>
+    <property name="created"/>
+    <many-to-one name="creator"/>
+    <property name="description"/>
+    <property name="modified"/>
+    <many-to-one name="modifier"/>
+    <property name="name"/>
+  </class>
+</hibernate-mapping>

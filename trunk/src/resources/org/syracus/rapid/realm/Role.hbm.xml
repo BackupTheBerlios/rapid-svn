@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="roles" name="org.syracus.rapid.realm.Role">
+    <id name="id">
+      <generator class="native"/>
+    </id>
+    <property name="name" not-null="true"/>
+    <set table="user_roles" lazy="true" name="users">
+      <key column="role_id"/>
+      <many-to-many column="user_id" class="org.syracus.rapid.realm.User"/>
+    </set>
+  </class>
+</hibernate-mapping>

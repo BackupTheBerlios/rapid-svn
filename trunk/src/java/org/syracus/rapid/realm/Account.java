@@ -1,5 +1,14 @@
 package org.syracus.rapid.realm;
 
+/**
+ * Basic meta data for user account.
+ * Used to authenticate an user during the login process.
+ * This is just a baseclass. RaPid uses instances of User,
+ * which inherits this class, as central user data class.
+ * 
+ * @author snwiem
+ * @see User
+ */
 public class Account {
 
 	private Long id;

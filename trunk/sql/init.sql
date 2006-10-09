@@ -1,6 +1,11 @@
 INSERT INTO users ( account, password, name, email ) VALUES ( 'snwiem', 'secret', 'Sebastian Wiemer', 'sebastian.wiemer@nefkom.net' );
 INSERT INTO users ( account, password, name, email ) VALUES ( 'snbreu', 'secret', 'Stephan Breu', 'stephan.breu@gfk.com' );
 INSERT INTO users ( account, password, name, email ) VALUES ( 'fdbisc', 'secret', 'Fred Bischoff', 'fred,bischoff@gfk.com' );
+INSERT INTO roles ( name ) VALUES ( 'ADMIN' );
+INSERT INTO roles ( name ) VALUES ( 'DEVELOPER' );
+INSERT INTO roles ( name ) VALUES ( 'TESTER' );
+INSERT INTO roles ( name ) VALUES ( 'CUSTOMER' );
+
 INSERT INTO modules ( ident, name, description, leader, creator, created, modifier, modified ) values ( 'MTST', 'Module One', 'My first module', 1, 1, now(), 1, now() );
 
 INSERT INTO issue_types ( name, icon, description ) VALUES ( 'Bug', NULL, 'A bug.' );
@@ -20,3 +25,6 @@ INSERT INTO issue_status ( name, pos, icon, description ) VALUES ( 'Resolved', 3
 INSERT INTO issue_status ( name, pos, icon, description ) VALUES ( 'Tested', 4, NULL, 'The issue has been tested any may be closed.' );
 INSERT INTO issue_status ( name, pos, icon, description ) VALUES ( 'Reopened', 5, NULL, 'The issue didn''t pass the test.' );
 INSERT INTO issue_status ( name, pos, icon, description ) VALUES ( 'Closed', 6, NULL, 'The issue is closed.' );
+
+INSERT INTO event_types ( name, icon, description ) VALUES ( 'Meeting', NULL, 'A simple meeting.' );
+INSERT INTO event_types ( name, icon, description ) VALUES ( 'Deployment', NULL, 'Deployment of a component.' );

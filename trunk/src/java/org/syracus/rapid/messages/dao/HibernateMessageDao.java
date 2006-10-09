@@ -2,32 +2,17 @@ package org.syracus.rapid.messages.dao;
 
 import java.util.List;
 
-import org.syracus.rapid.common.AbstractHibernateDao;
+import org.syracus.rapid.common.GenericHibernateDao;
 import org.syracus.rapid.messages.Message;
 import org.syracus.rapid.messages.MessageStatus;
 import org.syracus.rapid.realm.User;
 
-public class HibernateMessageDao extends AbstractHibernateDao implements
+public class HibernateMessageDao extends GenericHibernateDao<Message, Long> implements
 		IMessageDao {
 
-	public void create(Message message) {
-		getHibernateTemplate().save( message );
-	}
+	
 
-	public void delete(Message message) {
-		getHibernateTemplate().delete( message );
-	}
-
-	public Message find(Long id) {
-		return( (Message)getHibernateTemplate().get( Message.class, id ) );
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Message> findAll() {
-		return( (List<Message>)getHibernateTemplate().find(
-				"FROM Message"
-		) );
-	}
+	
 
 	@SuppressWarnings("unchecked")
 	public List<Message> findByBody(String body) {
@@ -77,9 +62,7 @@ public class HibernateMessageDao extends AbstractHibernateDao implements
 		) );
 	}
 
-	public void update(Message message) {
-		getHibernateTemplate().update( message );
-	}
+	
 
 	@SuppressWarnings("unchecked")
 	public List<Message> findByStatus(MessageStatus status) {

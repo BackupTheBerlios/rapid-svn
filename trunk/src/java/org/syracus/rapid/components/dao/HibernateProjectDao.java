@@ -9,25 +9,15 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.HibernateCallback;
-import org.syracus.rapid.common.AbstractHibernateDao;
+import org.syracus.rapid.common.GenericHibernateDao;
 import org.syracus.rapid.components.Module;
 import org.syracus.rapid.components.Project;
 import org.syracus.rapid.realm.User;
 
-public class HibernateProjectDao extends AbstractHibernateDao implements
+public class HibernateProjectDao extends GenericHibernateDao<Project, Long> implements
 		IProjectDao {
 
-	public void create(Project project) {
-		getHibernateTemplate().save( project );
-	}
-
-	public void delete(Project project) {
-		getHibernateTemplate().delete( project );
-	}
-
-	public Project find(Long id) {
-		return( (Project)getHibernateTemplate().get( Project.class, id ) );
-	}
+	
 
 	@SuppressWarnings("unchecked")
 	public List<Project> findByKey(String key) {
@@ -43,12 +33,7 @@ public class HibernateProjectDao extends AbstractHibernateDao implements
 		return( findByCriteria( criteria ) );
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<Project> findAll() {
-		return( (List<Project>)getHibernateTemplate().find(
-				"FROM Project"
-		) );
-	}
+	
 
 	@SuppressWarnings("unchecked")
 	public List<Project> findByCreator(User creator) {
@@ -117,10 +102,7 @@ public class HibernateProjectDao extends AbstractHibernateDao implements
 		) ); 
 	}
 
-	public void update(Project project) {
-		getHibernateTemplate().update( project );
-	}
-
+	
 	public Integer countComponentsOfProject( final Project project ) {
 		return( (Integer)getHibernateTemplate().execute( new HibernateCallback() {
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {

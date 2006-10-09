@@ -47,6 +47,8 @@ public class LoginActionBean extends RealmActionBean {
 		User user = getRealmService().authenticateUser( getAccount(), getPassword() );
 		Resolution resolution = getContext().getSourcePageResolution();
 		if ( null != user ) {
+			// load user roles
+			user.setRoles( user.getRoles() );
 			getContext().setAuthUser( user );
 			// try to load users profile
 			UserProfile profile = getProfileService().getUserProfile( user.getId() );

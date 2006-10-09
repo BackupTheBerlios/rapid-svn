@@ -11,8 +11,12 @@
 	<property name="build.dir.classes" value="${build.dir}/classes"/>
 	<property name="build.dir.test" value="${build.dir}/tests"/>
 	
+	<property name="doc.dir" value="${basedir}/doc"/>
+	<property name="doc.dir.api" value="${doc.dir}/api"/>
+	
 	<property name="web.dir" value="${basedir}/web"/>
 	<property name="lib.dir" value="${web.dir}/WEB-INF/lib"/>
+	<property name="tag.dir" value="${web.dir}/WEB-INF/tags"/>
 	<property name="sql.dir" value="${basedir}/sql"/>
 	
 	<property name="xdoclet.dir" value="${basedir}/xdoclet"/>
@@ -25,13 +29,24 @@
 		<path refid="classpath.compile.java"/>
 	</path>
 	
+	<path id="classpath.javadoc">
+		<path refid="classpath.compile.java"/>
+		<pathelement location="${tomcat.home}/common/lib/servlet-api.jar"/>
+		<pathelement location="${tomcat.home}/common/lib/jsp-api.jar"/>
+	</path>
+	
 	<path id="classpath.xdoclet">
 		<fileset dir="${xdoclet.home}/lib" includes="*.jar"/>
+		<pathelement location="${tomcat.home}/common/lib/servlet-api.jar"/>
+		<pathelement location="${tomcat.home}/common/lib/jsp-api.jar"/>
 	</path>
 	
 	<path id="classpath.xdoclet2">
 		<fileset dir="${xdoclet2.home}/lib" includes="**/*.jar"/>
 		<pathelement location="${xdoclet2.home}/plugins/xdoclet-plugin-hibernate-1.0.4-SNAPSHOT.jar"/>
+		<pathelement location="${xdoclet2.home}/plugins/xdoclet-plugin-web-1.0.3.jar"/>
+		<pathelement location="${tomcat.home}/common/lib/servlet-api.jar"/>
+		<pathelement location="${tomcat.home}/common/lib/jsp-api.jar"/>
 	</path>
 	
 	<path id="classpath.schemaexport">
@@ -46,12 +61,37 @@
 	<taskdef name="hibernatedoclet"
 			classname="xdoclet.modules.hibernate.HibernateDocletTask"
 			classpathref="classpath.xdoclet"/>
+	<taskdef name="webdoclet"
+			classname="xdoclet.modules.web.WebDocletTask"
+			classpathref="classpath.xdoclet"/>
 	<taskdef name="schemaexport"
 			classname="org.hibernate.tool.hbm2ddl.SchemaExportTask"
 			classpathref="classpath.schemaexport"/>
 	<taskdef name="xdoclet"
 			classname="org.xdoclet.ant.XDocletTask"
 			classpathref="classpath.xdoclet2"/>
+	
+	<target name="taglib.descriptor">
+		<!--
+		<webdoclet destdir="${basedir}" force="${xdoclet.force}" verbose="${xdoclet.verbose}">
+			<fileset dir="${src.dir.java}" includes="**/*.java"/>
+			<jsptaglib jspversion="2.0" taglibversion="1.0"
+				shortname="calendar" uri="http://rapid.syracus.org/calendar.tld"
+				filename="calendar.tld" xmlencoding="UTF-8"/>
+		</webdoclet>
+		-->
+		<xdoclet>
+			<fileset dir="${src.dir.java}" includes="**/*.java"/>
+			<component classname="org.xdoclet.plugin.web.TaglibPlugin"
+				destdir="${tag.dir}"
+				jspversion="2.0"
+				taglibversion="1.0"
+				shortname="calendar"
+				uri="http://rapid.syracus.org/calendar.tld"
+				encoding="UTF-8"
+				/>
+		</xdoclet>
+	</target>
 		
 	<target name="hibernate.mappings">
 		<xdoclet>
@@ -169,6 +209,23 @@
 				autocommit="false" onerror="continue">
 			<classpath refid="classpath.database"/>
 		</sql>
+	</target>
+	
+	<target name="javadoc.java" depends="compile.java">
+		<mkdir dir="${doc.dir.api}"/>
+		<javadoc destdir="${doc.dir.api}"
+				author="true"
+				version="true"
+				use="true"
+				windowtitle="RaPid - API">
+			<classpath refid="classpath.javadoc"/>
+			<packageset dir="${src.dir.java}" defaultexcludes="yes">
+				<include name="**"/>
+				<!--
+				<exclude name="com/dummy/test/doc-files/**"/>
+				-->
+			</packageset>
+		</javadoc>
 	</target>
 		
 </project>

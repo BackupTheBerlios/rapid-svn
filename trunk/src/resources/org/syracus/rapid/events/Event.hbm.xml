@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="events" name="org.syracus.rapid.events.Event">
+    <id name="id">
+      <generator class="native"/>
+    </id>
+    <many-to-one name="type"/>
+    <property name="description" type="text"/>
+    <property name="endDate" not-null="true"/>
+    <many-to-one name="leader"/>
+    <set table="event_participants" lazy="true" name="participants">
+      <key column="event_id"/>
+      <many-to-many column="user_id" class="org.syracus.rapid.realm.User"/>
+    </set>
+    <property name="startDate" not-null="true"/>
+    <property name="title" not-null="true"/>
+  </class>
+</hibernate-mapping>
