@@ -11,6 +11,7 @@ a:visited {
 	color: red;
 }
 .calendarTable {
+	background-color: green;
 	width:100%;
 }
 .calendarToday{
@@ -20,6 +21,7 @@ a:visited {
 	color:red;
 }
 .calendarDay {
+	text-align:center;
 	color:white;
 }
 .calendarLink {

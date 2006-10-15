@@ -30,7 +30,7 @@ public abstract class AbstractPropertyTag extends BodyTagSupport {
 		}
 		if ( parent instanceof AbstractCalendarTag ) {
 			AbstractCalendarTag calendarTag = (AbstractCalendarTag)parent;
-			String value = getBodyContent().getString();
+			Object value = getPropertyValue();
 			if ( log.isDebugEnabled() ) {
 				log.debug( "[doAfterBody] value = '" + value + "'" );
 			}
@@ -48,5 +48,8 @@ public abstract class AbstractPropertyTag extends BodyTagSupport {
 		return( SKIP_BODY );
 	}
 
+	protected Object getPropertyValue() {
+		return( getBodyContent().getString() );
+	}
 	
 }

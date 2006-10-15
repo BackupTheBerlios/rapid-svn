@@ -24,9 +24,7 @@
 			
 			<stripes:layout-component name="rightColumn">
 				<jsp:include page="/protected/workbench/tiles/todoList.jsp" flush="true"/>
-				<%--
 				<jsp:include page="/protected/workbench/tiles/calendar.jsp" flush="true"/>
-				--%>
 			</stripes:layout-component>
 			
 		</stripes:layout-render>

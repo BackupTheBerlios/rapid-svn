@@ -269,15 +269,31 @@
 		</property>
 	</bean>
 	
-	<bean id="historyDao" class="org.syracus.rapid.history.dao.HibernateHistoryDao">
+	<bean id="moduleHistoryDao" class="org.syracus.rapid.history.dao.HibernateModuleHistoryDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	<bean id="projectHistoryDao" class="org.syracus.rapid.history.dao.HibernateProjectHistoryDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	<bean id="componentHistoryDao" class="org.syracus.rapid.history.dao.HibernateComponentHistoryDao">
 		<property name="sessionFactory">
 			<ref local="hibernateSessionFactory"/>
 		</property>
 	</bean>
 	
 	<bean id="historyServiceImpl" class="org.syracus.rapid.history.HistoryService">
-		<property name="historyDao">
-			<ref local="historyDao"/>
+		<property name="moduleHistoryDao">
+			<ref local="moduleHistoryDao"/>
+		</property>
+		<property name="projectHistoryDao">
+			<ref local="projectHistoryDao"/>
+		</property>
+		<property name="componentHistoryDao">
+			<ref local="componentHistoryDao"/>
 		</property>
 	</bean>
 	
@@ -296,15 +312,39 @@
 		</property>
 	</bean>
 	
-	<bean id="attachementDao" class="org.syracus.rapid.files.dao.HibernateAttachementDao">
+	<bean id="moduleAttachementDao" class="org.syracus.rapid.files.dao.HibernateModuleAttachementDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	<bean id="projectAttachementDao" class="org.syracus.rapid.files.dao.HibernateProjectAttachementDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	<bean id="componentAttachementDao" class="org.syracus.rapid.files.dao.HibernateComponentAttachementDao">
+		<property name="sessionFactory">
+			<ref local="hibernateSessionFactory"/>
+		</property>
+	</bean>
+	<bean id="issueAttachementDao" class="org.syracus.rapid.files.dao.HibernateIssueAttachementDao">
 		<property name="sessionFactory">
 			<ref local="hibernateSessionFactory"/>
 		</property>
 	</bean>
 	
 	<bean id="attachementServiceImpl" class="org.syracus.rapid.files.AttachementService">
-		<property name="attachementDao">
-			<ref local="attachementDao"/>
+		<property name="moduleAttachementDao">
+			<ref local="moduleAttachementDao"/>
+		</property>
+		<property name="projectAttachementDao">
+			<ref local="projectAttachementDao"/>
+		</property>
+		<property name="componentAttachementDao">
+			<ref local="componentAttachementDao"/>
+		</property>
+		<property name="issueAttachementDao">
+			<ref local="issueAttachementDao"/>
 		</property>
 	</bean>
 	

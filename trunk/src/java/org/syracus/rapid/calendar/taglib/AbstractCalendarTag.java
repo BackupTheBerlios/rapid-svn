@@ -14,24 +14,29 @@ public abstract class AbstractCalendarTag extends SimpleTagSupport {
 	public static final String PROPERTY_TITLECLASS = "title.class";
 	public static final String PROPERTY_TITLESTYLE = "title.style";
 	public static final String PROPERTY_TITLEFORMAT = "title.format";
+	
 	public static final String PROPERTY_DAYCLASS = "day.class";
 	public static final String PROPERTY_DAYSTYLE = "day.style";
+	public static final String PROPERTY_DAYLINK = "day.link";
+	public static final String PROPERTY_WEEKDAYCLASS = "weekday.class";
+	public static final String PROPERTY_WEEKDAYSTYLE = "weekday.style";
+	public static final String PROPERTY_WEEKDAYLENGTH = "weekday.length";
 	
-	private Hashtable<String,String> properties = new Hashtable<String,String>();
+	private Hashtable<String,Object> properties = new Hashtable<String,Object>();
 
-	public Hashtable<String, String> getProperties() {
+	public Hashtable<String, Object> getProperties() {
 		return properties;
 	}
 
-	public void setProperties(Hashtable<String, String> properties) {
+	public void setProperties(Hashtable<String, Object> properties) {
 		this.properties = properties;
 	}
 	
-	public String getProperty( String key ) {
+	public Object getProperty( String key ) {
 		return( getProperties().get( key ) );
 	}
 	
-	public void setProperty( String key, String value ) {
+	public void setProperty( String key, Object value ) {
 		getProperties().put( key, value );
 	}
 	

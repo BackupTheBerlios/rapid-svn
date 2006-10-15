@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.JspFragment;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,146 +32,26 @@ public class MonthCalendarTag extends AbstractCalendarTag {
 	
 	private int year = 0;
 	private int month = 0;
-	private int day = 0;
+	private boolean border = true;
+	
 	private Locale locale = null;
 	
-	//private String styleTable;
-	//private String styleMonth;
-	//private String styleDay;
-	//private String styleToday;
-	//private String styleLink;
 	
-	//private boolean shortMonth = false;
-	//private boolean shortDay = true;
+
+
 	
-	//private String nextMonth;
-	//private String prevMonth;
-	//private String nextYear;
-	//private String prevYear;
-
-	/*
-	public String getStyleLink() {
-		return styleLink;
-	}
-
-
-	public void setStyleLink(String styleLink) {
-		this.styleLink = styleLink;
-	}
-
-
-	public String getNextYear() {
-		return nextYear;
-	}
-
-
-	public void setNextYear(String nextYear) {
-		this.nextYear = nextYear;
-	}
-
-
-	public String getPrevYear() {
-		return prevYear;
-	}
-
-
-	public void setPrevYear(String prevYear) {
-		this.prevYear = prevYear;
-	}
-
-
-	public String getNextMonth() {
-		return nextMonth;
-	}
-
-
-	public void setNextMonth(String nextMonth) {
-		this.nextMonth = nextMonth;
-	}
-
-
-	public String getPrevMonth() {
-		return prevMonth;
-	}
-
-
-	public void setPrevMonth(String prevMonth) {
-		this.prevMonth = prevMonth;
-	}
-
-
-	public boolean isShortDay() {
-		return shortDay;
-	}
-
-
-	public void setShortDay(boolean shortDay) {
-		this.shortDay = shortDay;
-	}
-
-
-	public boolean isShortMonth() {
-		return shortMonth;
-	}
-
-
-	public void setShortMonth(boolean shortMonth) {
-		this.shortMonth = shortMonth;
-	}
-
-
-	public String getStyleDay() {
-		return styleDay;
-	}
-
-
-	public void setStyleDay(String styleDay) {
-		this.styleDay = styleDay;
-	}
-
-
-	public String getStyleMonth() {
-		return styleMonth;
-	}
-
-
-	public void setStyleMonth(String styleMonth) {
-		this.styleMonth = styleMonth;
-	}
-
-
-	public String getStyleToday() {
-		return styleToday;
-	}
-
-
-	public void setStyleToday(String styleToday) {
-		this.styleToday = styleToday;
-	}
-
-
-	public String getStyleTable() {
-		return styleTable;
-	}
-
-
-	public void setStyleTable(String styleTable) {
-		this.styleTable = styleTable;
-	}
-	*/
-
-
 	/**
 	 * @jsp.attribute required="false" rtexprvalue="true"
 	 */
-	public int getDay() {
-		return day;
+	public boolean getBorder() {
+		return border;
 	}
 
 
-	public void setDay(int day) {
-		this.day = day;
+	public void setBorder(boolean border) {
+		this.border = border;
 	}
+
 
 	/**
 	 * @jsp.attribute required="false" rtexprvalue="true"
@@ -214,7 +95,10 @@ public class MonthCalendarTag extends AbstractCalendarTag {
 			log.debug( "[doEndTag] BEGIN" );
 		}
 		try {
-			getJspBody().invoke( null );
+			JspFragment body = getJspBody();
+			if ( null != body ) {
+				body.invoke( null );
+			}
 		} catch( IOException e ) {
 			throw new JspException( e );
 		}
@@ -250,12 +134,14 @@ public class MonthCalendarTag extends AbstractCalendarTag {
 		if ( log.isDebugEnabled() ) {
 			log.debug( "[doEndTag] current day = " + cal.get( Calendar.DAY_OF_MONTH ) );
 		}
+		/*
 		if ( 0 >= getDay() ) {
 			setDay( cal.get( Calendar.DAY_OF_MONTH ) );
 		}
 		if ( log.isDebugEnabled() ) {
 			log.debug( "[doEndTag] new day = " + getDay() );
 		}
+		*/
 		int[][] table = new int[ NROWS ][ NDAYS ];
 		
 		int w = 0;
@@ -306,11 +192,18 @@ public class MonthCalendarTag extends AbstractCalendarTag {
 		}
 		
 		JspWriter writer = getJspContext().getOut();
-		if ( null != getProperty( PROPERTY_CALENDARCLASS ) ) {
-			writer.print( "<table border=\"1\" class=\"" + getProperty( PROPERTY_CALENDARCLASS ) + "\">" );
-		} else {
-			writer.print( "<table border=\"1\">" );
+		writer.print( "<table" );
+		if ( true == getBorder() ) {
+			writer.print( " border=\"1\"" );
 		}
+		if ( null != getProperty( PROPERTY_CALENDARCLASS ) ) {
+			writer.print( " class=\"" + getProperty( PROPERTY_CALENDARCLASS ) + "\"" );
+		}
+		if ( null != getProperty( PROPERTY_CALENDARSTYLE ) ) {
+			writer.print( " style=\"" + getProperty( PROPERTY_CALENDARSTYLE ) + "\"" );
+		}
+		writer.print( ">" );
+		
 		writer.print( "<tr><td colspan=\"7\">" );
 		writer.print( getMonthRow( cal, months) );
 		writer.print( "</td></tr>" );
@@ -321,16 +214,21 @@ public class MonthCalendarTag extends AbstractCalendarTag {
 			}
 		}
 		for ( int i = 0; i < weekdays.length-1; ++i ) {
-			if ( null != getProperty( PROPERTY_DAYCLASS ) ) {
-				writer.print( "<th class=\"" + getProperty( PROPERTY_DAYCLASS ) + "\">" );
-			} else {
-				writer.print( "<th>" );
+			writer.print( "<th" );
+			if ( null != getProperty( PROPERTY_WEEKDAYCLASS ) ) {
+				writer.print( " class=\"" + getProperty( PROPERTY_WEEKDAYCLASS ) + "\"" );
 			}
-			//if ( isShortDay() ) {
-			//	writer.print( weekdays[(first++)].substring(0, 3) );
-			//} else {
+			if ( null != getProperty( PROPERTY_WEEKDAYSTYLE ) ) {
+				writer.print( " style=\"" + getProperty( PROPERTY_WEEKDAYSTYLE ) + "\"" );
+			}
+			writer.print( ">" );
+			
+			if ( null != getProperty( PROPERTY_WEEKDAYLENGTH ) ) {
+				writer.print( weekdays[(first++)].substring( 0, ((Integer)getProperty( PROPERTY_WEEKDAYLENGTH )) ) );
+			} else {
 				writer.print( weekdays[(first++)] );
-			//}
+			}
+			
 			if ( first > weekdays.length-1 ) {
 				first = 1;
 			}
@@ -348,17 +246,38 @@ public class MonthCalendarTag extends AbstractCalendarTag {
 			for ( int j = 0; j < table[i].length; ++j ) {
 				if ( 0 == table[i][j] ) {
 					writer.print( "<td>&nbsp;</td>" );
-				} else if ( table[i][j] == getDay() ) {
-					//if ( null != getStyleToday() ) {
-					//	writer.print( "<td class=\"" + getStyleToday() + "\">" );
-					//} else {
-						writer.print( "<td>" );
-					//}
-					writer.print( table[i][j] );
-					writer.print( "</td>" );
 				} else {
-					writer.print( "<td>" );
-					writer.print( table[i][j] );
+					writer.print( "<td" );
+					if ( null != getProperty( PROPERTY_DAYCLASS + "." + table[i][j] ) ) {
+						writer.print( " class=\"" + getProperty( PROPERTY_DAYCLASS + "." + table[i][j] ) + "\"" );
+					} else if ( null != getProperty( PROPERTY_DAYCLASS ) ) {
+						writer.print( " class=\"" + getProperty( PROPERTY_DAYCLASS ) + "\"" );
+					}
+					if ( null != getProperty( PROPERTY_DAYSTYLE + "." + table[i][j] ) ) {
+						writer.print( " style=\"" + getProperty( PROPERTY_DAYSTYLE + "." + table[i][j] ) + "\"" );
+					} else if ( null != getProperty( PROPERTY_DAYSTYLE ) ) {
+						writer.print( " style=\"" + getProperty( PROPERTY_DAYSTYLE ) + "\"" );
+					}
+					writer.print( ">" );
+					
+					if ( null != getProperty( PROPERTY_DAYLINK + "." + table[i][j] ) ) {
+						DayLink link = (DayLink)getProperty( PROPERTY_DAYLINK + "." + table[i][j] );
+						writer.print( "<a href=\"" + link.getUrl() + "\"" );
+						if ( null != link.getTarget() ) {
+							writer.print( " target=\"" + link.getTarget() + "\"" );
+						}
+						if ( null != link.getClassId() ) {
+							writer.print( " class=\"" + link.getClassId() + "\"" );
+						}
+						if ( null != link.getStyle() ) {
+							writer.print( " style=\"" + link.getStyle() + "\"" );
+						}
+						writer.print( ">" );
+						writer.print( table[i][j] );
+						writer.print( "</a>" );
+					} else {
+						writer.print( table[i][j] );
+					}
 					writer.print( "</td>" );
 				}
 			}
